@@ -37,12 +37,10 @@
             {% endif %}
             </td>
           </tr>
-          {% if request.user.is_superuser %}
             <tr>
               <th scope="row" class="text-nowrap">Quantity:</th>
               <td>{{ allocation.quantity }}</td>
             </tr>
-          {% endif %}
           <tr>
             <th scope="row" class="text-nowrap">Justification:</th>
             <td>{{ allocation.justification }}</td>
@@ -50,31 +48,19 @@
           <tr>
             <th scope="row" class="text-nowrap">Status:</th>
             <td>
-              {% if request.user.is_superuser %}
                 {{ form.status }}
-              {% else %}
-                {{ allocation.status }}
-              {% endif %}
             </td>
           </tr>
           <tr>
             <th scope="row" class="text-nowrap">Start Date:</th>
             <td>
-              {% if request.user.is_superuser %}
                 {{ form.start_date }}
-              {% else %}
-                {{ allocation.start_date }}
-              {% endif %}
             </td>
           </tr>
           <tr>
             <th scope="row" class="text-nowrap">End Date:</th>
             <td>
-              {% if request.user.is_superuser %}
-                {{ form.end_date }}
-              {% else %}
-                {{ allocation.end_date }}
-              {% endif %}
+              {{ form.end_date }}
               {% if allocation.is_locked and allocation.status.name == 'Active' and allocation.expires_in <= 60 and allocation.expires_in >= 0 %}
               <span class="badge badge-warning"><i class="far fa-clock" aria-hidden="true"></i>
                 Expires in {{allocation.expires_in}} day{{allocation.expires_in|pluralize}} - Not renewable
@@ -91,11 +77,7 @@
           <tr>
             <th scope="row" class="text-nowrap">Description:</th>
             <td>
-              {% if request.user.is_superuser %}
                 {{ form.description }}
-              {% else %}
-                {{ allocation.description|default_if_none:"" }}
-              {% endif %}
             </td>
           </tr>
           <tr>
@@ -132,20 +114,18 @@
           {% endif %}
         </table>
       </div>
-      {% if request.user.is_superuser %}
       <div class="float-right">
         {% if allocation.status.name == 'New' or allocation.status.name == 'Renewal Requested' %}
           <button type="submit" name="action" value="approve" class="btn btn-success mr-1 confirm-activate">Approve</button>
           <button type="submit" name="action" value="deny" class="btn btn-danger mr-1 confirm-deny">Deny</button>
         {% endif %}
         <button type="submit" name="action" value="update" class="btn btn-primary"><i class="fas fa-sync" aria-hidden="true"></i> Update</button>
-      {% endif %}
     </div>
     </form>
   </div>
 </div>
 
-{% if (attributes or attributes_with_usage) and request.user.is_superuser %}
+{% if (attributes or attributes_with_usage) %}
   <div class="card mb-3">
     <div class="card-header">
       <h3 class="d-inline"><i class="fas fa-info-circle" aria-hidden="true"></i> Allocation Attributes</h3>
