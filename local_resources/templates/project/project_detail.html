@@ -29,12 +29,6 @@ Project Detail
 
 {% include "project/detail/breadcrumbs.html" %}
 
-
-<div class="mb-3">
-  <h2 class="text-justify">{{ project.title }}</h2>
-  <hr>
-</div>
-
 <!-- Start Project Heading -->
 <div class="card mb-3">
   <div class="card-header">
@@ -54,6 +48,7 @@ Project Detail
       ({{ project.pi.username }})
       <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email PI</span></a>
     </h3>
+    <p class="card-text text-justify"><strong>Name: </strong>{{ project.title }}</p>
     <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
     {% if project.project_code %}
         <p class="card-text text-justify"><strong>Project Code: </strong>{{ project.project_code }}</p>
