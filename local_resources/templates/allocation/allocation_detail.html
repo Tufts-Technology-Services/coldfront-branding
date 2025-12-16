@@ -1,0 +1,158 @@
+{% extends "common/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+Allocation Detail
+{% endblock %}
+
+
+{% block content %}
+
+{% if allocation.project.status.name == 'Archived' %}
+  <div class="alert alert-warning" role="alert">
+    This is a allocation from an archived project! You cannot make any changes.
+  </div>
+{% endif %}
+
+{% include "allocation/detail/breadcrumb.html" %}
+
+{% if form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+  
+{% if request.user.is_superuser  %}
+ 
+  {% include "allocation/detail/admin_detail.html" %}
+
+{% else %}
+
+  {% include "allocation/detail/basic_detail.html" %}
+
+{% endif %}
+
+{% if eulas %}
+  {% include "allocation/detail/eula.html" %}
+{% endif %}
+
+{% if not user_is_pending %}
+<!-- Start Allocation Change Requests -->
+  {% include "allocation/detail/change_requests.html" %}
+
+{% endif %}
+
+
+{% if request.user.is_superuser %} <!-- Only show if users managed at allocation level-->
+  {% include "allocation/detail/allocation_users.html" %}
+{% endif %}
+
+<!-- Start Admin Messages -->
+<div class="card mb-3" id="notifications">
+  <div class="card-header">
+    <h3 class="d-inline"><i class="fas fa-users" aria-hidden="true"></i> Notifications</h3>
+    <span class="badge badge-secondary">{{notes.count}}</span>
+    <div class="float-right">
+      {% if request.user.is_superuser %}
+        <a class="btn btn-success" href="{% url 'allocation-note-add' allocation.pk %}" role="button">
+          <i class="fas fa-plus" aria-hidden="true"></i> Add Notification
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-body">
+    {% if notes %}
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Note</th>
+              <th scope="col">Administrator</th>
+              <th scope="col">Last Modified</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for note in notes %}
+              {% if not note.is_private or request.user.is_superuser %}
+                <tr>
+                  <td>{{ note.note }}</td>
+                  <td>{{ note.author.first_name }} {{ note.author.last_name }}</td>
+                  <td>{{ note.modified }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <div class="alert alert-info" role="alert">
+        <i class="fa fa-info-circle" aria-hidden="true"></i> There are no notes from system administrators.
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  $(document).ready(function () {
+    var guage_data = {{ guage_data | safe }};
+    //console.log(guage_data);
+    guage_data.forEach(function (item, index) {
+      var original_label = item.columns[0][0];
+      var new_label = "Usage" + original_label.split(":")[1];
+      item.columns[0][0] = new_label;
+
+      var original_color = item.colors[original_label];
+      item.colors[new_label] = original_color;
+      delete item.colors[original_label];
+    });
+    drawGauges(guage_data);
+
+    $('#allocation_change_table').DataTable({
+      lengthMenu: [5, 10, 20, 50, 100],
+      "pageLength": 5,
+      "ordering": false,
+      'aoColumnDefs': [{
+        'bSortable': false,
+        'aTargets': ['nosort']
+      }]
+    });
+    $('#allocationuser_table').DataTable({
+      'aoColumnDefs': [{
+        'bSortable': false,
+        'aTargets': ['nosort']
+      }]
+    });
+  });
+
+  function drawGauges(guage_data) {
+    var arrayLength = guage_data.length;
+    for (var i = 0; i < arrayLength; i++) {
+      c3.generate({
+        bindto: '#gauge-' + i,
+        data: guage_data[i],
+        legend: {
+          item: {
+            onclick: function (id) { }
+          }
+        }
+      });
+    }
+  }
+  $(".datepicker").flatpickr();
+  $(document).on('click', '.confirm-activate', function(){
+    var attributes_num = {{ attributes | length }};
+    if (attributes_num == 0) {
+      return confirm('Are you sure you want to activate this allocation request without setting any allocation attributes?');
+    }
+  })
+  $(document).on('click', '.confirm-deny', function(){
+    var notes_num = {{ notes | length }};
+    if (notes_num == 0) {
+      return confirm('Are you sure you want to deny this allocation request without setting a notification?');
+    }
+  })
+</script>
+{% endblock %}
+

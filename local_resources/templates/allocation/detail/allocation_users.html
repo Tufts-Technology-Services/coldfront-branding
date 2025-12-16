@@ -1,0 +1,54 @@
+<!-- Start Allocation Users -->
+<div id="allocation_users" class="card mb-3">
+  <div class="card-header">
+    <h3 class="d-inline"><i class="fas fa-users" aria-hidden="true"></i> Users in Allocation</h3>
+    <span class="badge badge-secondary">{{allocation_users.count}}</span>
+    <div class="float-right">
+      {% if allocation.project.status.name != 'Archived' and is_allowed_to_update_project and allocation.status.name in 'Active,New,Renewal Requested' %}
+        <a class="btn btn-success" href="{% url 'allocation-add-users' allocation.pk %}" role="button">
+          <i class="fas fa-user-plus" aria-hidden="true"></i> Add Users
+        </a>
+        <a class="btn btn-danger" href="{% url 'allocation-remove-users' allocation.pk %}" role="button">
+          <i class="fas fa-user-times" aria-hidden="true"></i> Remove Users
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table id="allocationuser_table" class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col" class="text-nowrap">Username</th>
+            <th scope="col" class="text-nowrap">First Name</th>
+            <th scope="col" class="text-nowrap">Last Name</th>
+            <th scope="col" class="text-nowrap">Email</th>
+            <th scope="col" class="text-nowrap" >Status</th>
+            <th scope="col" class="nosort">Last Modified</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in allocation_users %}
+            <tr>
+              <td>{{ user.user.username }}</td>
+              <td>{{ user.user.first_name }}</td>
+              <td>{{ user.user.last_name }}</td>
+              <td>{{ user.user.email }}</td>
+              {% if user.status.name == 'Active' %}
+                <td class="text-success">{{ user.status.name }}</td>
+              {% elif user.status.name == 'PendingEULA' %}
+                <td class="text-info">{{ user.status.name }}</td>
+              {% elif user.status.name == 'Denied' or user.status.name == 'Error' or user.status.name == 'DeclinedEULA' %}
+                <td class="text-danger">{{ user.status.name }}</td>
+              {% else %}
+                <td class="text-info">{{ user.status.name }}</td>
+              {% endif %}
+              <td>{{ user.modified|date:"M. d, Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

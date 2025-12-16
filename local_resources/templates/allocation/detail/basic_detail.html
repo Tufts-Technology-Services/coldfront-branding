@@ -1,0 +1,98 @@
+<!-- simplified allocation for end users -->
+ <!-- Allocation Information Card -->
+<div class="card mb-3">
+  <div class="card-header">
+    {% if allocation.is_changeable and not allocation.is_locked and is_allowed_to_update_project and allocation.status.name in 'Active, Renewal Requested, Payment Pending, Payment Requested, Paid' %}
+    <div class="row">
+      <div class="col">
+        <h3><i class="fas fa-list" aria-hidden="true"></i> Allocation Information</h3>
+      </div>
+      <div class="col">
+        <a class="btn btn-primary" href="{% url 'allocation-change' allocation.pk %}" role="button" style="float: right;">
+                Request Change
+        </a>
+      </div>
+    </div>
+    {% else %}
+      <h3><i class="fas fa-list" aria-hidden="true"></i> Allocation Information</h3>   
+    {% endif %}
+  </div>
+
+  <div class="card-body row">
+      <!-- allocation details for end users will be a responsive dashboard-->
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <table class="table table-bordered table-sm">
+            <tr>
+              <th scope="row" class="text-nowrap">Project:</th>
+              <td><a href="{% url 'project-detail' allocation.project.pk %}">{{ allocation.project }}</a></td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-nowrap">Resource{{ allocation.resources.all|pluralize }} in allocation:</th>
+              <td>
+                {% if allocation.get_resources_as_list %}
+                  {% for resource in allocation.get_resources_as_list %}
+                    <a href="{% url 'resource-detail' resource.pk %}">{{ resource }}</a> <br>
+                  {% endfor %}
+              {% else %}
+                None
+              {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-nowrap">Description:</th>
+              <td>{{ allocation.description|default_if_none:"" }}</td>
+            </tr>
+            {% if request.user.is_pi %}
+            <tr>
+              <th scope="row" class="text-nowrap">Justification:</th>
+              <td>{{ allocation.justification }}</td>
+            </tr>
+            {% endif %}
+            {% if allocation.end_date %}
+            <tr>
+              <th scope="row" class="text-nowrap">Start Date:</th>
+              <td>{{ allocation.start_date }}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="text-nowrap">End Date:</th>
+              <td>{{ allocation.end_date }}</td>
+            </tr>
+            {% endif %}
+          {% if attributes %}
+            {% for attribute in attributes %}
+                <tr>
+                  <th scope="row" class="text-nowrap">{{attribute}}</th>
+                  <td>
+                    {{attribute.value}}
+                  </td>
+                </tr>
+            {% endfor %}
+         {% endif %}
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+        {% if attributes_with_usage %}
+          {% for attribute in attributes_with_usage %}
+            <div class="card mb-3 mr-1">
+              <div class="card-body">
+                <h4 class="card-title">{{attribute}}</h4>
+                <div id="gauge-{{forloop.counter0}}"></div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+    </div>
+
+</div>
+  <div class="card-footer text-muted">
+    <div class="row">
+    <span class="col-3"><i>{{ allocation.modified|date:"M. d, Y" }}</i></span> 
+    </div>
+  </div>
+</div>
+<!-- End Allocation Information Card -->
+

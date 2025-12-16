@@ -1,0 +1,43 @@
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb" class="row">
+  <ol class="breadcrumb col-9">
+    <li class="breadcrumb-item"><a href="/">Home</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'project-detail' allocation.project.pk %}">Project: {{ allocation.project }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Allocation ID: {{ allocation.pk }} 
+    {%  if allocation.status.name == "Expired" and allocation.expires_in < 0 %}
+      <span class="badge badge-pill badge-danger">Expired</span>
+
+    {%  elif allocation.status.name == "Renewal Requested" %}
+      <span class="badge badge-pill badge-danger">{{allocation.status}}</span>
+
+    {%  elif allocation.expires_in >= 0 and allocation.expires_in <= 30 %}
+      <span class="badge badge-pill badge-danger">Expires in 
+        <span class="badge badge-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}
+      </span>
+
+    {% elif allocation.expires_in > 30 and allocation.expires_in <= 90 %}
+      <span class="badge badge-pill badge-warning">Expires in 
+        <span class="badge badge-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}
+      </span>
+
+    {% elif allocation.status.name == "Pending" %}
+      <span class="badge badge-pill badge-info">{{allocation.status}}</span>
+
+    {% elif allocation.status.name == "Active" %}
+      <span class="badge badge-pill badge-success">{{allocation.status}}</span>
+
+    {% else %}
+    <span class="badge badge-pill badge-info">{{allocation.status}}</span>
+    {% endif %}
+    {% if allocation.is_locked %}
+      <i class="fas fa-lock" aria-hidden="true"></i>
+    {% endif %}
+    </li>
+  </ol>      
+  <div class="breadcrumb col-3 d-flex justify-content-end">
+    <a class="" href="#notifications">
+      Notifications <span class="badge badge-secondary">{{notes.count}}</span>
+    </a>
+  </div> 
+</nav>
+
