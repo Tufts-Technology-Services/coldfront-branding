@@ -39,22 +39,21 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Project</th>
             <th scope="col">Resource</th>
+            <th scope="col">Project</th>
             <th scope="col">Status</th>
-
           </tr>
         </thead>
         <tbody>
           {% for allocation in allocation_list %}
           <tr>
-            <td>{{allocation.project.title}}</td>
             <td>
               <a href = "{% url 'allocation-detail' allocation.id %}">{{allocation.get_parent_resource}}</a>
               {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
               <a href = "{{ondemand_url}}"> {% load static %}  <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
             {% endif %}
             </td>
+            <td>{{allocation.project.title}}</td>
             <td> 
             {%  if allocation.status.name == "Expired" and allocation.expires_in < 0 %}
             <span class="badge badge-pill badge-danger">Expired</span>
