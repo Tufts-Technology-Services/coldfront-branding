@@ -36,7 +36,7 @@ Project Detail
       <div class="float-right">
         {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.status.name in 'Active, New' %}
           <a class="btn btn-info" href="{% url 'project-update' project.pk %}" role="button"><i class="far fa-edit" aria-hidden="true"></i> Update</a>
-          <a class="btn btn-info" href="{% url 'project-archive' project.id %}" role="button"><i class="fas fa-file-archive" aria-hidden="true"></i> Archive Project</a>
+          <!--<a class="btn btn-info" href="{% url 'project-archive' project.id %}" role="button"><i class="fas fa-file-archive" aria-hidden="true"></i> Archive Project</a>-->
         {% endif %}
       </div>
   </div>
@@ -107,7 +107,7 @@ Project Detail
             <th scope="col" class="text-nowrap">Email</th>
             <th scope="col" class="text-nowrap">Role <a href="#" data-toggle="popover" data-trigger="hover" data-content="Manager role grants user access to add/remove users and allocations to the project."><i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Manager role grants user access to add/remove users and allocations to the project.</span></a></th>
             <th scope="col" class="text-nowrap">Status</th>
-            <th scope="col" class="nosort"><input type="checkbox" class="check" id="selectAll" style="margin-right: 5px;">Enable Notifications 
+            <th scope="col" class="nosort"><input type="checkbox" class="check" id="selectAll" style="margin-right: 5px;">Notifications 
               <a href="#" data-toggle="popover" data-trigger="hover" data-content="Receive email notifications for this project">
                 <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Receive email notifications for this project</span>
               </a>
@@ -198,7 +198,11 @@ Project Detail
               <td class="test-nowrap"><a href="{% url 'allocation-review-eula' allocation.pk %}">Review and Accept EULA to activate</a> </td>
               {% else %}
               {% if allocation.get_information != '' %} 
-              <td class="text-nowrap">{{allocation.get_information}}</td>
+              <td class="text-nowrap">
+                {{allocation.get_information}}&nbsp;                
+                {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
+                  <a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
+                {% endif %}</td>
               {% else %}
               <td class="text-nowrap">{{allocation.description|default_if_none:""}}</td>
               {% endif %}
@@ -233,9 +237,6 @@ Project Detail
                   Expires in {{allocation.expires_in}} day{{allocation.expires_in|pluralize}} <br> Click to renew
                   </span>
                   </a>
-                {% endif %}
-                {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
-                  <a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
                 {% endif %}
               </td>
             </tr>
