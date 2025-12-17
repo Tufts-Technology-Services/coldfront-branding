@@ -1,0 +1,73 @@
+{% extends "common/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block title %}
+Request Allocation Change
+{% endblock %}
+
+
+{% block content %}
+
+<h2>Request change to {{ allocation.get_parent_resource }} for project: {{ allocation.project.title }}</h2>
+<hr>
+
+<p class="text-justify">
+  Request changes to an existing allocation using the form below. For each change
+  you must provide a justification.
+</p>
+
+<form action="{% url 'allocation-change' allocation.pk %}" method="post">
+  <div class="card mb-3">
+
+    <div class="card-body">
+    {% csrf_token %}
+    {% if allocation.is_changeable %}
+     <!--   <tr>
+        <th scope="row" class="text-nowrap">Request End Date Extension:</th>
+        <td>
+            {{ form.end_date_extension }}
+        </td>
+        </tr>-->
+    {% endif %}
+
+
+  {% if formset %}
+        
+          <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+              <thead>
+                <tr>
+                  <th scope="col"><span class="sr-only">Attribute</span></th>
+                  <th scope="col">Current Value</th>
+                  <th scope="col">Request New Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for form in formset %}
+                    <tr>
+                      <td>{{form.name.value}}</td>
+                      <td>{{form.value.value}}</td>
+                      <td>{{form.new_value}}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {{ formset.management_form }}
+        </div>
+      </div>
+    {% endif %}
+
+    <div>
+      {{form.justification | as_crispy_field }}
+      <input class="btn btn-success" type="submit" value="Submit" />
+      <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation.pk %}" role="button">Back to
+        Allocation</a><br>
+    </div>
+</form>
+
+<script>
+</script>
+{% endblock %}
