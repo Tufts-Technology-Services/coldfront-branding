@@ -35,7 +35,7 @@ Project Detail
       <h3 class="d-inline" id="manage-project"><i class="fas fa-cubes" aria-hidden="true"></i> Project Information</h3>
       <div class="float-right">
         {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.status.name in 'Active, New' %}
-          <a class="btn btn-info" href="{% url 'project-update' project.pk %}" role="button"><i class="far fa-edit" aria-hidden="true"></i> Update Project Information</a>
+          <a class="btn btn-info" href="{% url 'project-update' project.pk %}" role="button"><i class="far fa-edit" aria-hidden="true"></i> Update</a>
           <a class="btn btn-info" href="{% url 'project-archive' project.id %}" role="button"><i class="fas fa-file-archive" aria-hidden="true"></i> Archive Project</a>
         {% endif %}
       </div>
@@ -46,23 +46,17 @@ Project Detail
       {{ project.pi.first_name }}
       {{ project.pi.last_name }}
       ({{ project.pi.username }})
-      <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email PI</span></a>
+      <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email Project Owner</span></a>
     </h3>
     <p class="card-text text-justify"><strong>Name: </strong>{{ project.title }}</p>
     <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
     {% if project.project_code %}
         <p class="card-text text-justify"><strong>Project Code: </strong>{{ project.project_code }}</p>
-    {% else %}
-        <p class="card-text text-justify"><strong>ID: </strong>{{ project.id }}</p>
     {% endif %}
     {% if not settings.FIELD_OF_SCIENCE_HIDE %}
         <p class="card-text text-justify"><strong>Field of Science: </strong>{{ project.field_of_science }}</p>
     {% endif %}
-    <p class="card-text text-justify"><strong>Project Status: </strong>{{ project.status }}
-        {% if project.last_project_review and  project.last_project_review.status.name == 'Pending'%}
-          <span class="badge badge-pill badge-info">project review pending</span>
-        {% endif %}
-    </p>
+
     {% if PROJECT_INSTITUTION_EMAIL_MAP %}
         <p class="card-text text-justify"><strong>Institution: </strong>{{ project.institution }}</p>
     {% endif %}
@@ -111,10 +105,13 @@ Project Detail
             <th scope="col" class="text-nowrap">First Name</th>
             <th scope="col" class="text-nowrap">Last Name</th>
             <th scope="col" class="text-nowrap">Email</th>
-            <th scope="col" class="text-nowrap">Role <a href="#" data-toggle="popover" title="Role" data-trigger="hover" data-content="Manager role grants user access to add/remove users, allocations, grants, and publications to the project."><i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Manager role grants user access to add/remove users, allocations, grants, and publications to the project.</span></a></th>
+            <th scope="col" class="text-nowrap">Role <a href="#" data-toggle="popover" data-trigger="hover" data-content="Manager role grants user access to add/remove users and allocations to the project."><i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Manager role grants user access to add/remove users and allocations to the project.</span></a></th>
             <th scope="col" class="text-nowrap">Status</th>
-            <th scope="col" class="nosort"><input type="checkbox" class="check" id="selectAll" style="margin-right: 5px;">Enable Notifications <a href="#" title="Enable Notifications" data-toggle="popover" data-trigger="hover" data-content="When disabled, user will not receive notifications for allocation requests and expirations or cloud usage (if applicable)."><i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">When disabled, user will not receive notifications for allocation requests and expirations or cloud usage (if applicable).</span></a></th>
-            <th scope="col" class="nosort">Actions</th>
+            <th scope="col" class="nosort"><input type="checkbox" class="check" id="selectAll" style="margin-right: 5px;">Enable Notifications 
+              <a href="#" data-toggle="popover" data-trigger="hover" data-content="Receive email notifications for this project">
+                <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Receive email notifications for this project</span>
+              </a>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -128,7 +125,11 @@ Project Detail
               {% if user.status.name == 'Active' %}
                 <td class="text-success">{{ user.status.name }}</td>
               {% else %}
-                <td class="text-info">{{ user.status.name }}</td>
+                <td class="text-info">{{ user.status.name }}
+                {% if is_allowed_to_update_project %}
+                  <a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-user-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
+                {% endif %}
+                </td>
               {% endif %}
               <td>
                 {% if is_allowed_to_update_project %}
@@ -152,11 +153,6 @@ Project Detail
                   value="{{ user.enable_notifications }}"
                   {% if user.enable_notifications %} checked {% endif %}
                   disabled>
-                {% endif %}
-              </td>
-              <td>
-                {% if is_allowed_to_update_project %}
-                  <a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-user-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
                 {% endif %}
               </td>
             </tr>
@@ -190,13 +186,13 @@ Project Detail
               <th scope="col">Information</th>
               <th scope="col">Status</th>
               <th scope="col">End Date</th>
-              <th scope="col" class="nosort">Actions</th>
+              <th scope="col" class="nosort"><span class="sr-only">Request Change</span></th>
             </tr>
           </thead>
           <tbody>
             {% for allocation in allocations %}
             <tr>
-              <td>{{ allocation.get_parent_resource.name }}</td>
+              <td><a href="{% url 'allocation-detail' allocation.pk %}">{{ allocation.get_parent_resource.name }}</a><span class="sr-only">Details</span></td>
               <td>{{ allocation.get_parent_resource.resource_type.name }}</td>
               {% if user_allocation_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
               <td class="test-nowrap"><a href="{% url 'allocation-review-eula' allocation.pk %}">Review and Accept EULA to activate</a> </td>
@@ -218,9 +214,15 @@ Project Detail
               {% else %}
                 <td class="text-info">{{ allocation.status.name }}</td>
               {% endif %}
-              <td>{{allocation.end_date|date:"Y-m-d"}}</td>
+              <td>{{allocation.end_date|date:"Y-m-d"|default:"N/A"}}</td>
               <td>
-                <a href="{% url 'allocation-detail' allocation.pk %}"><i class="far fa-folder-open" aria-hidden="true"></i><span class="sr-only">Details</span></a>
+
+                {% if allocation.is_changeable and not allocation.is_locked and is_allowed_to_update_project and allocation.status.name in 'Active, Renewal Requested, Payment Pending, Payment Requested, Paid' %}
+                <a class="btn btn-primary" href="{% url 'allocation-change' allocation.pk %}" role="button">
+                  Request Change
+                </a>
+                {% endif %}
+
                 {% if allocation.is_locked and allocation.status.name == 'Active' and allocation.expires_in <= 60 and allocation.expires_in >= 0 %}
                 <span class="badge badge-warning"><i class="far fa-clock" aria-hidden="true"></i>
                   Expires in {{allocation.expires_in}} day{{allocation.expires_in|pluralize}} <br> Not renewable
@@ -233,8 +235,8 @@ Project Detail
                   </a>
                 {% endif %}
                 {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
-                <a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
-              {% endif %}
+                  <a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
+                {% endif %}
               </td>
             </tr>
             {% endfor %}

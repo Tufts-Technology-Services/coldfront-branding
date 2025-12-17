@@ -2,15 +2,13 @@
 <nav aria-label="breadcrumb" class="row">
   <ol class="breadcrumb col-9">
     <li class="breadcrumb-item"><a href="/">Home</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Project: {{ project.title }}</li>
-
+    <li class="breadcrumb-item active" aria-current="page">Project: {{ project.title }}
     {% if project.status.name == "Active" %}
       <span class="badge badge-pill badge-success">{{project.status}}</span>
-
     {% else %}
-    <span class="badge badge-pill badge-info">{{project.status}}</span>
+      <span class="badge badge-pill badge-info">{{project.status}}</span>
     {% endif %}
-
+    </li>
   </ol>      
   <div class="breadcrumb col-3 d-flex justify-content-end">
     <a class="" href="#notifications">
