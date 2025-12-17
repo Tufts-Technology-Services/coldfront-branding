@@ -152,12 +152,12 @@
               {% for attribute in attributes %}
                 {% if attribute.allocation_attribute_type.is_private %}
                   <tr style="background-color:#eee">
-                    <td><i class="fas fa-lock" aria-hidden="true"></i> {{attribute}}</td>
+                    <td><i class="fas fa-lock" aria-hidden="true"></i> {{attribute|replace:"_"|title}}</td>
                     <td>{{attribute.value}}</td>
                   </tr>
                 {% else %}
                   <tr>
-                    <td>{{attribute}}</td>
+                    <td>{{attribute|replace:"_"|title}}</td>
                     <td>
                       {{attribute.value}}
                     </td>
@@ -174,7 +174,7 @@
         {% for attribute in attributes_with_usage %}
           <div class="card mb-3 mr-1">
             <div class="card-body">
-              <h4 class="card-title">{{attribute}}</h4>
+              <h4 class="card-title">{{attribute|replace:"_"|title}}</h4>
               <div id="gauge-{{forloop.counter0}}"></div>
             </div>
           </div>

@@ -38,7 +38,7 @@ Allocation Detail
   {% include "allocation/detail/eula.html" %}
 {% endif %}
 
-{% if not user_is_pending %}
+{% if not user_is_pending and allocation.is_changeable %}
 <!-- Start Allocation Change Requests -->
   {% include "allocation/detail/change_requests.html" %}
 
