@@ -168,7 +168,7 @@ Project Detail
 <!-- Start Project Allocations -->
 <div class="card mb-3">
   <div class="card-header">
-    <h3 class="d-inline"><i class="fas fa-server" aria-hidden="true"></i> Allocations</h3> <span class="badge badge-secondary">{{allocations.count}}</span>
+    <h3 class="d-inline"><i class="fas fa-server" aria-hidden="true"></i> Resource Allocations</h3> <span class="badge badge-secondary">{{allocations.count}}</span>
     <div class="float-right">
       {% if project.status.name != 'Archived' and is_allowed_to_update_project %}
         <a class="btn btn-success" href="{% url 'allocation-create' project.pk %}" role="button"><i class="fas fa-plus" aria-hidden="true"></i> Request Resource Allocation</a>
@@ -181,12 +181,14 @@ Project Detail
         <table id="allocation_table" class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Resource Name</th>
-              <th scope="col">Resource Type</th>
+              <th scope="col">Resource</th>
+              <th scope="col">Type</th>
               <th scope="col">Information</th>
               <th scope="col">Status</th>
               <th scope="col">End Date</th>
+              {% if is_allowed_to_update_project %}
               <th scope="col" class="nosort"><span class="sr-only">Request Change</span></th>
+              {% endif %}
             </tr>
           </thead>
           <tbody>
@@ -194,34 +196,37 @@ Project Detail
             <tr>
               <td><a href="{% url 'allocation-detail' allocation.pk %}">{{ allocation.get_parent_resource.name }}</a><span class="sr-only">Details</span></td>
               <td>{{ allocation.get_parent_resource.resource_type.name }}</td>
-              {% if user_allocation_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
-              <td class="test-nowrap"><a href="{% url 'allocation-review-eula' allocation.pk %}">Review and Accept EULA to activate</a> </td>
-              {% else %}
-              {% if allocation.get_information != '' %} 
+
               <td class="text-nowrap">
-                {{allocation.get_information}}&nbsp;                
-                {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
-                  <a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
-                {% endif %}</td>
-              {% else %}
-              <td class="text-nowrap">{{allocation.description|default_if_none:""}}</td>
-              {% endif %}
-              {% endif %}
-              {% if allocation.status.name == 'Active' %}
               {% if user_allocation_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
-              <td class="text-success">{{ user_allocation_status|get_value_by_index:forloop.counter0 }}</td>
+                <a href="{% url 'allocation-review-eula' allocation.pk %}">Review and Accept EULA to activate</a> 
+              {% elif allocation.get_information != '' %}
+                {{allocation.get_information}}                
               {% else %}
-                <td class="text-success">{{ allocation.status.name }}</td>
+                {{allocation.description|default_if_none:""}}
               {% endif %}
+              {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
+                  &nbsp;<a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
+              {% endif %}
+              </td>
+              
+              {% if allocation.status.name == 'Active' %}
+                {% if user_allocation_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
+                <td class="text-success">{{ user_allocation_status|get_value_by_index:forloop.counter0 }}</td>
+                {% else %}
+                <td class="text-success">{{ allocation.status.name }}</td>
+                {% endif %}
               {% elif  allocation.status.name == 'Expired' or allocation.status.name == 'Denied' %}
                 <td class="text-danger">{{ allocation.status.name }}</td>
               {% else %}
                 <td class="text-info">{{ allocation.status.name }}</td>
               {% endif %}
-              <td>{{allocation.end_date|date:"Y-m-d"|default:"N/A"}}</td>
-              <td>
 
-                {% if allocation.is_changeable and not allocation.is_locked and is_allowed_to_update_project and allocation.status.name in 'Active, Renewal Requested, Payment Pending, Payment Requested, Paid' %}
+              <td>{{allocation.end_date|date:"Y-m-d"|default:"N/A"}}</td>
+              
+              {% if is_allowed_to_update_project %}
+              <td>
+                {% if allocation.is_changeable and not allocation.is_locked and allocation.status.name in 'Active, Renewal Requested, Payment Pending, Payment Requested, Paid' %}
                 <a class="btn btn-primary" href="{% url 'allocation-change' allocation.pk %}" role="button">
                   Request Change
                 </a>
@@ -239,6 +244,7 @@ Project Detail
                   </a>
                 {% endif %}
               </td>
+              {% endif %}
             </tr>
             {% endfor %}
           </tbody>
