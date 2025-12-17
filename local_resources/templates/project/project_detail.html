@@ -121,14 +121,15 @@ Project Detail
               <td>{{ user.user.first_name }} </td>
               <td>{{ user.user.last_name }}</td>
               <td>{{ user.user.email }}</td>
-              <td>{{ user.role.name }}</td>
+              <td>{{ user.role.name }}
+                {% if is_allowed_to_update_project %}
+                &nbsp;<a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-user-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
+                {% endif %}
+              </td>
               {% if user.status.name == 'Active' %}
                 <td class="text-success">{{ user.status.name }}</td>
               {% else %}
                 <td class="text-info">{{ user.status.name }}
-                {% if is_allowed_to_update_project %}
-                  <a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-user-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
-                {% endif %}
                 </td>
               {% endif %}
               <td>
