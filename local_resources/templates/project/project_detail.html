@@ -66,7 +66,7 @@ Project Detail
       {% for attribute in attributes %}
         {% if not attribute.proj_attr_type.is_private %}
             <p class="card-text text-justify"><strong>{{attribute}}: </strong>{{attribute.value}}  
-              {% if is_allowed_to_update_project %}
+              {% if request.user.is_superuser and attribute.is_changeable %}
               <a href="{% url 'project-attribute-update' project.pk attribute.pk %}">
                 <i class="far fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span>
               </a>

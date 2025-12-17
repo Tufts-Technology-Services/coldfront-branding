@@ -63,7 +63,7 @@
           {% if attributes %}
             {% for attribute in attributes %}
                 <tr>
-                  <th scope="row" class="text-nowrap">{{attribute|replace:"_"|title}}</th>
+                  <th scope="row" class="text-nowrap">{{attribute}}</th>
                   <td>
                     {{attribute.value}}
                   </td>
@@ -79,7 +79,7 @@
           {% for attribute in attributes_with_usage %}
             <div class="card mb-3 mr-1">
               <div class="card-body">
-                <h4 class="card-title">{{attribute|replace:"_"|title}}</h4>
+                <h4 class="card-title">{{attribute}}</h4>
                 <div id="gauge-{{forloop.counter0}}"></div>
               </div>
             </div>
