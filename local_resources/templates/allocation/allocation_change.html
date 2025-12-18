@@ -48,7 +48,7 @@ Request Allocation Change
                     <tr>
                       <td>{{form.name.value}}</td>
                       <td>{{form.value.value}}
-                        {% for attr in allocation.allocationattribute_set %}
+                        {% for attr in allocation.allocationattribute_set.all %}
                           {% if attr.allocation_attribute_type.name == form.name.value and attr.allocationattributeusage %} ({{ attr.allocationattributeusage.value }} used){% endif %}
                         {% endfor %}
                       </td>
