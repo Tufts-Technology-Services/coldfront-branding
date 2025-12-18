@@ -14,8 +14,7 @@ Request Allocation Change
 <hr>
 
 <p class="text-justify">
-  Request changes to an existing allocation using the form below. For each change
-  you must provide a justification.
+  Request changes to an existing allocation using the form below. You must provide a reason for each change.
 </p>
 
 <form action="{% url 'allocation-change' allocation.pk %}" method="post">
@@ -32,7 +31,7 @@ Request Allocation Change
         </tr>-->
     {% endif %}
 
-
+          <div>Pending changes: {{ allocation.allocationchangerequest_set.count }}</div>
   {% if formset %}
         
           <div class="table-responsive">
@@ -41,7 +40,7 @@ Request Allocation Change
                 <tr>
                   <th scope="col"><span class="sr-only">Attribute</span></th>
                   <th scope="col">Current Value</th>
-                  <th scope="col">Request New Value</th>
+                  <th scope="col">Requested Value</th>
                 </tr>
               </thead>
               <tbody>
