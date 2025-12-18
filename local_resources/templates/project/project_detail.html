@@ -174,7 +174,7 @@ Project Detail
               <th scope="col">Type</th>
               <th scope="col">Information</th>
               <th scope="col">Status</th>
-              <th scope="col">End Date</th>
+              <!--<th scope="col">End Date</th>-->
               {% if is_allowed_to_update_project %}
               <th scope="col" class="nosort"><span class="sr-only">Request Change</span></th>
               {% endif %}
@@ -211,7 +211,6 @@ Project Detail
                 <td class="text-info">{{ allocation.status.name }}</td>
               {% endif %}
 
-              <td>{{allocation.end_date|date:"Y-m-d"|default:"N/A"}}</td>
               
               {% if is_allowed_to_update_project %}
               <td>

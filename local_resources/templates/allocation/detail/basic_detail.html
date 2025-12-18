@@ -50,16 +50,7 @@
               <td>{{ allocation.justification }}</td>
             </tr>
             {% endif %}
-            {% if allocation.end_date %}
-            <tr>
-              <th scope="row" class="text-nowrap">Start Date:</th>
-              <td>{{ allocation.start_date }}</td>
-            </tr>
-            <tr>
-              <th scope="row" class="text-nowrap">End Date:</th>
-              <td>{{ allocation.end_date }}</td>
-            </tr>
-            {% endif %}
+
           {% if attributes %}
             {% for attribute in attributes %}
                 <tr>
