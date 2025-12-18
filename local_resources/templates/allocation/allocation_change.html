@@ -31,7 +31,16 @@ Request Allocation Change
         </tr>-->
     {% endif %}
 
-          <div>Pending changes: {{ allocation.allocationchangerequest_set.count }}</div>
+          <div>
+            <p>Pending changes:</p>
+          <ol>
+            {% for change in allocation.allocationchangerequest_set.all %}
+              {% if change.status.name == "Pending" %}
+              <li><a href="{% url 'allocation-change-detail' change.pk %}">{{ change.created|date:"M. d, Y" }} - {{ change.allocationattributechangerequest_set.all | join:", " }}</a></li>
+              {% endif %}
+            {% endfor %}
+          </ol>
+          </div>
   {% if formset %}
         
           <div class="table-responsive">
