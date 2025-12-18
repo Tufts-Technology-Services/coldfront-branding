@@ -56,7 +56,7 @@
                 <tr>
                   <th scope="row" class="text-nowrap">{{attribute}}</th>
                   <td>
-                    {{attribute.value}}
+                    {{attribute.value}}{% if attribute.has_usage %} ({% for usage in attributes_with_usage%}{% if usage == attribute %}{{ usage }}{% endif %}{% endfor %} used){% endif %}
                   </td>
                 </tr>
             {% endfor %}
