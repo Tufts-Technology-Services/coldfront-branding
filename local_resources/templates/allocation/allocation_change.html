@@ -73,18 +73,14 @@ Request Allocation Change
     {% endif %}
 
     <div>
-      <div class="field-wrapper">
-            <!-- Manually render the label with a custom class -->
-            <label for="{{ form.justification.id_for_label }}" class="my-custom-class">
+      <div class="form-group">
+            <label for="{{ form.justification.id_for_label }}">
                 Reason for Change:
             </label>
 
-            <!-- Render the input widget -->
-            {{ form.justification }}
-            <!-- Display help text and errors -->
-            {% if form.justification.help_text %}
-                <p class="help">{{ form.justification.help_text|safe }}</p>
-            {% endif %}
+            {{ form.justification | as_crispy_field: "bootstrap4" }}
+
+            <small class="form-text text-muted">please include some information about the reason for this request. e.g. new lab member, new data set</small>
         </div>
       <input class="btn btn-success" type="submit" value="Submit" />
       <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation.pk %}" role="button">Back to
