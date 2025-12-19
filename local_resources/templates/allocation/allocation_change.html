@@ -33,13 +33,13 @@ Request Allocation Change
 
           <div>
             <p>Pending changes:</p>
-          <ol>
+          <ul>
             {% for change in allocation.allocationchangerequest_set.all %}
               {% if change.status.name == "Pending" %}
               <li><a href="{% url 'allocation-change-detail' change.pk %}">{{ change.created|date:"M. d, Y" }} - {{ change.allocationattributechangerequest_set.all | join:", " }}</a></li>
               {% endif %}
             {% endfor %}
-          </ol>
+          </ul>
           </div>
   {% if formset %}
         
@@ -73,7 +73,19 @@ Request Allocation Change
     {% endif %}
 
     <div>
-      {{form.justification | as_crispy_field }}
+      <div class="field-wrapper">
+            <!-- Manually render the label with a custom class -->
+            <label for="{{ form.justification.id_for_label }}" class="my-custom-class">
+                Reason for Change:
+            </label>
+
+            <!-- Render the input widget -->
+            {{ form.justification }}
+            <!-- Display help text and errors -->
+            {% if form.justification.help_text %}
+                <p class="help">{{ form.justification.help_text|safe }}</p>
+            {% endif %}
+        </div>
       <input class="btn btn-success" type="submit" value="Submit" />
       <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation.pk %}" role="button">Back to
         Allocation</a><br>
