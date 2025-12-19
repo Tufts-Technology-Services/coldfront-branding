@@ -77,8 +77,7 @@ Request Allocation Change
             <label for="{{ form.justification.id_for_label }}">
                 Reason for Change:
             </label>
-
-            {{ form.justification|as_crispy_field }}
+            <textarea class="form-control" id="{{ form.justification.id }}" rows="3">{{ form.justification }}</textarea>
 
             <small class="form-text text-muted">please include some information about the reason for this request. e.g. new lab member, new data set</small>
         </div>
