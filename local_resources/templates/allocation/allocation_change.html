@@ -18,25 +18,17 @@ Request Allocation Change
 </p>
 
 <form action="{% url 'allocation-change' allocation.pk %}" method="post">
+    {% csrf_token %}
   <div class="card mb-3">
 
     <div class="card-body">
-    {% csrf_token %}
-    {% if allocation.is_changeable %}
-     <!--   <tr>
-        <th scope="row" class="text-nowrap">Request End Date Extension:</th>
-        <td>
-            {{ form.end_date_extension }}
-        </td>
-        </tr>-->
-    {% endif %}
 
           <div>
             <p>Pending changes:</p>
           <ul>
             {% for change in allocation.allocationchangerequest_set.all %}
               {% if change.status.name == "Pending" %}
-              <li><a href="{% url 'allocation-change-detail' change.pk %}">{{ change.created|date:"M. d, Y" }} - {{ change.allocationattributechangerequest_set.first }}</a></li>
+              <li><a href="{% url 'allocation-change-detail' change.pk %}">{{ change.created|date:"M. d, Y" }} - {{ change.allocationattributechangerequest_set.first.allocationattribute }}</a></li>
               {% endif %}
             {% endfor %}
           </ul>
