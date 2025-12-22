@@ -24,11 +24,11 @@ Request Allocation Change
     <div class="card-body">
 
           <div>
-            <p>Pending changes to this allocation:</p>
+            <p>Pending changes for this allocation:</p>
           <ul>
             {% for change in allocation.allocationchangerequest_set.all %}
               {% if change.status.name == "Pending" %}
-              <li><a href="{% url 'allocation-change-detail' change.pk %}">{{ change.created|date:"M. d, Y" }} - {{ change.allocationattributechangerequest_set.first }}</a></li>
+              <li><a href="{% url 'allocation-change-detail' change.pk %}">{{ change.created|date:"M. d, Y" }} - {{ change.allocationattributechangerequest_set.first }} to {{ change.allocationattributechangerequest_set.first.new_value  }} </a></li>
               {% endif %}
             {% endfor %}
           </ul>
