@@ -69,7 +69,7 @@ Request Allocation Change
             <label for="{{ form.justification.id_for_label }}">
                 Reason for Change:
             </label>
-            {{ form.justification.tag }}
+            {{ form.justification | as_crispy_field }}
             <small class="form-text text-muted">please include some information about the reason for this request. e.g. new lab member, new data set</small>
         </div>
       <input class="btn btn-success" type="submit" value="Submit" />
