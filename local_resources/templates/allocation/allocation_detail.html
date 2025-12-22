@@ -38,6 +38,10 @@ Allocation Detail
   {% include "allocation/detail/eula.html" %}
 {% endif %}
 
+{% if display_slurm_help %}
+  {% include "slurm/slurm_help_div.html" %}
+{% endif %}
+
 {% if not user_is_pending and allocation.is_changeable %}
 <!-- Start Allocation Change Requests -->
   {% include "allocation/detail/change_requests.html" %}
@@ -93,66 +97,26 @@ Allocation Detail
     {% endif %}
   </div>
 </div>
+{% endblock %}
 
+{% block javascript %}
+{{ block.super }}
 <script>
-  $(document).ready(function () {
-    var guage_data = {{ guage_data | safe }};
-    //console.log(guage_data);
-    guage_data.forEach(function (item, index) {
-      var original_label = item.columns[0][0];
-      var new_label = "Usage" + original_label.split(":")[1];
-      item.columns[0][0] = new_label;
-
-      var original_color = item.colors[original_label];
-      item.colors[new_label] = original_color;
-      delete item.colors[original_label];
-    });
-    drawGauges(guage_data);
-
-    $('#allocation_change_table').DataTable({
-      lengthMenu: [5, 10, 20, 50, 100],
-      "pageLength": 5,
-      "ordering": false,
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }]
-    });
-    $('#allocationuser_table').DataTable({
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }]
-    });
-  });
-
-  function drawGauges(guage_data) {
-    var arrayLength = guage_data.length;
-    for (var i = 0; i < arrayLength; i++) {
-      c3.generate({
-        bindto: '#gauge-' + i,
-        data: guage_data[i],
-        legend: {
-          item: {
-            onclick: function (id) { }
-          }
-        }
-      });
-    }
-  }
-  $(".datepicker").flatpickr();
+document.addEventListener('DOMContentLoaded', function() {
   $(document).on('click', '.confirm-activate', function(){
     var attributes_num = {{ attributes | length }};
     if (attributes_num == 0) {
       return confirm('Are you sure you want to activate this allocation request without setting any allocation attributes?');
     }
-  })
+  });
   $(document).on('click', '.confirm-deny', function(){
     var notes_num = {{ notes | length }};
     if (notes_num == 0) {
       return confirm('Are you sure you want to deny this allocation request without setting a notification?');
     }
-  })
+  });
+});
 </script>
 {% endblock %}
+
 
