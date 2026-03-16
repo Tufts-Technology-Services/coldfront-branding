@@ -169,17 +169,24 @@
         </div>
       {% endif %}
 
-      {% if attributes_with_usage %}
-        <hr>
-        {% for attribute in attributes_with_usage %}
-          <div class="card mb-3 mr-1">
-            <div class="card-body">
-              <h4 class="card-title">{{attribute}}</h4>
-              <div id="gauge-{{forloop.counter0}}"></div>
+    <div class="col-sm-6">
+        {% if attributes_with_usage %}
+          {% for attribute in attributes_with_usage %}
+            <div class="card mb-3 mr-1">
+              <div class="card-body">
+                <h4 class="card-title">{{attribute}}</h4>
+                <div class="chart-container mx-auto" style="text-align: center; position: relative; width:40%">
+                  <canvas class="gauge-chart" 
+                          data-title="{{ attribute.allocationattributeusage.value }} of {{ attribute.value }} used" 
+                          data-total="{{ attribute.value }}" 
+                          data-used="{{ attribute.allocationattributeusage.value }}">
+                  </canvas>
+                </div>
+              </div>
             </div>
-          </div>
-        {% endfor %}
-      {% endif %}
+          {% endfor %}
+        {% endif %}
+    </div>
     </div>
   </div>
   {% endif %}

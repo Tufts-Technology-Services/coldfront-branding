@@ -10,9 +10,11 @@
       Manage your research resources, such as storage and HPC access, in this portal.
     </p>
     <hr>
-
+    {% if 'djangosaml2' in EXTRA_APPS %}
+    <p><a class="btn btn-primary btn-block" href="{% url 'saml2_login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></p>
+    {% else %}
     <p><a class="btn btn-primary btn-block" href="{% url 'login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></p>
-
+    {% endif %}
     <div class="card bg-light">
       <div class="card-body">
         <h3 class="card-title h5">Do not have an Account?</h3>

@@ -22,7 +22,11 @@
       </ul>
  
       <ul class="navbar-nav ml-auto">
+        {% if 'djangosaml2' in EXTRA_APPS %}
+        <li id="navbar-login" class="nav-item"><a class="nav-link" href="{% url 'saml2_login' %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></li>
+        {% else %}
         <li id="navbar-login" class="nav-item"><a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></li>
+        {% endif %}
       </ul>
     </div>
   </div>
