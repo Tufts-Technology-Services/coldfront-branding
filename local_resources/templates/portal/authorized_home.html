@@ -92,9 +92,12 @@
     <h2>Links</h2>
     <hr>
     <ul class="list-group">
+      {% url 'account-status' as account_status_url %}
+      {% if account_status_url%}
       <li class="list-group-item">
-        <a href="{% url 'account-status' %}"><i class="fa fa-book fa-lg" aria-hidden="true"></i> HPC Account Status</a>
+        <a href="{{ account_status_url }}"><i class="fa fa-book fa-lg" aria-hidden="true"></i> HPC Account Status</a>
       </li>
+      {% endif %}
       <li class="list-group-item">
         <a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a>
       </li>
