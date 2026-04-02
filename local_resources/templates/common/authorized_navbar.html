@@ -36,9 +36,6 @@
           {% include 'common/navbar_director.html' %}
         {% endif %}
         {% include 'common/navbar_reporting.html' %}
-        {% if request.user.is_superuser or perms.allocation.can_manage_invoice %}
-          {% include 'common/navbar_invoice.html' %}
-        {% endif %}
         {% if settings.CENTER_HELP_URL %}
           {% include 'common/navbar_help.html' %}
         {% endif %}
