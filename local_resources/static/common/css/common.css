@@ -1,3 +1,10 @@
+@media (min-width: 1400px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 1320px;
+    }
+}
+
+
 .fakeimg {
   height: 77px;
   background: #E2E2E2;
@@ -60,6 +67,60 @@ footer .secondary-logo img {
   border-color: #1f1d1d !important;
 }
 
+a {
+  color: #3172AE;
+}
+
+.btn-outline-primary {
+    color: #3172AE;
+    border-color: #3172AE;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3172AE;
+}
+
+.btn-primary {
+    background-color: #3172AE;
+    border-color: #3172AE;
+}
+
+.btn-primary:hover {
+    background-color: #1473cb;
+    border-color: #1473cb;
+}
+
+.resource-block {
+  min-height: 18rem;
+}
+
+.btn-outline-primary.register-btn {
+    border-color: black;
+    color: black;
+    border-radius: 0;
+    padding: 0.75em 1.5em;
+}
+
+.btn-outline-primary.register-btn:hover {
+    background-color: white;
+    color: #3172AE;
+}
+
+.access-box {
+    background-color: #e0e0e0;
+    color: black;
+    margin-left: -4rem;
+    margin-right: -4rem;
+}
+
+.access-text {
+    font-weight: 500;
+}
+
+.see-all {
+    font-size: 0.75em;
+    font-weight: normal;
+}
 
 
 #brand .container {

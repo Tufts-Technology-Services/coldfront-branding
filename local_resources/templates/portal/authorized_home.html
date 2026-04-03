@@ -4,9 +4,17 @@
 
 {% block content %}
 <div class="row">
+  <br/>
+  <div class="col-lg-12">
+  <p class="lead">Make storage requests, manage users and assign billing details in the Research Computing ecosystem.</p>
+  </div>
+  <br/>
+</div>
 
-  <div class="col-lg-6 mt-2">
-    <h2><a href="{% url 'project-list' %}">Projects &raquo;</a></h2>
+<div class="row">
+
+  <div class="col-lg-6 mt-2 resource-block">
+    <h2>Projects <a href="{% url 'project-list' %}">&raquo; <span class='see-all'>all</span></a></h2>
     <hr>
 
     {% if project_list %}
@@ -23,7 +31,9 @@
         {% endfor %}
       </ul>
     {% else %}
-      <div class="alert alert-info" role="alert"><i class="fa fa-info-circle" aria-hidden="true"></i> There are no projects to display.</div>
+      <div class="alert alert-light" role="alert"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> 
+        You are not currently associated with any projects. You must be in a project to have resource allocations.
+      </div>
       {% if user.userprofile.is_pi or user.is_superuser %}
         <a class="btn btn-primary btn-block" href="{% url 'project-create' %}" role="button">Add a project</a>
         <hr>
@@ -32,7 +42,7 @@
   </div>
 
   <div class="col-lg-6 mt-2">
-    <h2><a href="{% url 'allocation-list' %}">Allocations &raquo;</a></h2>
+    <h2>Resource Allocations <a href="{% url 'allocation-list' %}">&raquo; <span class='see-all'>all</span></a></h2>
     <hr>
 
     {% if allocation_list %}
@@ -82,32 +92,21 @@
         </tbody>
       </table>
     {% else %}
-      <div class="alert alert-info" role="alert">
-        <i class="fa fa-info-circle" aria-hidden="true"></i> There are no allocations to display.
+      <div class="alert alert-light" role="alert">
+        <i class="fa fa-exclamation-circle" aria-hidden="true"></i> You are not currently associated with any resource allocations.
       </div>
     {% endif %}
   </div>
-
- <div class="col-lg-6 mt-2">
-    <h2>Links</h2>
-    <hr>
-    <ul class="list-group">
-      {% url 'account-status' as account_status_url %}
-      {% if account_status_url%}
-      <li class="list-group-item">
-        <a href="{{ account_status_url }}"><i class="fa fa-book fa-lg" aria-hidden="true"></i> HPC Account Status</a>
-      </li>
-      {% endif %}
-      <li class="list-group-item">
-        <a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a>
-      </li>
-      <li class="list-group-item">
-        <a href="mailto:christopher.barnett@tufts.edu"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i> Contact Support</a>
-      </li>
-    </ul>
- </div>
-
 </div>
+<div class="row">
+  <div class="col-lg-12 mt-4">
+    <hr>
+  </div>
+</div>
+
+{% include "portal/home_extras.html" %}
+
+
 <div class="row">
   {% include "portal/extra_app_templates.html" %}
 </div>
