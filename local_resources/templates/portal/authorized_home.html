@@ -62,6 +62,8 @@
               <a href = "{% url 'allocation-detail' allocation.id %}">{{allocation.get_parent_resource}}</a>
               {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
               <a href = "{{ondemand_url}}"> {% load static %}  <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
+              </td>
+              {% endif %}
               {% with allocation.get_information as allocation_information %}
               {% if allocation_information != '' %}
               <td class="text-nowrap">{{allocation_information}}</td>
@@ -69,8 +71,8 @@
               <td class="text-nowrap">{{allocation.description|default_if_none:""}}</td>
               {% endif %}
               {% endwith %}
-            {% endif %}
-            </td>
+
+            
             <td>{{allocation.project.title}}</td>
             <td> 
             {%  if allocation.status.name == "Expired" and allocation.expires_in < 0 %}
