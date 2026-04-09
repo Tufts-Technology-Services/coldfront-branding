@@ -1,13 +1,4 @@
-<div class="row">
-  <div class="col-12 py-5">
-    <h3>Help</h3>
-    <ul class="list-inline">
-      <li class="list-inline-item p-2"><a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i> RCRM Documentation</a></li>
-      <li class="list-inline-item p-2"><a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a></li>
-      <li class="list-inline-item p-2"><a href="mailto:christopher.barnett @tufts.edu"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i> Contact Support</a></li>
-    </ul>
-  </div>
-</div>
+
 
 
 {% url 'account-status' as account_status_url %}
@@ -23,3 +14,21 @@
   </div>
 </div>
 {% endif %}
+<div class="row">
+  <div class="col-lg-12 mt-4">
+    <hr>
+  </div>
+</div>
+
+<div class="container ">
+<div class="row">
+  <div class="col-12 py-5">
+    <h3>Help</h3>
+    <ul class="list-inline">
+      <li class="list-inline-item p-2 mr-5"><a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i> RCRM Documentation</a></li>
+      <li class="list-inline-item p-2 mr-5"><a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a></li>
+      <li class="list-inline-item p-2 mr-5"><a href="{{ settings.CENTER_HELP_URL }}"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i> Contact Support</a></li>
+    </ul>
+  </div>
+</div>
+</div>

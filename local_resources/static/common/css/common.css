@@ -90,8 +90,16 @@ a {
     border-color: #1473cb;
 }
 
+.welcome-text {
+    font-size: 1.75em;
+}
+
 .resource-block {
   min-height: 18rem;
+}
+
+.project-list > .list-group-item {
+    border-color: white;
 }
 
 .btn-outline-primary.register-btn {
