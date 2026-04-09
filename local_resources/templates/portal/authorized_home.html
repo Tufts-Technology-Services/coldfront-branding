@@ -59,16 +59,16 @@
           {% for allocation in allocation_list %}
           <tr>
             <td>
-              <a href = "{% url 'allocation-detail' allocation.id %}">{{allocation.get_parent_resource}}</a>
+              <a href="{% url 'allocation-detail' allocation.id %}" class="text-nowrap">{{allocation.get_parent_resource}}</a>
               {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
               <a href = "{{ondemand_url}}"> {% load static %}  <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
               </td>
               {% endif %}
               {% with allocation.get_information as allocation_information %}
               {% if allocation_information != '' %}
-              <td class="text-nowrap">{{allocation_information}}</td>
+              <td>{{allocation_information}}</td>
               {% else %}
-              <td class="text-nowrap">{{allocation.description|default_if_none:""}}</td>
+              <td>{{allocation.description|default_if_none:""}}</td>
               {% endif %}
               {% endwith %}
 
@@ -93,6 +93,8 @@
               {% else %}
               <span class="badge badge-pill badge-success">{{allocation.status}}</span>
               {% endif %}
+            {% elif allocation.status.name == "New" %}
+            <span class="badge badge-pill badge-danger">Requested</span>
             {% else %}
             <span class="badge badge-pill badge-info">{{allocation.status}}</span>
             {% endif %}
