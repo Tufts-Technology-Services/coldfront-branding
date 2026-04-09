@@ -50,7 +50,7 @@
         <thead>
           <tr>
             <th scope="col">Resource</th>
-            <th scope="col">Allocation</th>
+            <th scope="col">Info</th>
             <th scope="col">Project</th>
             <th scope="col">Status</th>
           </tr>
@@ -94,7 +94,7 @@
               <span class="badge badge-pill badge-success">{{allocation.status}}</span>
               {% endif %}
             {% elif allocation.status.name == "New" %}
-            <span class="badge badge-pill badge-danger">Requested</span>
+            <span class="badge badge-pill badge-warning">Requested</span>
             {% else %}
             <span class="badge badge-pill badge-info">{{allocation.status}}</span>
             {% endif %}

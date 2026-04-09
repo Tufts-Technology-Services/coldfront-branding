@@ -98,6 +98,10 @@ a {
   min-height: 18rem;
 }
 
+.resource-block table tr {
+    border-top: none;
+}
+
 .project-list > .list-group-item {
     border-color: white;
 }
