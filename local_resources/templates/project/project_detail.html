@@ -107,7 +107,11 @@ Project Detail
                 <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Receive email notifications for this project</span>
               </a>
             </th>
-            <th scope="col" class="text-nowrap">Role <a href="#" data-toggle="popover" data-trigger="hover" data-content="Manager role grants user access to add/remove users and allocations to the project."><i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Manager role grants user access to add/remove users and allocations to the project.</span></a></th>
+            <th scope="col" class="text-nowrap">Role 
+              <a href="#" data-toggle="popover" data-trigger="hover" data-content="Approver role grants user access to add/remove users and allocations to the project.">
+                <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Approver role grants user access to add/remove users and allocations to the project.</span>
+              </a>
+            </th>
 
           </tr>
         </thead>
@@ -135,7 +139,7 @@ Project Detail
                 {% elif request.user != user.user %} disabled>{% else %}>{% endif %}
               </td>
 
-              <td>{{ user.role.name }}
+              <td>{% if user.role.name == "Manager" %}Approver{% else %}{{ user.role.name }}{% endif %}
                 {% if is_allowed_to_update_project %}
                 &nbsp;<a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
                 {% endif %}

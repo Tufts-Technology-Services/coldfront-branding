@@ -3,12 +3,12 @@
 
 
 {% block title %}
-User Projects and Managers{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif %}
+User Projects and Approvers{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif %}
 {% endblock %}
 
 
 {% block content %}
-<h2>User Projects and Managers{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif %}</h2>
+<h2>User Projects and Approvers{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif %}</h2>
 
 {% with object_list as user_project_associations %}
   {% if not user_project_associations %}
@@ -40,10 +40,10 @@ User Projects and Managers{% if not user == viewed_user %}: {{ viewed_user.usern
             <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
            <!-- <p class="card-text text-justify"><strong>Field of Science: </strong>{{ project.field_of_science }}</p> -->
             <p class="card-text text-justify"><strong>Project Status: </strong>{{ project.status }} </p>
-            <p class="card-text"><strong>Principal Investigator: </strong>{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }})
+            <p class="card-text"><strong>Project Owner: </strong>{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }})
               <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email</span></a>
               {% if association.is_project_pi %}
-                <span class="text-success">({{ user_pronounish | lower }} <em>{{user_verbform_be}}</em> the project PI)</span>
+                <span class="text-success">({{ user_pronounish | lower }} <em>{{user_verbform_be}}</em> the project owner)</span>
               {% endif %}
             </p>
             <!-- End Project Heading -->
@@ -51,10 +51,10 @@ User Projects and Managers{% if not user == viewed_user %}: {{ viewed_user.usern
             <!-- Start Project Managers -->
             <div class="card mb-3">
               <div class="card-header">
-                <h4 class="d-inline"><i class="fas fa-users" aria-hidden="true"></i> Additional Managers</h4> <span class="badge badge-secondary">{{ project.project_managers | length }}</span>
+                <h4 class="d-inline"><i class="fas fa-users" aria-hidden="true"></i> Additional Approvers</h4> <span class="badge badge-secondary">{{ project.project_managers | length }}</span>
                 {% if association.is_project_manager and not association.is_project_pi %}
                   <div class="float-right">
-                    <p class="card-text text-success"><strong>{{ user_pronounish }} {{user_verbform_be}} a manager of this project.</strong></p>
+                    <p class="card-text text-success"><strong>{{ user_pronounish }} {{user_verbform_be}} an approver for this project.</strong></p>
                   </div>
                 {% endif %}
               </div>
@@ -90,7 +90,7 @@ User Projects and Managers{% if not user == viewed_user %}: {{ viewed_user.usern
                     </table>
                   </div>
                 {% else %}
-                  <div class="alert alert-info" role="alert"><i class="fas fa-info-circle" aria-hidden="true"></i> There are no additional project managers.</div>
+                  <div class="alert alert-info" role="alert"><i class="fas fa-info-circle" aria-hidden="true"></i> There are no additional project approvers.</div>
                 {% endif %}
               </div>
             </div>
