@@ -103,7 +103,7 @@ Project List
           <tr>
 
             <td style="text-align: justify; text-justify: inter-word;">
-              <a href="/project/{{project.id}}/">{{ project.title }}</a>
+              <a href="/project/{{project.id}}/" data-toggle="popover" data-trigger="hover" data-content="View project details.">{{ project.title }}</a>
             </td>
           
             <td>{{ project.description }}</td>
@@ -142,5 +142,15 @@ Project List
     No projects to display!
   </div>
 {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    $('[data-toggle="popover"]').popover();
+});
+</script> 
 
 {% endblock %}
