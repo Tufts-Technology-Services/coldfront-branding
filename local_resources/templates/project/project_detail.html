@@ -42,13 +42,9 @@ Project Detail
   </div>
   <div class="card-body">
     <h3 class="card-title">
-      Project Owner:
-      {{ project.pi.first_name }}
-      {{ project.pi.last_name }}
-      ({{ project.pi.username }})
-      <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email Project Owner</span></a>
+      {{ project.title }}  
     </h3>
-    <p class="card-text text-justify"><strong>Name: </strong>{{ project.title }}</p>
+    <p class="card-text text-justify"><strong>Project Owner: </strong>{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }}) <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email Project Owner</span></a></p>
     <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
     {% if project.project_code %}
         <p class="card-text text-justify"><strong>Project Code: </strong>{{ project.project_code }}</p>
