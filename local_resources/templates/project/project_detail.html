@@ -11,7 +11,7 @@ Project Detail
 
 
 {% block content %}
-
+{% csrf_token %}
 {% if is_allowed_to_update_project and project.needs_review%}
   <div class="alert alert-warning">
     You need to review this project. <a href="{% url 'project-review' project.pk %}">Review Project</a>
@@ -144,6 +144,7 @@ Project Detail
                 &nbsp;<a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
                 {% endif %}
               </td>
+
             </tr>
           {% endfor %}
         </tbody>
@@ -523,8 +524,9 @@ document.addEventListener('DOMContentLoaded', function() {
       var checked = $(this).prop('checked');
       var user_project_id = Number($(this).attr('id').split("_").pop());
 
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
       $.ajax({
-        headers: { 'X-CSRFToken': getCookie('csrftoken') },
+        headers: { 'X-CSRFToken': csrftoken },
         type: "POST",
         url: "/project/project-user-update-email-notification/",
         data: {
