@@ -94,11 +94,11 @@ a {
     font-size: 1.75em;
 }
 
-.resource-block {
+.home-block {
   min-height: 18rem;
 }
 
-.resource-block table tr {
+.allocation-block table tr {
     border-top: none;
 }
 
