@@ -40,7 +40,7 @@ Resource List
 
 
 {% if resource_list %}
-  <strong>Resource{{resources_count|pluralize}}: {{resources_count}}</strong>
+  {% if is_paginated %} <strong>Resource{{resources_count|pluralize}}: {{resources_count}}</strong> {% endif %}
   <div class="table-responsive">
     <table class="table table-sm">
       <thead>
