@@ -513,59 +513,14 @@ Project Detail
 </div>
 <!-- End Admin Messages -->
 
+
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
 <script>
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) == (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
-
-  $(document).ready(function(){
+document.addEventListener('DOMContentLoaded', function() {
     $('[data-toggle="popover"]').popover();
-
-    var guage_data = {{ guage_data | safe }};
-    drawGauges(guage_data);
-
-    $('#publication-table').DataTable({
-      "aLengthMenu": [
-        [10, 25, 50, 100, -1],
-        [10, 25, 50, 100, "All"]],
-      "iDisplayLength": 25,
-      "bSortClasses": false,
-      "order": [[ 1, "desc" ]]
-    });
-
-    $('#allocation_table').DataTable({
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }]
-    });
-
-    $('#grant_table').DataTable({
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }]
-    });
-
-    $('#projectuser_table').DataTable({
-      'aoColumnDefs': [{
-        'bSortable': false,
-        'aTargets': ['nosort']
-      }]
-    });
-
     $("#selectAll").click(function () {
       $("input[id^='email_notifications_for_user_id_']").not(":disabled").prop('checked', $(this).prop('checked')).change();
      });
@@ -590,21 +545,7 @@ Project Detail
         }
       });
     });
-  });
-
-  function drawGauges(guage_data) {
-    var arrayLength = guage_data.length;
-    for (var i = 0; i < arrayLength; i++) {
-      c3.generate({
-        bindto: '#gauge-' + i,
-        data: guage_data[i],
-        legend: {
-          item: {
-            onclick: function (id) { }
-          }
-        }
-      });
-    }
-  }
+});
 </script>
+
 {% endblock %}
