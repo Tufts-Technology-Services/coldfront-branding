@@ -32,7 +32,7 @@ Project Detail
 <!-- Start Project Heading -->
 <div class="card mb-3">
   <div class="card-header">
-      <h3 class="d-inline" id="manage-project"><i class="fas fa-cubes" aria-hidden="true"></i> Project Information</h3>
+      <h3 class="d-inline" id="manage-project"><i class="fas fa-cubes" aria-hidden="true"></i> {{ project.title }} </h3>
       <div class="float-right">
         {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.status.name in 'Active, New' %}
           <a class="btn btn-info" href="{% url 'project-update' project.pk %}" role="button"><i class="far fa-edit" aria-hidden="true"></i> Update</a>
@@ -41,9 +41,9 @@ Project Detail
       </div>
   </div>
   <div class="card-body">
-    <h3 class="card-title">
+    <!--<h3 class="card-title">
       {{ project.title }}  
-    </h3>
+    </h3>-->
     <p class="card-text text-justify"><strong>Project Owner: </strong>{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }}) <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email Project Owner</span></a></p>
     <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
     {% if project.project_code %}
