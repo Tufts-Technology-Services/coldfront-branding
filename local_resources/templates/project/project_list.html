@@ -21,14 +21,17 @@ Project List
 </div>
 
 <h2>Projects</h2>
+<p>Projects organize your resource allocations and manage group membership.</p>
 <hr>
 {% if expand_accordion == "show" or project_list or user.is_superuser%}
   <div class="mb-3" id="accordion">
     <div class="card">
       <div class="card-header">
         <a id="expand_button" role="button" class="card-link " data-toggle="collapse" href="#collapseOne">
+          <div>
           <i class="fas fa-filter" aria-hidden="true"></i> Filter
           <i id="plus_minus" class="fas {{expand_accordion|get_icon}} float-right"></i>
+          </div>
         </a>
       </div>
       <div id="collapseOne" class="collapse {{expand_accordion}}" data-parent="#accordion">
@@ -37,7 +40,9 @@ Project List
             {{ project_search_form.title |as_crispy_field }}
             {{ project_search_form.last_name |as_crispy_field }}
             {{ project_search_form.username |as_crispy_field }}
+            {% if request.user.is_superuser or request.user.is_staff %}
             {{ project_search_form.show_all_projects |as_crispy_field }}
+            {% endif %}
             <input type="submit" class="btn btn-primary" value="Search">
             <button id="form_reset_button" type="button" class="btn btn-secondary">Reset</button>
           </form>
@@ -48,22 +53,32 @@ Project List
   <hr>
 {% endif %}
 {% if project_list %}
-  <strong>Projects: {{projects_count}}</strong>
-  <div class="table-responsive">
+  {% if is_paginated %}<strong>Total: {{projects_count}}</strong>{% endif %}
+  <div class="table-responsive info-block">
     <table class="table table-sm">
       <thead>
+
         <tr>
           <th scope="col" class="text-nowrap">
+            Title
+            <a href="?order_by=title&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Title asc</span></a>
+            <a href="?order_by=title&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Title desc</span></a>
+          </th>
+
+          <th scope="col">Description</th>
+ <!--         <th scope="col" class="text-nowrap">
             ID
             <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort ID asc</span></a>
             <a href="?order_by=id&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort ID desc</span></a>
           </th>
+        -->
           <th scope="col" class="text-nowrap">
-            PI
-            <a href="?order_by=pi__username&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort PI asc</span></a>
-            <a href="?order_by=pi__username&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort PI desc</span></a>
+            Owner
+            <a href="?order_by=pi__username&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Owner asc</span></a>
+            <a href="?order_by=pi__username&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Owner desc</span></a>
           </th>
-          <th scope="col">Title</th>
+
+
          <!-- <th scope="col" class="text-nowrap">
             Field of Science
             <a href="?order_by=field_of_science&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Field of Science asc</span></a>
@@ -86,13 +101,14 @@ Project List
       <tbody>
         {% for project in project_list %}
           <tr>
-            {% if project.project_code %}
-                <td><a href="/project/{{project.id}}/">{{ project.project_code }}</a></td>
-            {% else %}
-                <td><a href="/project/{{project.id}}/">{{ project.id }}</a></td>
-            {% endif %}
-            <td>{{ project.pi.username }}</td>
-            <td style="text-align: justify; text-justify: inter-word;">{{ project.title }}</td>
+
+            <td style="text-align: justify; text-justify: inter-word;">
+              <a href="/project/{{project.id}}/">{{ project.title }}</a>
+            </td>
+          
+            <td>{{ project.description }}</td>
+
+            <td style="text-align: justify; text-justify: inter-word;">{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }})</td>
          <!--   <td>{{ project.field_of_science.description }}</td> -->
             <td>{{ project.status.name }}</td>
             {% if settings.PROJECT_INSTITUTION_EMAIL_MAP %}
