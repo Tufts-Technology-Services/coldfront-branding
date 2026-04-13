@@ -98,7 +98,7 @@ a {
   min-height: 18rem;
 }
 
-.allocation-block table tr {
+.allocation-block table th {
     border-top: none;
 }
 
