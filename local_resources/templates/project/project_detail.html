@@ -194,19 +194,9 @@ Project Detail
                   &nbsp;<a href = "{{ ondemand_url }}" target="_blank"> <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
               {% endif %}
               </td>
-              
-              {% if allocation.status.name == 'Active' %}
-                {% if user_allocation_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
-                <td class="text-success">{{ user_allocation_status|get_value_by_index:forloop.counter0 }}</td>
-                {% else %}
-                <td class="text-success">{{ allocation.status.name }}</td>
-                {% endif %}
-              {% elif  allocation.status.name == 'Expired' or allocation.status.name == 'Denied' %}
-                <td class="text-danger">{{ allocation.status.name }}</td>
-              {% else %}
-                <td class="text-info">{{ allocation.status.name }}</td>
-              {% endif %}
-
+              <td>
+                {% include "allocation/detail/allocation_status.html" %} 
+              </td>
               
               {% if is_allowed_to_update_project %}
               <td>
