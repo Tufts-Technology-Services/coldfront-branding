@@ -46,9 +46,7 @@ Project Detail
     </h3>-->
     <p class="card-text text-justify"><strong>Project Owner: </strong>{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }}) <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email Project Owner</span></a></p>
     <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
-    {% if project.project_code %}
-        <p class="card-text text-justify"><strong>Project Code: </strong>{{ project.project_code }}</p>
-    {% endif %}
+    
     {% if not settings.FIELD_OF_SCIENCE_HIDE %}
         <p class="card-text text-justify"><strong>Field of Science: </strong>{{ project.field_of_science }}</p>
     {% endif %}
@@ -140,7 +138,7 @@ Project Detail
                 {% elif request.user != user.user %} disabled>{% else %}>{% endif %}
               </td>
 
-              {% if is_allowed_to_update_project %}
+              {% if is_allowed_to_update_project and user.user != project.pi %}
               <td>
                 <select id="role_for_user_id_{{user.id}}" 
                   name="role_for_user_id_select" 
@@ -149,6 +147,8 @@ Project Detail
                     <option value="User" {% if user.role.name == "User" %} selected {% endif %}>User</option>
                 </select>
               </td>
+              {% elif user.user == project.pi %}
+                  <td>Owner</td>
               {% else %}
                   {% if user.role.name == "Manager" %}<td>Approver</td>{% else %}<td>{{ user.role.name }}</td>{% endif %}
               {% endif %}
