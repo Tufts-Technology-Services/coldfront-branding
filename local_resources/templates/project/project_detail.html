@@ -46,9 +46,7 @@ Project Detail
     </h3>-->
     <p class="card-text text-justify"><strong>Project Owner: </strong>{{ project.pi.first_name }} {{ project.pi.last_name }} ({{ project.pi.username }}) <a href="mailto:{{ project.pi.email }} "><i class="far fa-envelope" aria-hidden="true"></i><span class="sr-only">Email Project Owner</span></a></p>
     <p class="card-text text-justify"><strong>Description: </strong>{{ project.description }}</p>
-    {% if project.project_code %}
-        <p class="card-text text-justify"><strong>Project Code: </strong>{{ project.project_code }}</p>
-    {% endif %}
+    
     {% if not settings.FIELD_OF_SCIENCE_HIDE %}
         <p class="card-text text-justify"><strong>Field of Science: </strong>{{ project.field_of_science }}</p>
     {% endif %}
