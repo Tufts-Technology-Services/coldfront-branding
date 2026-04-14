@@ -129,6 +129,7 @@ Project Detail
                 <td class="text-info">{{ user.status.name }}
                 </td>
               {% endif %}
+
               <td>
                 <input type="checkbox" id="email_notifications_for_user_id_{{user.id}}"
                     name="email_notifications_checkbox" value="{{ user.enable_notifications }}"
@@ -139,11 +140,18 @@ Project Detail
                 {% elif request.user != user.user %} disabled>{% else %}>{% endif %}
               </td>
 
-              <td>{% if user.role.name == "Manager" %}Approver{% else %}{{ user.role.name }}{% endif %}
-                {% if is_allowed_to_update_project %}
-                &nbsp;<a href="{% url 'project-user-detail' project.pk user.id %}"><i class="fas fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span></a>
-                {% endif %}
+              {% if is_allowed_to_update_project %}
+              <td>
+                <select id="role_for_user_id_{{user.id}}" 
+                  name="role_for_user_id_select" 
+                  value="{{ user.role.name }}" class="form-control form-control-sm">
+                    <option value="Manager" {% if user.role.name == "Manager" %} selected {% endif %}>Approver</option>
+                    <option value="User" {% if user.role.name == "User" %} selected {% endif %}>User</option>
+                </select>
               </td>
+              {% else %}
+                  {% if user.role.name == "Manager" %}<td>Approver</td>{% else %}<td>{{ user.role.name }}</td>{% endif %}
+              {% endif %}
 
             </tr>
           {% endfor %}
@@ -541,6 +549,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     });
+
+    $("[id^=role_for_user_id_]").change(function() {
+      var value = $(this).val();
+      if (value == "Approver") {
+        // this probably isn't needed
+        console.log('changing to manager');
+        value = "Manager";
+      }
+      var user_project_id = Number($(this).attr('id').split("_").pop());
+
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+      $.ajax({
+        headers: { 'X-CSRFToken': csrftoken },
+        type: "POST",
+        url: "/local/project-user-update-role/",
+        data: {
+          user_project_id: user_project_id,
+          role: value
+        },
+        success: function (data) {
+          $("#alert_div").html('<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success!</strong> User role updated.</div>')
+        },
+        error: function (xhr, status, error) {
+          $("#alert_div").html('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong> Failed updating user role.</div>')
+        }
+      });
+    });
+
 });
 </script>
 

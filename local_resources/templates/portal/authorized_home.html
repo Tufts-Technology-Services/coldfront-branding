@@ -50,7 +50,6 @@
         <thead>
           <tr>
             <th scope="col">Resource Allocation</th>
-            <th scope="col">Info</th>
             <th scope="col">Project</th>
             <th scope="col">Status</th>
           </tr>
@@ -62,16 +61,15 @@
               <a href="{% url 'allocation-detail' allocation.id %}" class="text-nowrap">{{allocation.get_parent_resource}}</a>
               {% if allocation.get_parent_resource.get_ondemand_status == 'Yes' and ondemand_url %}
               <a href = "{{ondemand_url}}"> {% load static %}  <img src="/static/core/portal/imgs/ondemand.png" alt="ondemand cta" width="25" height="25"></a>
-              </td>
               {% endif %}
               {% with allocation.get_information as allocation_information %}
               {% if allocation_information != '' %}
-              <td>{{allocation_information}}</td>
+                <br>{{allocation_information}}
               {% else %}
-              <td>{{allocation.description|default_if_none:""}}</td>
+                <br>{{allocation.description|default_if_none:""}}
               {% endif %}
               {% endwith %}
-
+            </td>
             
             <td>{{allocation.project.title}}</td>
             <td> 
