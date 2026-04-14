@@ -12,7 +12,7 @@ Resource List
 {% block content %}
 <h2>Resources</h2>
 <hr>
-
+<!--
 {% if expand_accordion == "show" or resource_list %}
   <div class="mb-3" id="accordion">
     <div class="card">
@@ -37,7 +37,7 @@ Resource List
   </div>
   <hr>
 {% endif %}
-
+-->
 
 {% if resource_list %}
   {% if is_paginated %} <strong>Resource{{resources_count|pluralize}}: {{resources_count}}</strong> {% endif %}
