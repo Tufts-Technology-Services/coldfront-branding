@@ -61,43 +61,15 @@ Project List
       <thead>
 
         <tr>
-          <th scope="col" class="text-nowrap">
-            Title
-            <a href="?order_by=title&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Title asc</span></a>
-            <a href="?order_by=title&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Title desc</span></a>
-          </th>
-
-          <th scope="col">Description</th>
- <!--         <th scope="col" class="text-nowrap">
-            ID
-            <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort ID asc</span></a>
-            <a href="?order_by=id&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort ID desc</span></a>
-          </th>
-        -->
-          <th scope="col" class="text-nowrap">
-            Owner
-            <a href="?order_by=pi__username&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Owner asc</span></a>
-            <a href="?order_by=pi__username&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Owner desc</span></a>
-          </th>
-
-
-         <!-- <th scope="col" class="text-nowrap">
-            Field of Science
-            <a href="?order_by=field_of_science&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Field of Science asc</span></a>
-            <a href="?order_by=field_of_science&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Field of Science desc</span></a>
-          </th> -->
-          <th scope="col" class="text-nowrap">
-            Status
-            <a href="?order_by=status&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Status asc</span></a>
-            <a href="?order_by=status&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Status desc</span></a>
-          </th>
+          {% include "common/table_sort.html" with col_name="title" col_label="Title" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
+           <th scope="col">Description</th>
+          {% include "common/table_sort.html" with col_name="pi__username" col_label="Owner" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
+          
+          {% include "common/table_sort.html" with col_name="status" col_label="Status" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
           {% if settings.PROJECT_INSTITUTION_EMAIL_MAP %}
-              <th scope="col" class="text-nowrap">
-                  Institution
-                  <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Institution asc</span></a>
-                  <a href="?order_by=id&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Institution desc</span></a>
-              </th>
+              {% include "common/table_sort.html" with col_name="institution" col_label="Institution" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
           {% endif %}
+
         </tr>
       </thead>
       <tbody>

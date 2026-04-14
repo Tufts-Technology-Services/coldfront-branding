@@ -1,0 +1,21 @@
+    <th scope="col" class="text-nowrap">
+    
+    {% if "="|add:col_name|add:"&" in filter_parameters_with_order_by %}
+        {% if 'direction=asc' in filter_parameters_with_order_by %}
+            <a href="?order_by={{col_name}}&direction=des&{{filter_parameters}}">
+                <span class="header-text">{{ col_label }}</span>
+                <i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort {{ col_label }} descending</span>
+            </a>
+        {% elif 'direction=des' in filter_parameters_with_order_by %}
+            <a href="?order_by={{col_name}}&direction=asc&{{filter_parameters}}">
+                <span class="header-text">{{ col_label }}</span>   
+                <i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort {{ col_label }} ascending</span>
+            </a>
+        {% endif %}
+    {% else %}
+        <a href="?order_by={{col_name}}&direction=asc&{{filter_parameters}}">
+            <span class="header-text">{{ col_label }}</span>
+            <i class="fas fa-sort" aria-hidden="true" style="color:lightgray"></i><span class="sr-only">Sort {{ col_label }} asc</span>
+        </a>
+    {% endif %}
+    </th>
