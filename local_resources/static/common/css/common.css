@@ -90,6 +90,10 @@ a {
     border-color: #1473cb;
 }
 
+span.header-text {
+    color: black;
+}
+
 .welcome-text {
     font-size: 1.75em;
 }

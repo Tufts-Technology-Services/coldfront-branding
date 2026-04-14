@@ -51,22 +51,12 @@ Resource List
             <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort ID asc</span></a>
             <a href="?order_by=id&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort ID desc</span></a>
           </th>
+
         -->
-          <th scope="col" class="text-nowrap">
-            Resource Name
-            <a href="?order_by=name&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Resource Name asc</span></a>
-            <a href="?order_by=name&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Resource Name desc</span></a>
-          </th>
-          <th scope="col" class="text-nowrap">
-            Parent Resource
-            <a href="?order_by=parent_resource&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Parent Resource asc</span></a>
-            <a href="?order_by=parent_resource&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Parent Resource desc</span></a>
-          </th>
-          <th scope="col" class="text-nowrap">
-            Resource Type
-            <a href="?order_by=resource_type__name&direction=asc&{{filter_parameters}}"><i class="fas fa-sort-up" aria-hidden="true"></i><span class="sr-only">Sort Resource Type asc</span></a>
-            <a href="?order_by=resource_type__name&direction=des&{{filter_parameters}}"><i class="fas fa-sort-down" aria-hidden="true"></i><span class="sr-only">Sort Resource Type desc</span></a>
-          </th>
+          {% include "common/table_sort.html" with col_name="name" col_label="Resource Name" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
+          {% include "common/table_sort.html" with col_name="parent_resource" col_label="Parent Resource" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
+          {% include "common/table_sort.html" with col_name="resource_type__name" col_label="Resource Type" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters_with_order_by %}
+
           <th scope="col" class="text-nowrap">
             Description
           </th>
