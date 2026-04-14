@@ -138,6 +138,9 @@ span.header-text {
     font-weight: normal;
 }
 
+a.see-more {
+    float: right;
+}
 
 #brand .container {
   margin-bottom: 1px;

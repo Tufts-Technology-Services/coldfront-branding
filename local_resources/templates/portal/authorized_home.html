@@ -29,8 +29,9 @@
 
         {% if project_list|length >= 5 %}
           <li class="list-group-item">
-            <a href="{% url 'project-list' %}">
-              <i class="fa fa-folder-plus fa-lg" aria-hidden="true"></i>View all projects
+            <a class="see-more" href="{% url 'project-list' %}">
+   <!--           <i class="fa fa-folder-plus fa-lg" aria-hidden="true"></i>View all projects-->
+              &raquo; View all projects
             </a>  
           </li>
         {% endif %}
@@ -90,8 +91,8 @@
           <tfoot>
             <tr>
               <td colspan="3">
-                <a href="{% url 'allocation-list' %}">
-                  View all resource allocations
+                <a class="see-more" href="{% url 'allocation-list' %}">
+                  &raquo; View all resource allocations
                 </a>  
               </td>
             </tr>
