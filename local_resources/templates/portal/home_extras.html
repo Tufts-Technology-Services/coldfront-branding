@@ -4,17 +4,17 @@
 {% url 'account-status' as account_status_url %}
 {% if account_status_url%}
 <div class="row justify-content-center py-5 access-box">
-  <div class="col-2 py-5 px-4">
+  <div class="col-3 py-5 px-4">
     
-    <div class="lead access-text"><span>Need access to the Tufts HPC Cluster?</span></div>
+    <div class="lead access-text">
+      <span>Need access to the Tufts HPC Cluster?</span><br>
+      <span><a href="https://rtguides.it.tufts.edu/hpc/index.html" target="_blank"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a></span>
+    </div>
   </div>
+    
     <div class="col-4 py-5 px-4">
-    
-    <a href="{{ account_status_url }}" class="btn btn-lg btn-outline-primary register-btn">Register for an HPC Account</a>
-
-          <li class="list-inline-item p-2 mr-5"><a href="https://rtguides.it.tufts.edu/hpc/index.html" target="_blank"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a></li>
-
-  </div>
+      <a href="{{ account_status_url }}" class="btn btn-lg btn-outline-primary register-btn">Register for an HPC Account</a>      
+    </div>
 </div>
 {% endif %}
 <div class="row">
