@@ -3,25 +3,23 @@
 
 {% url 'account-status' as account_status_url %}
 {% if account_status_url%}
-<div class="row justify-content-center py-5 access-box">
-  <div class="col-3 py-5 px-4">
-    
-    <div class="lead access-text">
-      <span>Need access to the Tufts HPC Cluster?</span><br>
-      <span><a href="https://rtguides.it.tufts.edu/hpc/index.html" target="_blank"><i class="fa fa-book fa-lg" aria-hidden="true"></i> Cluster Documentation</a></span>
-    </div>
+
+<div class="card mb-2">
+  <div class="card-header">
+      <h2>Access to the Tufts HPC Cluster</h2>
   </div>
-    
-    <div class="col-4 py-5 px-4">
-      <a href="{{ account_status_url }}" class="btn btn-lg btn-outline-primary register-btn">Register for an HPC Account</a>      
-    </div>
-</div>
+  <div class="card-body">
+    <p>Need access to the Tufts HPC Cluster? </p>
+    <a href="{{ account_status_url }}" class="btn btn-lg btn-primary">Register for an HPC Account</a>
+
+      
+  </div>
+  <div class="card-footer">
+    <a href="https://rtguides.it.tufts.edu/hpc/index.html"><i class="fa fa-book fa-lg" aria-hidden="true"></i>Tufts HPC Cluster Documentation</a>
+  </div>
+  
 {% endif %}
-<div class="row">
-  <div class="col-lg-12 mt-4">
-    <hr>
-  </div>
-</div>
+
 
 <div class="container ">
 <div class="row">
@@ -29,8 +27,11 @@
     <h3>Help</h3>
     <ul class="list-inline">
       <li class="list-inline-item p-2 mr-5"><a href="https://rtguides.it.tufts.edu/hpc/index.html" target="_blank"><i class="fa fa-book fa-lg" aria-hidden="true"></i> RCRM Documentation</a></li>
-      <li class="list-inline-item p-2 mr-5"><a href="{{ settings.CENTER_HELP_URL }}"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i> Contact Support</a></li>
+      <li class="list-inline-item p-2 mr-5"><a href="{{ settings.CENTER_HELP_URL }}"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i> Contact us for Assistance</a></li>
     </ul>
   </div>
 </div>
 </div>
+
+
+
