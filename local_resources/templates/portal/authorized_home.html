@@ -42,7 +42,7 @@
         You are not currently associated with any projects. You must be in a project to have resource allocations.
       </div>
       {% if user.userprofile.is_pi or user.is_superuser %}
-        <a class="btn btn-primary btn-block" href="{% url 'project-create' %}" role="button">Add a project</a>
+        <a class="btn btn-primary btn-block" href="{% url 'project-create' %}" role="button">Request a new project</a>
         <hr>
       {% endif %}
     {% endif %}
