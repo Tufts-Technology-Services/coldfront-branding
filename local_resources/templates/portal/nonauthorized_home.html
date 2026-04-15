@@ -9,9 +9,9 @@
 <div class="row my-4">
   <div class="col">
     {% if 'djangosaml2' in EXTRA_APPS %}
-    <p><a class="btn btn-primary w25" href="{% url 'saml2_login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></p>
+    <p><a class="btn btn-primary w25" href="{% url 'saml2_login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i>  Log in via Tufts SSO</a></p>
     {% else %}
-    <p><a class="btn btn-primary w25" href="{% url 'login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a></p>
+    <p><a class="btn btn-primary w25" href="{% url 'login' %}" role="button"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log in via Tufts SSO</a></p>
     {% endif %}
   </div>
   {% include "portal/extra_app_templates.html" %}
