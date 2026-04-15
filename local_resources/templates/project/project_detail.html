@@ -524,6 +524,7 @@ Project Detail
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     $('[data-toggle="popover"]').popover();
+
     $("#selectAll").click(function () {
       $("input[id^='email_notifications_for_user_id_']").not(":disabled").prop('checked', $(this).prop('checked')).change();
      });
@@ -571,6 +572,10 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         success: function (data) {
           $("#alert_div").html('<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success!</strong> User role updated.</div>')
+          // update notification status if needed. Managers cannot update notification status, so disable checkbox if role is changed to manager
+          if (value == "Manager") {
+            $("#email_notifications_for_user_id_" + user_project_id).prop('checked', true).prop('disabled', true);
+          } 
         },
         error: function (xhr, status, error) {
           $("#alert_div").html('<div class="alert alert-danger alert-dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Error!</strong> Failed updating user role.</div>')
