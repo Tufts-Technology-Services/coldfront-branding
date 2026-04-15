@@ -71,6 +71,21 @@ a {
   color: #3172AE;
 }
 
+.breadcrumb {
+    background-color: #00000008;
+    border: 1px solid rgba(0,0,0,.125);
+}
+
+ol.breadcrumb {
+    border-right: none;
+    border-radius: .25rem 0 0 .25rem;
+}
+
+div.breadcrumb {
+    border-left: none;
+    border-radius: 0 .25rem .25rem 0;
+}
+
 .btn-outline-primary {
     color: #3172AE;
     border-color: #3172AE;

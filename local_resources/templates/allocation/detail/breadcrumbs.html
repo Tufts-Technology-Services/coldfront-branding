@@ -1,4 +1,5 @@
 <!-- Breadcrumbs -->
+ <div class="container">
 <nav aria-label="breadcrumb" class="row">
   <ol class="breadcrumb col-9">
     <li class="breadcrumb-item"><a href="/">Home</a></li>
@@ -25,7 +26,8 @@
 
     {% elif allocation.status.name == "Active" %}
       <span class="badge badge-pill badge-success">{{allocation.status}}</span>
-
+    {% elif allocation.status.name == "New" %}
+      <span class="badge badge-pill badge-warning">Requested</span>
     {% else %}
     <span class="badge badge-pill badge-info">{{allocation.status}}</span>
     {% endif %}
@@ -40,4 +42,4 @@
     </a>
   </div> 
 </nav>
-
+ </div>
