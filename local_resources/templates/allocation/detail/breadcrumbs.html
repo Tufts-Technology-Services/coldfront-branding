@@ -6,7 +6,7 @@
     <li class="breadcrumb-item"><a href="{% url 'project-detail' allocation.project.pk %}">Project: {{ allocation.project }}</a></li>
     <li class="breadcrumb-item active" aria-current="page">Allocation ID: {{ allocation.pk }} 
 
-      {% include "allocation/detail/allocation_status_badge.html" %}
+      {% include "allocation/detail/allocation_status.html" %}
 
     {% if allocation.is_locked %}
       <i class="fas fa-lock" aria-hidden="true"></i>
