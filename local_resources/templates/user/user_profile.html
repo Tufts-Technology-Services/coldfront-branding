@@ -1,4 +1,4 @@
-{% extends "common/base.html" %}
+{% extends "user/user_profile.html" %}
 {% load static %}
 
 {% block title %}
@@ -13,9 +13,11 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
   <div class="card-header">
     <i class="fas fa-user" aria-hidden="true"></i>
     {{ viewed_user.username }}
+    {% if request.user.is_superuser %}
     <div class="float-right">
       <a class="btn btn-info" href="{% url 'user-projects-managers' viewed_user %}" role="button"><i class="far fa-user-circle" aria-hidden="true"></i> View user projects and approvers</a>
     </div>
+    {% endif %}
   </div>
   <div class="card-body">
     <div class="card-title text-center h4">
@@ -41,10 +43,17 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
                     <div class="form-group mb-2">
                       <span class="badge badge-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="sr-only">No</span></span>
                     </div>
+
+                    {% if request.user.is_superuser %}
+                    <div class="mx-sm-3 mb-2">
+                      <div class="badge badge-info p-2"><i class="fas fa-star" aria-hidden="true"></i> superuser</div>
+                    </div>
+                    {% else %}
                     <div class="form-group mx-sm-3 mb-2">
                       {% csrf_token %}
                       <button class="btn btn-secondary" type="submit"><i class="fas fa-chevron-circle-up" aria-hidden="true"></i> Upgrade Account</button>
                     </div>
+                    {% endif %}
                   </form>
                 {% endif %}
               </td>
@@ -52,8 +61,8 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
             <tr>
               <th scope="row" nowrap>No Cost Quota Eligibility:</th>
               <td>
-                  {% if 'faculty_pi_eligible_tier1' in group_list %}Tier 1: 10TB {% endif %}
-                  {% if 'faculty_pi_eligible_tier2' in group_list %}&nbsp; Tier2: 10TB {% endif %}
+                  {% if 'faculty_pi_eligible_tier1' in group_list %}<span class="badge badge-info p-2">Tier 1: 10TB</span> {% endif %}
+                  {% if 'faculty_pi_eligible_tier2' in group_list %}&nbsp; <span class="badge badge-info p-2">Tier2: 10TB</span> {% endif %}
                   {% if 'faculty_pi_eligible_' not in group_list %}None{% endif %}
               </td>
             </tr>
