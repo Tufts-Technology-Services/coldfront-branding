@@ -13,9 +13,12 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
   <div class="card-header">
     <i class="fas fa-user" aria-hidden="true"></i>
     {{ viewed_user.username }}
+    {% if request.user.is_superuser %}            
+        <span class="badge badge-info"><i class="fas fa-star" aria-hidden="true"></i> superuser</span>
+    {% endif %}
     {% if request.user.is_superuser %}
     <div class="float-right">
-      <a class="btn btn-info" href="{% url 'user-projects-managers' viewed_user %}" role="button"><i class="far fa-user-circle" aria-hidden="true"></i> View user projects and approvers</a>
+      <a class="btn btn-secondary" href="{% url 'user-projects-managers' viewed_user %}" role="button"><i class="far fa-user-circle" aria-hidden="true"></i> View user projects and approvers</a>
     </div>
     {% endif %}
   </div>
@@ -43,12 +46,7 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
                     <div class="form-group mb-2">
                       <span class="badge badge-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="sr-only">No</span></span>
                     </div>
-
-                    {% if request.user.is_superuser %}
-                    <div class="mx-sm-3 mb-2">
-                      <div class="badge badge-info p-2"><i class="fas fa-star" aria-hidden="true"></i> superuser</div>
-                    </div>
-                    {% else %}
+                    {% if not request.user.is_superuser %}
                     <div class="form-group mx-sm-3 mb-2">
                       {% csrf_token %}
                       <button class="btn btn-secondary" type="submit"><i class="fas fa-chevron-circle-up" aria-hidden="true"></i> Upgrade Account</button>
