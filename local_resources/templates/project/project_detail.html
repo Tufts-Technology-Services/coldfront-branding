@@ -81,14 +81,13 @@ Project Detail
 <!-- Start Project Users -->
 
 <!--Start Check for Odd Users (RSTORE)-->
-{% if not project.group %}
-  <div class="alert alert-danger" role="alert">
-    <i class="fa fa-triangle-exclamation fa-lg" aria-hidden="true"></i>
-     This is a legacy project that was created before this user management system was implemented.
-      Please contact {{ settings.CENTER_HELP_URL }} to have this project's membership updated.
-  </div>
-
-{% endif %}
+<!-- This is a HACK but only way to do until we modify the view.  Also note the JS code label  RSTORE HACK 
+ near end of this dock-->
+<div id="legacy-project-warning" class="alert alert-danger" role="alert">
+  <i class="fa fa-triangle-exclamation fa-lg" aria-hidden="true"></i>
+   This is a legacy project that was created before this user management system was implemented.
+    Please contact {{ settings.CENTER_HELP_URL }} to have this project's membership updated.
+</div>
 <!--End Check for Odd Users (RSTORE)-->
 
 <div class="card mb-3">
@@ -99,9 +98,9 @@ Project Detail
         <a class="btn btn-primary" href="{{mailto}}" role="button"><i class="far fa-envelope" aria-hidden="true"></i> Email Project Users</a>
        {% endif %}
 
-      {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.group %}
-        <a id="add-user-btn" class="btn btn-success" href="{% url 'project-add-users-search' project.id %}" role="button"><i class="fas fa-user-plus" aria-hidden="true"></i> Add Users</a>
-        <a id="remove-user-btn" class="btn btn-danger" href="{% url 'project-remove-users' project.id %}" role="button"><i class="fas fa-user-times" aria-hidden="true"></i> Remove Users</a>
+      {% if project.status.name != 'Archived' and is_allowed_to_update_project %}
+        <a id="add-user-btn" class="btn btn-success" style="display:none" href="{% url 'project-add-users-search' project.id %}" role="button"><i class="fas fa-user-plus" aria-hidden="true"></i> Add Users</a>
+        <a id="remove-user-btn" class="btn btn-danger" style="display:none" href="{% url 'project-remove-users' project.id %}" role="button"><i class="fas fa-user-times" aria-hidden="true"></i> Remove Users</a>
       {% endif %}
     </div>
   </div>
@@ -539,6 +538,17 @@ Project Detail
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     $('[data-toggle="popover"]').popover();
+
+    // Part of RSTORE HACK
+    // Show Add/Remove buttons and hide legacy warning if a non-empty Group attribute exists
+    {% for attribute in attributes %}{% if attribute.proj_attr_type.name == 'Group' and attribute.value %}
+    document.getElementById('legacy-project-warning').style.display = 'none';
+    var addBtn = document.getElementById('add-user-btn');
+    if (addBtn) addBtn.style.display = '';
+    var removeBtn = document.getElementById('remove-user-btn');
+    if (removeBtn) removeBtn.style.display = '';
+    {% endif %}{% endfor %}
+    //END RSTORE HACK
 
     $("#selectAll").click(function () {
       $("input[id^='email_notifications_for_user_id_']").not(":disabled").prop('checked', $(this).prop('checked')).change();
