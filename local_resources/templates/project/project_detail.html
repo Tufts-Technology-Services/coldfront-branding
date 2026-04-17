@@ -81,7 +81,7 @@ Project Detail
 <!-- Start Project Users -->
 
 <!--Start Check for Odd Users (RSTORE)-->
-{% if project.group.name == '' %}
+{% if not project.group %}
   <div class="alert alert-danger" role="alert">
     <i class="fa fa-triangle-exclamation fa-lg" aria-hidden="true"></i>
      This is a legacy project that was created before this user management system was implemented.
@@ -99,7 +99,7 @@ Project Detail
         <a class="btn btn-primary" href="{{mailto}}" role="button"><i class="far fa-envelope" aria-hidden="true"></i> Email Project Users</a>
        {% endif %}
 
-      {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.group.value != '' %}
+      {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.group %}
         <a id="add-user-btn" class="btn btn-success" href="{% url 'project-add-users-search' project.id %}" role="button"><i class="fas fa-user-plus" aria-hidden="true"></i> Add Users</a>
         <a id="remove-user-btn" class="btn btn-danger" href="{% url 'project-remove-users' project.id %}" role="button"><i class="fas fa-user-times" aria-hidden="true"></i> Remove Users</a>
       {% endif %}
