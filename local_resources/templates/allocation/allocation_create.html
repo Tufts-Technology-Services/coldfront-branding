@@ -21,7 +21,13 @@ Request New Allocation
 
 <form method="post">
   {% csrf_token %}
-  {{form.resource | as_crispy_field}}
+  {{ form.resource | as_crispy_field }}
+  {{ form.quantity.as_hidden }}
+  {{ form.allocation_account.as_hidden }}
+  {{ form.project.as_hidden }}
+  {{ form.users.as_hidden }}
+  {{ form.is_changeable.as_hidden }}
+
   <style>
     textarea {
         display: block;
