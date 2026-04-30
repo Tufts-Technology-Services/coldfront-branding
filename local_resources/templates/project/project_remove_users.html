@@ -38,7 +38,7 @@
                   <td>{{ form.first_name.value }}</td>
                   <td>{{ form.last_name.value }}</td>
                   <td>{{ form.email.value }}</td>
-                  <td>{% if form.role.value == "Manager" %} Approver {% else %} {{ form.role.value }} {% endif %}</td>
+                  <td>{% if form.role.value|stringformat:"s" == "Manager" %} Approver {% else %} {{ form.role.value }} {% endif %}</td>
                 </tr>
               {% endfor %}
             </tbody>
