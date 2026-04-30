@@ -87,7 +87,14 @@
               <td>{{ form.first_name.value }}</td>
               <td>{{ form.last_name.value }}</td>
               <td>{{ form.email.value }}</td>
-              <td>{{ form.role }}</td>
+              <td>
+                <select 
+                  name="{{ form.role.name }}" 
+                  class="form-control form-control-sm">
+                    <option value="User" {% if form.role.value == "User" %} selected {% endif %}>User</option>
+                    <option value="Manager" {% if form.role.value == "Manager" %} selected {% endif %}>Approver</option>
+                </select>
+              </td>
             </tr>
           {% endfor %}
         </tbody>
