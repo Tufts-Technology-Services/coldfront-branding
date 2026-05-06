@@ -88,11 +88,10 @@
               <td>{{ form.last_name.value }}</td>
               <td>{{ form.email.value }}</td>
               <td>
-                <select 
-                  name="{{ form.role.name }}" 
-                  class="form-control form-control-sm">
-                    <option value="User" {% if form.role.value == "User" %} selected {% endif %}>User</option>
-                    <option value="Manager" {% if form.role.value == "Manager" %} selected {% endif %}>Approver</option>
+                <select name="{{ form.role.html_name }}" id="{{ form.role.id_for_label }}" class="form-control form-control-sm">
+                  {% for value, text in form.role.field.choices %}
+                    <option value="{{ value }}" {% if form.role.value == value %} selected {% endif %}>{% if text == 'Manager' %}Approver{% else %}{{ text }}{% endif %}</option>
+                  {% endfor %}
                 </select>
               </td>
             </tr>

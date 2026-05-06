@@ -18,6 +18,9 @@
 {% if settings.GRANT_ENABLE %}
     <a id="navbar-grant-report" class="dropdown-item" href="{% url 'grant-report' %}">Grant Report</a>
 {% endif %}
-<a id="navbar-manage-reports" class="dropdown-item" href="{% url 'reports_manage' %}">Manage Billing</a>
+{% url 'reports_manage' as manage_reports_url %}
+{% if manage_reports_url %}
+<a id="navbar-manage-reports" class="dropdown-item" href="{{ manage_reports_url }}">Manage Billing</a>
+{% endif %}
   </div>
 </li>
