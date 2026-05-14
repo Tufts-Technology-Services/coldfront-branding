@@ -9,11 +9,10 @@ Billing Details - {{ project.title }}
 {% block content %}
 <h2>Billing Details</h2>
 <div class="py-3">
-<p class="lead info-text">Project cost per resource allocation for <a href="/project/{{ project.id }}/" data-toggle="popover" data-trigger="hover" data-content="View project.">{{ project.title }}</a> ({{ project.pi.username }})</p>
+<p class="lead info-text">Project cost per resource allocation for <a href="/project/{{ project.id }}/" data-toggle="popover" data-trigger="hover" data-content="View project.">{{ project.title }}</a> (Owner: {{ project.pi.username }})</p>
 </div>
 <hr>
 
-<strong>Resource Allocations: {{ allocations|length }}</strong>
 {% if allocations %}
 <div class="table-responsive">
     <table class="table table-sm">
@@ -72,7 +71,7 @@ Billing Details - {{ project.title }}
         </tbody>
         <tfoot>
         <tr class="font-weight-bold">
-            <td colspan="6" class="text-right">Project Total:</td>
+            <td colspan="6" class="text-right">Project Total Cost:</td>
             <td>${{ total_cost }}</td>
         </tr>
         </tfoot>
