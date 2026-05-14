@@ -10,7 +10,7 @@ Billing
 {% block content %}
 <h2>Billing</h2>
 <div class="py-3">
-<p class="lead info-text">Assign billing codes to projects.</p>
+<p class="lead info-text">Assign DeptIDs and Grant Numbers or Project Numbers to projects for billing.</p>
 </div>
 <hr>
 {% if expand_accordion == "show" or project_list %}
@@ -93,7 +93,11 @@ Billing
             </th>
         -->
             <th scope="col" class="text-nowrap">Monthly cost</th>
-            <th scope="col" class="text-nowrap text-left">Cost centers</th>
+            <th scope="col" class="text-nowrap text-left">Cost centers
+                <a href="#" data-toggle="popover" data-trigger="hover" data-content="DeptIDs and Grant Numbers or Project Numbers assigned to the project.">
+                <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">DeptIDs and Grant Numbers or Project Numbers assigned to the project.</span>
+              </a>
+            </th>
             <th scope="col" class="text-nowrap"></th>
         </tr>
         </thead>
@@ -289,4 +293,13 @@ Billing
 <script src="{% static 'billing/js/cost_center_autocomplete.js' %}"></script>
 <script>window.COLDFRONT_MAX_COST_CENTER_ASSIGNMENTS = {{ max_cost_center_assignments }};</script>
 <script src="{% static 'billing/js/billing.js' %}"></script>
+{% endblock %}
+
+{% block javascript %}
+{{ block.super }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    $('[data-toggle="popover"]').popover();
+});
+</script>
 {% endblock %}
