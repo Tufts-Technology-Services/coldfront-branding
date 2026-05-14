@@ -1,0 +1,291 @@
+{% extends "common/base.html" %}
+{% load common_tags %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+Assign No-Cost Quota
+{% endblock %}
+
+{% block content %}
+<h2>Assign No-Cost Quota</h2>
+<hr>
+
+{% if expand_accordion == "show" or allocations %}
+<div class="mb-3" id="accordion">
+    <div class="card">
+        <div class="card-header">
+            <a id="expand_button" role="button" class="card-link"
+               data-toggle="collapse" href="#collapseOne">
+                <i class="fas fa-filter" aria-hidden="true"></i> Filter
+                <i id="plus_minus"
+                   class="fas {{expand_accordion|get_icon}} float-right"></i>
+            </a>
+        </div>
+        <div id="collapseOne" class="collapse {{expand_accordion}}"
+             data-parent="#accordion">
+            <div class="card-body">
+                <form id="filter_form" method="GET"
+                      action="{% url 'assign_no_cost_quota' %}" autocomplete="off">
+                    <input type="hidden" name="selected_quota" value="{{ quota.pk }}">
+                    {% if back %}
+                    <input type="hidden" name="back" value="{{ back }}">
+                    {% endif %}
+                    {{ search_form|crispy }}
+                    <input type="submit" class="btn btn-primary" value="Search">
+                    <a href="{% url 'assign_no_cost_quota' %}?selected_quota={{ quota.pk }}{% if back %}&back={{ back|urlencode }}{% endif %}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+{% endif %}
+
+<p class="mb-4">
+    Assign a portion of {% if request.user.is_superuser %}the selected user's{% else %}your{% endif %}
+    <strong>{{ quota.quota_type }}</strong>
+    quota ({{ quota_remaining|floatformat:-2 }} {{ quota.units }} remaining)
+    to an allocation.
+    <br>Select an allocation to create a new allotment or update/delete an existing one.
+    <br>Use the auto-assign button to distribute quota among allocations on projects where
+    {% if request.user.is_superuser %}<strong>{{ quota.user.username }}</strong> is{% else %}you are{% endif %} the PI.
+</p>
+
+<strong>Eligible Allocations: {{ allocations_count }}</strong>
+{% if allocations %}
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th scope="col" class="text-nowrap">
+                ID
+                <a href="?order_by=id&direction=asc&{{filter_parameters}}">
+                    <i class="fas fa-sort-up" aria-hidden="true"></i>
+                    <span class="sr-only">Sort ID asc</span>
+                </a>
+                <a href="?order_by=id&direction=des&{{filter_parameters}}">
+                    <i class="fas fa-sort-down" aria-hidden="true"></i>
+                    <span class="sr-only">Sort ID desc</span>
+                </a>
+            </th>
+            <th scope="col" class="text-nowrap">
+                Project
+                <a href="?order_by=project&direction=asc&{{filter_parameters}}">
+                    <i class="fas fa-sort-up" aria-hidden="true"></i>
+                    <span class="sr-only">Sort Project asc</span>
+                </a>
+                <a href="?order_by=project&direction=des&{{filter_parameters}}">
+                    <i class="fas fa-sort-down" aria-hidden="true"></i>
+                    <span class="sr-only">Sort Project desc</span>
+                </a>
+            </th>
+            <th scope="col" class="text-nowrap">PI</th>
+            <th scope="col" class="text-nowrap">
+                Resource name
+                <a href="?order_by=resource_name&direction=asc&{{filter_parameters}}">
+                    <i class="fas fa-sort-up" aria-hidden="true"></i>
+                    <span class="sr-only">Sort Resource name asc</span>
+                </a>
+                <a href="?order_by=resource_name&direction=des&{{filter_parameters}}">
+                    <i class="fas fa-sort-down" aria-hidden="true"></i>
+                    <span class="sr-only">Sort Resource name desc</span>
+                </a>
+            </th>
+            <th scope="col" class="text-nowrap">Status</th>
+            <th scope="col" class="text-nowrap">
+                Quota
+                <a href="?order_by=amount&direction=asc&{{filter_parameters}}">
+                    <i class="fas fa-sort-up" aria-hidden="true"></i>
+                    <span class="sr-only">Sort Quota asc</span>
+                </a>
+                <a href="?order_by=amount&direction=des&{{filter_parameters}}">
+                    <i class="fas fa-sort-down" aria-hidden="true"></i>
+                    <span class="sr-only">Sort Quota desc</span>
+                </a>
+            </th>
+            <th scope="col" class="text-nowrap">Type</th>
+            <th scope="col" class="text-nowrap">Assigned by others</th>
+            <th scope="col" class="text-nowrap">
+                Assigned by {% if request.user.is_superuser %}user{% else %}me{% endif %}
+            </th>
+            <th scope="col" class="text-nowrap"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in allocations %}
+        {% with allocation=row.allocation %}
+        <tr class="{% if row.inactive %}table-secondary{% endif %}">
+            <td><a href="/allocation/{{ allocation.id }}/">{{ allocation.id }}</a></td>
+            <td>
+                <a href="{% url 'billing_details' project_id=allocation.project_id %}">
+                    {{ allocation.project.title }}</a>
+            </td>
+            <td>{{ allocation.project.pi.username }}</td>
+            <td>{{ row.resource_name }}</td>
+            <td>
+                <span {% if allocation.status.name != "Active" %} class="text-danger" {% endif %}>
+                    {{ allocation.status.name }}
+                </span>
+            </td>
+            <td>{{ row.quota_amount }}</td>
+            <td>{{ quota.quota_type }}</td>
+            <td>{{ row.other_applications }}</td>
+            <td>{{ row.user_applications }}</td>
+            <td>
+                <button type="button" class="btn btn-sm btn-outline-primary"
+                        data-toggle="modal"
+                        data-target="#assignQuotaModal"
+                        data-allocation-id="{{ allocation.id }}"
+                        data-allocation-display="Allocation {{ allocation.id }} - {{ allocation.project.title }}"
+                        data-existing-amount="{{ row.existing_amount }}"
+                        data-max-amount="{{ row.max_possible|floatformat:-2 }}"
+                        data-increment="{{ row.minimum_increment|floatformat:-2 }}"
+                        data-allotment-id="{{ row.allotment_id }}"
+                        data-inactive="{{ row.inactive }}"
+                        title="Assign quota">
+                    <i class="fas fa-arrows-alt-h" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+        {% endwith %}
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'common/pagination.html' %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    No eligible allocations with matching no-cost quota type.
+</div>
+{% endif %}
+
+<div class="d-flex align-items-center flex-wrap mt-3 mb-3">
+    <a href="{% url 'manage_no_cost_quota' %}{% if back %}?{{ back }}{% endif %}"
+       class="btn btn-secondary">Back</a>
+    <button type="button"
+            class="btn btn-outline-primary ml-auto {% if not show_auto_assign %}d-none{% endif %}"
+            id="ncqAutoAssignOpen"
+            data-toggle="modal" data-target="#autoAssignQuotaModal"
+            data-quota-id="{{ quota.pk }}">
+        <i class="fas fa-magic" aria-hidden="true"></i> Auto-assign
+    </button>
+</div>
+
+<div class="modal fade" id="assignQuotaModal" tabindex="-1" role="dialog"
+     aria-labelledby="assignQuotaModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="{% url 'no_cost_quota_manage_allotment' %}" id="assignQuotaForm"
+                  data-units="{{ quota.units }}">
+                {% csrf_token %}
+                <input type="hidden" name="quota_id" value="{{ quota.pk }}">
+                <input type="hidden" name="allocation_id" id="assignQuotaAllocationId">
+                <input type="hidden" name="allotment_id" id="deleteAllotmentId">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignQuotaModalLabel">Assign No-Cost Quota</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="assignQuotaModalAllocation" class="mb-3"></p>
+                    <p id="assignQuotaModalLimits" class="mb-3 text-muted small"></p>
+                    <div class="form-group">
+                        <label for="assignQuotaAmount">Quota amount ({{ quota.units }})</label>
+                        <input type="number" class="form-control" id="assignQuotaAmount"
+                               name="amount" step="{{ quota.minimum_increment }}" min="0"
+                               placeholder="Multiple of {{ quota.minimum_increment|floatformat:-2 }} {{ quota.units }}"
+                               required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit"
+                            id="deleteQuotaButton"
+                            class="btn btn-danger d-none"
+                            name="action"
+                            value="delete"
+                            formnovalidate
+                            onclick="return confirm('Do you want to delete this allotment?')">
+                        Delete
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit"
+                            class="btn btn-primary"
+                            name="action"
+                            id="assignQuotaButton"
+                            value="assign">
+                        Assign
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="autoAssignQuotaModal" tabindex="-1" role="dialog"
+     aria-labelledby="autoAssignQuotaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form method="post" action="{% url 'no_cost_quota_auto_allotment' %}" id="autoAssignQuotaForm"
+                  data-units="{{ quota.units }}">
+                {% csrf_token %}
+                <input type="hidden" name="quota_id" value="{{ quota.pk }}">
+                {% for a in assignements %}
+                <input type="hidden" name="allocation_id" value="{{ a.allocation_id }}">
+                <input type="hidden" name="amount" value="{{ a.amount }}">
+                {% endfor %}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="autoAssignQuotaModalLabel">Auto-assign preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="ncqAutoAssignStatus" class="text-muted small mb-2"></p>
+                    <div id="ncqAutoAssignError" class="alert alert-danger d-none" role="alert"></div>
+                    <div id="ncqAutoAssignHint" class="alert alert-info small mb-2">
+                        {% if auto_assign_preview %}
+                        <p class="mb-2 font-weight-bold">Allocations for distributing the remaining no-cost quota (proposed amounts include existing allotments):</p>
+                        <ul class="mb-0 pl-3">
+                            {% for row in auto_assign_preview %}
+                            <li>
+                                <a href="/allocation/{{ row.allocation.id }}/">Allocation {{ row.allocation.id }}</a>
+                                — {{ row.allocation.project.title }}:
+                                <strong>{{ row.auto_assign_amount|floatformat:-2 }} {{ quota.units }}</strong>
+                                {% if row.inactive %}<span class="text-muted">(not active)</span>{% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="mb-0">No allocations are eligible to receive the remaining quota.</p>
+                        {% endif %}
+                    </div>
+                    <div class="table-responsive d-none" id="ncqAutoAssignTableWrap">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th>Allocation</th>
+                                <th class="text-right">Amount</th>
+                                <th class="text-nowrap">Max</th>
+                            </tr>
+                            </thead>
+                            <tbody id="ncqAutoAssignTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="ncqAutoAssignAccept"
+                            {% if not assignements %}disabled{% endif %}>
+                        Accept and apply
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<script src="{% static 'billing/js/no_cost_quota_assign.js' %}"></script>
+{% endblock %}

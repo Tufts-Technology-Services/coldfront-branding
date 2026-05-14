@@ -19,9 +19,11 @@ Billing
         <div class="card-header">
             <a id="expand_button" role="button" class="card-link"
                data-toggle="collapse" href="#collapseOne">
+               <div>
                 <i class="fas fa-filter" aria-hidden="true"></i> Filter
                 <i id="plus_minus"
                    class="fas {{expand_accordion|get_icon}} float-right"></i>
+               </div>
             </a>
         </div>
         <div id="collapseOne" class="collapse {{expand_accordion}}"
@@ -45,8 +47,12 @@ Billing
     <table class="table table-sm">
         <thead>
         <tr>
-            <th scope="col" class="text-nowrap">
-                ID
+            {% include "common/table_sort.html" with col_name="title" col_label="Project" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+            {% include "common/table_sort.html" with col_name="pi__username" col_label="Owner" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+            {% include "common/table_sort.html" with col_name="title" col_label="Title" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+            {% include "common/table_sort.html" with col_name="status__name" col_label="Status" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+      <!--      <th scope="col" class="text-nowrap">
+                
                 <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i
                         class="fas fa-sort-up" aria-hidden="true"></i><span
                         class="sr-only">Sort ID asc</span></a>
@@ -54,7 +60,8 @@ Billing
                         class="fas fa-sort-down" aria-hidden="true"></i><span
                         class="sr-only">Sort ID desc</span></a>
             </th>
-            <th scope="col" class="text-nowrap">
+        -->
+        <!--    <th scope="col" class="text-nowrap">
                 PI
                 <a href="?order_by=pi&direction=asc&{{filter_parameters}}"><i
                         class="fas fa-sort-up" aria-hidden="true"></i><span
@@ -63,6 +70,8 @@ Billing
                         class="fas fa-sort-down" aria-hidden="true"></i><span
                         class="sr-only">Sort PI desc</span></a>
             </th>
+        -->
+            <!--
             <th scope="col" class="text-nowrap">
                 Title
                 <a href="?order_by=title&direction=asc&{{filter_parameters}}"><i
@@ -72,6 +81,8 @@ Billing
                         class="fas fa-sort-down" aria-hidden="true"></i><span
                         class="sr-only">Sort Title desc</span></a>
             </th>
+        -->
+            <!--
             <th scope="col" class="text-nowrap">
                 Status
                 <a href="?order_by=status&direction=asc&{{filter_parameters}}"><i
@@ -81,6 +92,7 @@ Billing
                         class="fas fa-sort-down" aria-hidden="true"></i><span
                         class="sr-only">Sort Status desc</span></a>
             </th>
+        -->
             <th scope="col" class="text-nowrap">Monthly cost</th>
             <th scope="col" class="text-nowrap text-left">Cost centers</th>
             <th scope="col" class="text-nowrap"></th>
@@ -89,13 +101,10 @@ Billing
         <tbody>
         {% for project in project_list %}
         <tr>
-            {% if project.project_code %}
-            <td><a href="/project/{{project.id}}/">{{ project.project_code }}</a></td>
-            {% else %}
-            <td><a href="/project/{{project.id}}/">{{ project.id }}</a></td>
-            {% endif %}
+
+            <td style="text-align: justify; text-justify: inter-word;"><a href="/project/{{project.id}}/">{{ project.title }}</a></td>
+
             <td>{{ project.pi.username }}</td>
-            <td style="text-align: justify; text-justify: inter-word;">{{ project.title }}</td>
             <td>{{ project.status.name }}</td>
             <td>{{ project.cost }}</td>
             <td class="text-left align-middle">

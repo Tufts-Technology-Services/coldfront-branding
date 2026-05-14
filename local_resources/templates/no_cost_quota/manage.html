@@ -1,0 +1,164 @@
+{% extends "common/base.html" %}
+{% load common_tags %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+Manage No-Cost Quotas
+{% endblock %}
+
+{% block content %}
+<h2>Manage No-Cost Quotas</h2>
+<div class="py-3">
+<p class="lead info-text">Eligible users have No-Cost Quotas which they can apply to resource allocations to reduce costs.</p>
+</div>
+<hr>
+
+{% if expand_accordion == "show" or quota_list %}
+<div class="mb-3" id="accordion">
+    <div class="card">
+        <div class="card-header">
+            <a id="expand_button" role="button" class="card-link"
+               data-toggle="collapse" href="#collapseOne">
+               <div>
+                <i class="fas fa-filter" aria-hidden="true"></i> Filter
+                <i id="plus_minus"
+                   class="fas {{expand_accordion|get_icon}} float-right"></i>
+               </div>
+            </a>
+        </div>
+        <div id="collapseOne" class="collapse {{expand_accordion}}"
+             data-parent="#accordion">
+            <div class="card-body">
+                <form id="filter_form" method="GET"
+                      action="{% url 'manage_no_cost_quota' %}" autocomplete="off">
+                    {{ search_form|crispy }}
+                    <input type="submit" class="btn btn-primary" value="Search">
+                    <a href="{% url 'manage_no_cost_quota' %}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+{% endif %}
+
+<p class="mb-4">
+    {% if request.user.is_superuser %}
+    Select a no-cost quota on behalf of a user to apply to eligible resource allocations in any project.
+     {% else %}
+    Select a no-cost quota to apply to eligible resource allocations in projects where you are either the owner or have the
+    'Approver' role.
+    {% endif %}
+</p>
+
+<strong>No-Cost Quotas: {{ page_obj.paginator.count }}</strong>
+{% if request.user.is_superuser %}
+<p class="text-muted small mb-2">Showing all no-cost quotas (superuser view).</p>
+{% endif %}
+
+{% if quota_list %}
+<form method="get" action="{% url 'assign_no_cost_quota' %}">
+    <input type="hidden" name="back" value="{{ return_params }}">
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                {% include "common/table_sort.html" with col_name="owner" col_label="Quota Owner" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+             <!--   <th scope="col" class="text-nowrap">
+                    Owner
+                    <a href="?order_by=owner&direction=asc&{{filter_parameters}}">
+                        <i class="fas fa-sort-up" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Owner asc</span>
+                    </a>
+                    <a href="?order_by=owner&direction=des&{{filter_parameters}}">
+                        <i class="fas fa-sort-down" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Owner desc</span>
+                    </a>
+                </th>
+            -->
+                {% include "common/table_sort.html" with col_name="quota_type" col_label="Quota Type" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+             <!--   <th scope="col" class="text-nowrap">
+                    Type
+                    <a href="?order_by=quota_type&direction=asc&{{filter_parameters}}">
+                        <i class="fas fa-sort-up" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Type asc</span>
+                    </a>
+                    <a href="?order_by=quota_type&direction=des&{{filter_parameters}}">
+                        <i class="fas fa-sort-down" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Type desc</span>
+                    </a>
+                </th> -->
+                {% include "common/table_sort.html" with col_name="description" col_label="Description" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+                <!--<th scope="col" class="text-nowrap">
+                    Description
+                    <a href="?order_by=description&direction=asc&{{filter_parameters}}">
+                        <i class="fas fa-sort-up" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Description asc</span>
+                    </a>
+                    <a href="?order_by=description&direction=des&{{filter_parameters}}">
+                        <i class="fas fa-sort-down" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Description desc</span>
+                    </a>
+                </th>-->
+                {% include "common/table_sort.html" with col_name="amount" col_label="Total Quota" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+                <!--<th scope="col" class="text-nowrap">
+                    Total quota
+                    <a href="?order_by=amount&direction=asc&{{filter_parameters}}">
+                        <i class="fas fa-sort-up" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Total quota asc</span>
+                    </a>
+                    <a href="?order_by=amount&direction=des&{{filter_parameters}}">
+                        <i class="fas fa-sort-down" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Total quota desc</span>
+                    </a>
+                </th>-->
+                {% include "common/table_sort.html" with col_name="remaining" col_label="Unassigned Quota" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
+                <!--<th scope="col" class="text-nowrap">
+                    Unassigned quota
+                    <a href="?order_by=remaining&direction=asc&{{filter_parameters}}">
+                        <i class="fas fa-sort-up" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Unassigned quota asc</span>
+                    </a>
+                    <a href="?order_by=remaining&direction=des&{{filter_parameters}}">
+                        <i class="fas fa-sort-down" aria-hidden="true"></i>
+                        <span class="sr-only">Sort Unassigned quota desc</span>
+                    </a>
+                </th>-->
+            </tr>
+            </thead>
+            <tbody>
+            {% for quota in quota_list %}
+            <tr>
+                <td><input type="radio" name="selected_quota" value="{{ quota.pk }}"
+                           aria-label="Select quota {{ quota.quota_type }}"></td>
+                <td>{{ quota.user.username }}</td>
+                <td>{{ quota.quota_type }}</td>
+                <td>{{ quota.description|default:'-'}}</td>
+                <td>{{ quota.amount|floatformat:-2 }} {{ quota.units }}</td>
+                <td>
+                    {{ quota.remaining|floatformat:-2 }} {{ quota.units }}
+                    {% if quota.has_inactive %}
+                    <span class="text-danger" data-bs-toggle="tooltip" title="Amount in inactive allocations">
+                         + {{ quota.used_inactive|floatformat:-2 }} {{ quota.units }}
+                    </span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% include 'common/pagination.html' %}
+    </div>
+    <!--<p class="mt-2 text-muted">Select a No Cost Quota to assign</p>-->
+    <div class="text-right mb-3">
+        <button type="submit" class="btn btn-primary">Next</button>
+    </div>
+</form>
+{% else %}
+<div class="alert alert-info">
+    No no-cost quotas to display.
+</div>
+{% endif %}
+{% endblock %}
