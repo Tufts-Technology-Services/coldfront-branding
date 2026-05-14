@@ -1,0 +1,284 @@
+{% extends "common/base.html" %}
+{% load common_tags %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+Billing
+{% endblock %}
+
+{% block content %}
+<h2>Billing</h2>
+<div class="py-3">
+<p class="lead info-text">Assign billing codes to projects.</p>
+</div>
+<hr>
+{% if expand_accordion == "show" or project_list %}
+<div class="mb-3" id="accordion">
+    <div class="card">
+        <div class="card-header">
+            <a id="expand_button" role="button" class="card-link"
+               data-toggle="collapse" href="#collapseOne">
+                <i class="fas fa-filter" aria-hidden="true"></i> Filter
+                <i id="plus_minus"
+                   class="fas {{expand_accordion|get_icon}} float-right"></i>
+            </a>
+        </div>
+        <div id="collapseOne" class="collapse {{expand_accordion}}"
+             data-parent="#accordion">
+            <div class="card-body">
+                <form id="filter_form" method="GET"
+                      action="{% url 'billing_index' %}" autocomplete="off">
+                    {{ search_form|crispy }}
+                    <input type="submit" class="btn btn-primary" value="Search">
+                    <a href="{% url 'billing_index' %}" class="btn btn-secondary">Reset</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+{% endif %}
+{% if project_list %}
+<strong>Projects: {{projects_count}}</strong>
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+        <tr>
+            <th scope="col" class="text-nowrap">
+                ID
+                <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i
+                        class="fas fa-sort-up" aria-hidden="true"></i><span
+                        class="sr-only">Sort ID asc</span></a>
+                <a href="?order_by=id&direction=des&{{filter_parameters}}"><i
+                        class="fas fa-sort-down" aria-hidden="true"></i><span
+                        class="sr-only">Sort ID desc</span></a>
+            </th>
+            <th scope="col" class="text-nowrap">
+                PI
+                <a href="?order_by=pi&direction=asc&{{filter_parameters}}"><i
+                        class="fas fa-sort-up" aria-hidden="true"></i><span
+                        class="sr-only">Sort PI asc</span></a>
+                <a href="?order_by=pi&direction=des&{{filter_parameters}}"><i
+                        class="fas fa-sort-down" aria-hidden="true"></i><span
+                        class="sr-only">Sort PI desc</span></a>
+            </th>
+            <th scope="col" class="text-nowrap">
+                Title
+                <a href="?order_by=title&direction=asc&{{filter_parameters}}"><i
+                        class="fas fa-sort-up" aria-hidden="true"></i><span
+                        class="sr-only">Sort Title asc</span></a>
+                <a href="?order_by=title&direction=des&{{filter_parameters}}"><i
+                        class="fas fa-sort-down" aria-hidden="true"></i><span
+                        class="sr-only">Sort Title desc</span></a>
+            </th>
+            <th scope="col" class="text-nowrap">
+                Status
+                <a href="?order_by=status&direction=asc&{{filter_parameters}}"><i
+                        class="fas fa-sort-up" aria-hidden="true"></i><span
+                        class="sr-only">Sort Status asc</span></a>
+                <a href="?order_by=status&direction=des&{{filter_parameters}}"><i
+                        class="fas fa-sort-down" aria-hidden="true"></i><span
+                        class="sr-only">Sort Status desc</span></a>
+            </th>
+            <th scope="col" class="text-nowrap">Monthly cost</th>
+            <th scope="col" class="text-nowrap text-left">Cost centers</th>
+            <th scope="col" class="text-nowrap"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for project in project_list %}
+        <tr>
+            {% if project.project_code %}
+            <td><a href="/project/{{project.id}}/">{{ project.project_code }}</a></td>
+            {% else %}
+            <td><a href="/project/{{project.id}}/">{{ project.id }}</a></td>
+            {% endif %}
+            <td>{{ project.pi.username }}</td>
+            <td style="text-align: justify; text-justify: inter-word;">{{ project.title }}</td>
+            <td>{{ project.status.name }}</td>
+            <td>{{ project.cost }}</td>
+            <td class="text-left align-middle">
+                <div class="d-flex justify-content-between align-items-center flex-nowrap w-100">
+                    <span class="text-body text-left text-truncate pr-2 flex-grow-1"
+                          style="font-size: 0.9rem; cursor: pointer; min-width: 0;"
+                          data-toggle="popover"
+                          data-trigger="hover"
+                          data-placement="top"
+                          data-container="body"
+                          data-html="true"
+                          title="Cost centers"
+                          data-content="{{ project.all_cost_centers|linebreaksbr }}">
+                        {{ project.cost_centers }}
+                    </span>
+                    <span class="d-inline-flex flex-shrink-0"
+                          data-toggle="popover"
+                          data-trigger="hover"
+                          data-placement="top"
+                          data-container="body"
+                          data-content="{% if project.cost_centers != '' %}Edit{% else %}Add{% endif %} cost centers">
+                        <button type="button"
+                                class="btn btn-link p-0"
+                                data-toggle="modal"
+                                data-target="#costCentersModal"
+                                data-project-id="{{ project.id }}"
+                                data-project-name="{{ project.title|escape }}"
+                                data-project-cost="{{ project.cost }}"
+                                data-assignments="{{ project.assignments_json|escape }}">
+                            <i class="fas {% if project.cost_centers != '' %}fa-edit{% else %}fa-plus-circle{% endif %} text-dark"
+                               style="font-size: 1.2rem;"></i>
+                        </button>
+                    </span>
+                </div>
+            </td>
+            <td class="text-right">
+                <a href="{% url 'billing_details' project.id %}{% if return_params %}?{{ return_params }}{% endif %}">
+                    show details
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'common/pagination.html' %}
+</div>
+{% elif expand_accordion == "show" %}
+<div class="alert alert-info">
+    No search results!
+</div>
+{% else %}
+<div class="alert alert-info">
+    No projects to display!
+</div>
+{% endif %}
+
+
+<div class="modal fade" id="costCentersModal" tabindex="-1" role="dialog"
+     aria-labelledby="costCentersModalLabel" aria-hidden="true"
+     data-update-url="{% url 'update_cost_center_assignment' %}"
+     data-autocomplete-url="{% url 'autocomplete_cost_center' %}">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            {% csrf_token %}
+            <input type="hidden" id="id_project_id" name="project_id">
+            <input type="hidden" id="id_total_project_cost">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="costCentersModalLabel">Assign Cost
+                    Centers</h5>
+                <button type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="cost-center-validation-error" class="alert alert-danger d-none" role="alert">
+                    Total percentage must equal 100%.
+                </div>
+                <div id="cost-center-table-scroll-wrap">
+                <table class="table table-bordered text-center">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col" style="width: 30%">Department</th>
+                        <th scope="col" style="width: 30%">Grant (optional)</th>
+                        <th scope="col" style="width: 20%">Percentage (%)</th>
+                        <th scope="col" style="width: 15%">Cost</th>
+                        <th scope="col" style="width: 5%"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="cost-center-body">
+                    </tbody>
+                </table>
+                </div>
+
+                <button type="button" class="btn btn-sm btn-primary"
+                        id="add-row-btn">
+                    <i class="fas fa-plus"></i> Add cost assignmnent
+                </button>
+
+                <!-- Total Calculations -->
+                <div class="mt-3">
+                    <div class="col-md-6">
+                        <div class="mb-2">
+                            <strong>Total Percent: </strong><span
+                                id="total-percent">0%</span>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Total Cost: </strong><span id="total-cost">$0.00</span>
+                            monthly
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Close
+                </button>
+                <button type="button" class="btn btn-primary"
+                        id="save-changes-btn">Save changes
+                </button>
+            </div>
+
+            <table style="display: none;">
+                <tr id="sample-row">
+                    <td>
+                        <div class="autocomplete-wrapper position-relative text-left">
+                            <label class="sr-only">Department</label>
+                            <input type="text"
+                                   class="form-control form-control-sm dept-autocomplete-input"
+                                   name="department"
+                                   placeholder="Type at least 3 letters"
+                                   autocomplete="off">
+                            <ul class="dept-autocomplete-results list-group position-absolute w-100 d-none shadow-sm text-left"
+                                style="z-index: 1060; max-height: 220px; overflow-y: auto; top: 100%; margin-top: 2px; text-align: left;"
+                                role="listbox"></ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="autocomplete-wrapper position-relative text-left">
+                            <label class="sr-only">Grant</label>
+                            <input type="text"
+                                   class="form-control form-control-sm grant-autocomplete-input"
+                                   name="grant"
+                                   placeholder="Type at least 3 letters"
+                                   autocomplete="off">
+                            <ul class="grant-autocomplete-results list-group position-absolute w-100 d-none shadow-sm text-left"
+                                style="z-index: 1060; max-height: 220px; overflow-y: auto; top: 100%; margin-top: 2px; text-align: left;"
+                                role="listbox"></ul>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="number" name="percentage[]"
+                               class="form-control percent-input" min="0"
+                               max="100" step="1" placeholder="0">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control cost-input"
+                               readonly>
+                    </td>
+                    <td class="text-center align-middle">
+                        {# Clean Red Minus Icon #}
+                        <button type="button"
+                                class="btn btn-link text-danger p-0 remove-row-btn"
+                                data-toggle="popover"
+                                data-trigger="hover"
+                                data-placement="top"
+                                data-content="Remove cost assignment">
+                            <i class="fas fa-minus-circle"
+                               style="font-size: 1.2rem;"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+</div>
+<script src="{% static 'billing/js/cost_center_autocomplete.js' %}"></script>
+<script>window.COLDFRONT_MAX_COST_CENTER_ASSIGNMENTS = {{ max_cost_center_assignments }};</script>
+<script src="{% static 'billing/js/billing.js' %}"></script>
+{% endblock %}
