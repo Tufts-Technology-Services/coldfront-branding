@@ -26,8 +26,10 @@
 {% block javascript %}
   {{ block.super }}
   <script>
-    $("#navbar-main > ul > li.active").removeClass("active");
-    $("#navbar-home").addClass("active");
-    $('#cluster_registration_card').show();
+    document.addEventListener('DOMContentLoaded', function() {
+      $("#navbar-main > ul > li.active").removeClass("active");
+      $("#navbar-home").addClass("active");
+      $("#cluster_registration_card").show();
+    });
   </script>
 {% endblock %}
