@@ -13,7 +13,7 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
   <div class="card-header">
     <i class="fas fa-user" aria-hidden="true"></i>
     {{ viewed_user.username }}
-    {% if request.user.is_superuser %}            
+    {% if viewed_user.is_superuser %}            
         <span class="badge badge-info"><i class="fas fa-star" aria-hidden="true"></i> superuser</span>
     {% endif %}
     {% if request.user.is_superuser %}
