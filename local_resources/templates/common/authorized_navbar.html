@@ -18,13 +18,18 @@
           <a class="nav-link" href="{% url 'center-summary' %}">Center Summary</a>
         </li>-->
         <li id="navbar-project-menu" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Project</a>
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Manage</a>
           <div class="dropdown-menu">
             <a id="navbar-project" class="dropdown-item" href="{% url 'project-list' %}">Projects</a>
             <a id="navbar-allocation" class="dropdown-item" href="{% url 'allocation-list' %}">Allocations</a>
             <!--<a id="navbar-resource" class="dropdown-item" href="{% url 'resource-list' %}">Resources</a>-->
             {% if settings.ALLOCATION_ACCOUNT_ENABLED  %}
               <a class="dropdown-item" href="{% url 'allocation-account-list' %}">Allocation Accounts</a>
+            {% endif %}
+            {% with url 'billing_index' as billing_installed %}
+            {% if billing_installed and has_billing_role %}
+               <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
+               <a id="navbar-manage-no-cost-quotas" class="dropdown-item" href="{% url 'manage_no_cost_quota' %}">No-Cost Quotas</a>
             {% endif %}
           </div>
         </li>
