@@ -26,7 +26,7 @@
             {% if settings.ALLOCATION_ACCOUNT_ENABLED  %}
               <a class="dropdown-item" href="{% url 'allocation-account-list' %}">Allocation Accounts</a>
             {% endif %}
-            {% with url 'billing_index' as billing_installed %}
+            {% url 'billing_index' as billing_installed %}
             {% if billing_installed and has_billing_role %}
                <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
                <a id="navbar-manage-no-cost-quotas" class="dropdown-item" href="{% url 'manage_no_cost_quota' %}">No-Cost Quotas</a>
