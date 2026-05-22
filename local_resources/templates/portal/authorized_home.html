@@ -131,12 +131,13 @@
     {% if account_status_url %}
     $('#cluster_registration_card').hide();
     fetch({{ account_status_url }}, {'headers': {'Accept': 'application/json'}}).then(
-      x => x.json()).then(
+        x => x.json()
+      ).then(
         data => {
           if (!data.access && !data.signup_exists) {
             $('#cluster_registration_card').show();
           }
-        }
+        });
     {% endif %}
   });
 </script>
