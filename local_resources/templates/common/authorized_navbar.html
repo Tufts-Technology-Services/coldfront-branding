@@ -31,6 +31,10 @@
                <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
                <a id="navbar-manage-no-cost-quotas" class="dropdown-item" href="{% url 'manage_no_cost_quota' %}">No-Cost Quotas</a>
             {% endif %}
+            {% url 'account-status' as account_status_installed %}
+            {% if account_status_installed %}
+               <a id="navbar-account-status" class="dropdown-item" href="{% url 'account-status' %}">HPC Account Status</a>
+            {% endif %}
           </div>
         </li>
         {% if request.user.is_superuser %}
