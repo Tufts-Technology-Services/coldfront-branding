@@ -35,6 +35,8 @@
             {% if account_status_installed %}
                <a id="navbar-account-status" class="dropdown-item" href="{% url 'account-status' %}">HPC Account Status</a>
             {% endif %}
+            <a id="navbar-new-project" class="dropdown-item" target="_blank" href="https://tufts.qualtrics.com/jfe/form/SV_5bUmpFT0IXeyEfj">Request a New Project <i class="fas fa-arrow-up-right-from-square"></i></a>
+
           </div>
         </li>
         {% if request.user.is_superuser %}
