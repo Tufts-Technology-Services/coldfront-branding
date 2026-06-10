@@ -3,7 +3,8 @@
 <li id="navbar-admin" class="nav-item dropdown {% navbar_active_item 'admin' request %}">
   <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Admin</a>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="/admin">ColdFront Administration</a>
+    <a class="dropdown-item" href="/saml2/login/?next=/admin/">ColdFront Administration</a>
+    <a class="dropdown-item" href="/saml2/login/?next=/admin/coldfront_billing/costcenter/add/">Add Billing Code</a>
     <a id="navbar-user-search" class="dropdown-item" href="{% url 'user-search-home' %}">User Search</a>
     <a class="dropdown-item" href="{% url 'project-list' %}?show_all_projects=on">All Projects</a>
     <a class="dropdown-item" href="{% url 'allocation-list' %}?show_all_allocations=on">All Allocations</a>
