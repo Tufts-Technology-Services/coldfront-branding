@@ -29,8 +29,6 @@ Project Detail
 
 {% include "project/detail/breadcrumbs.html" %}
 
-{% url 'project-update-user-role' as update_role_url %}
-
 <!-- Start Project Heading -->
 <div class="card mb-3">
   <div class="card-header">
@@ -143,7 +141,7 @@ Project Detail
           </tr>
         </thead>
         <tbody>
-
+          {% url 'project-update-user-role' as update_role_url %}
           {% for user in project_users %}
             <tr>
               <td>{{ user.user.username }}</td>
@@ -590,6 +588,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+{% url 'project-update-user-role' as update_role_url %}
+{% if update_role_url %}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       $("[id^=role_for_user_id_]").change(function() {
@@ -627,5 +627,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
 </script>
+{% endif %}
 
 {% endblock %}
