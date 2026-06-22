@@ -590,7 +590,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-{% if update_role_url %}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       $("[id^=role_for_user_id_]").change(function() {
@@ -628,6 +627,5 @@ document.addEventListener('DOMContentLoaded', function() {
       });
   });
 </script>
-{% endif %}
 
 {% endblock %}
