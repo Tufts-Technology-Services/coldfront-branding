@@ -29,6 +29,8 @@ Project Detail
 
 {% include "project/detail/breadcrumbs.html" %}
 
+{% url 'project-update-user-role' as update_role_url %}
+
 <!-- Start Project Heading -->
 <div class="card mb-3">
   <div class="card-header">
@@ -141,7 +143,6 @@ Project Detail
           </tr>
         </thead>
         <tbody>
-          {% url 'project-update-user-role' as update_role_url %}
 
           {% for user in project_users %}
             <tr>
