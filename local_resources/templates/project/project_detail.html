@@ -35,8 +35,10 @@ Project Detail
       <h3 class="d-inline" id="manage-project"><i class="fas fa-cubes" aria-hidden="true"></i> {{ project.title }} </h3>
       <div class="float-right">
         {% if project.status.name != 'Archived' and is_allowed_to_update_project and project.status.name in 'Active, New' %}
-          <a class="btn btn-info" href="{% url 'project-update' project.pk %}" role="button"><i class="far fa-edit" aria-hidden="true"></i> Update</a>
-          <!--<a class="btn btn-info" href="{% url 'project-archive' project.id %}" role="button"><i class="fas fa-file-archive" aria-hidden="true"></i> Archive Project</a>-->
+          <a class="btn btn-info" href="{% url 'project-update' project.pk %}" role="button"><i class="far fa-edit" aria-hidden="true"></i> Edit</a>
+        {% endif %}
+        {% if project.status.name == 'New' and request.user.is_superuser %}
+          <a class="btn btn-warning" href="{% url 'project-archive' project.id %}" role="button"><i class="fas fa-file-archive" aria-hidden="true"></i> Activate</a>
         {% endif %}
       </div>
   </div>
@@ -586,7 +588,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
-    
     {% if update_role_url %}
       $("[id^=role_for_user_id_]").change(function() {
         var value = $(this).val();

@@ -4,9 +4,10 @@
   <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Admin</a>
   <div class="dropdown-menu">
     <a class="dropdown-item" href="/admin/">ColdFront Administration</a>
-    <a class="dropdown-item" href="/admin/coldfront_billing/costcenter/add/">Add Billing Code</a>
+    <a class="dropdown-item" href="/admin/coldfront_billing/costcenter/">Billing Code Administration</a>
     <a class="dropdown-item" href="/su/login/">Login as...</a>
     <a id="navbar-user-search" class="dropdown-item" href="{% url 'user-search-home' %}">User Search</a>
+    <a id="navbar-project-create" class="dropdown-item" href="{% url 'admin-project-create' %}">Create New Project</a>
     <a class="dropdown-item" href="{% url 'project-list' %}?show_all_projects=on">All Projects</a>
     <a class="dropdown-item" href="{% url 'allocation-list' %}?show_all_allocations=on">All Allocations</a>
     <a class="dropdown-item" href="{% url 'resource-list' %}">All Resources</a>
