@@ -676,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function() {
               const groupMembersContent = document.getElementById('group-members-content');
               groupMembersContent.innerHTML = '<ul>';
               data.members.forEach(member => {
-                  groupMembersContent.innerHTML += '<li>' + member.username + ' (' + member.first_name + ' ' + member.last_name + ')</li>';
+                  groupMembersContent.innerHTML += '<li>' + member + '</li>';
               });
               groupMembersContent.innerHTML += '</ul>'; 
           })
