@@ -47,7 +47,7 @@
               </td>
             {% else %}
               <td>
-                <form id="user-create-form-{{ forloop.counter }}" class="form-inline" method="post" action="{{ add_user_to_coldfront_url }}">
+                <form id="user-create-form-{{ forloop.counter }}" class="form-inline" method="post" data-url="{{ add_user_to_coldfront_url }}">
                     {% csrf_token %}
                   <input type="hidden" id="username-field-{{ forloop.counter }}" name="username" value="{{ user.username }}">
                   <button type="submit" class="btn btn-primary">Add to Coldfront</button>
@@ -65,35 +65,38 @@
   </div>
 {% endif %}
 <script>
-document.querySelectorAll('form[id^="user-create-form-"]').forEach(function(form) {
-    form.addEventListener('submit', function(event) {
-    // Prevent the browser from reloading the page
-    event.preventDefault(); 
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('form[id^="user-create-form-"]').forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+          // Prevent the browser from reloading the page
+          event.preventDefault(); 
 
-    // Extract the CSRF token from the form
-    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
-    
-    // Gather your input data
-    const usernameData = form.querySelector('[name="username"]').value;
-
-    // Send the AJAX POST request
-    fetch(form.action, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({
-            username: usernameData
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Handle success response from Django view
-        form.insertAdjacentHTML('afterend', '<div id="response-message">' + data.message + '</div>');
-    })
-    .catch(error => {
-        console.error('Error:', error);
+          // Extract the CSRF token from the form
+          const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+          // Gather your input data
+          const usernameData = form.querySelector('[name="username"]').value;
+          const url = form.dataset.url;
+          // Send the AJAX POST request
+          fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                username: usernameData
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+              // Handle success response from Django view
+              form.insertAdjacentHTML('afterend', '<div id="response-message">' + data.message + '</div>');
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
     });
-});
+  });
+
 </script>
