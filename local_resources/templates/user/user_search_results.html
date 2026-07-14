@@ -37,11 +37,13 @@
             {% if user.source == "local" %}
               <td><span class="badge badge-primary">In Coldfront</span></td>
               <td>
-                  <form id="user-impersonate-form-{{ forloop.counter }}" class="form-inline" method="post" action="{% url 'login_as_user' user.id %}">
-                    {% csrf_token %}
-                  <button type="submit" class="btn btn-primary">Login As</button>
-                </form>
-              
+                  {% url 'local_login_as_user' user.username as local_login_as_user_url %}
+                  {% if local_login_as_user_url %}
+                    <form id="user-impersonate-form-{{ forloop.counter }}" class="form-inline" method="post" action="{{ local_login_as_user_url }}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary">Login As</button>
+                    </form>
+                  {% endif %}
               </td>
             {% else %}
               <td>
