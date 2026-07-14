@@ -37,9 +37,9 @@
             {% if user.source == "local" %}
               <td><span class="badge badge-primary">In Coldfront</span></td>
               <td>
-                  <form id="user-impersonate-form-{{ forloop.counter }}" class="form-inline" method="post" action="{{ login_as_user }}">
+                  <form id="user-impersonate-form-{{ forloop.counter }}" class="form-inline" method="post" action="{{ su:login_as_user }}">
                     {% csrf_token %}
-                  <input type="hidden" id="impersonate-field-{{ forloop.counter }}" name="impersonate" value="{{ user.username }}">
+                  <input type="hidden" id="impersonate-field-{{ forloop.counter }}" name="username" value="{{ user.username }}">
                   <button type="submit" class="btn btn-primary">Login As</button>
                 </form>
               
@@ -63,3 +63,36 @@
     No results!
   </div>
 {% endif %}
+<script>
+document.querySelectorAll('form[id^="user-create-form-"]').forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+    // Prevent the browser from reloading the page
+    event.preventDefault(); 
+
+    // Extract the CSRF token from the form
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    // Gather your input data
+    const usernameData = form.querySelector('[name="username"]').value;
+
+    // Send the AJAX POST request
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            username: usernameData
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Handle success response from Django view
+        form.insertAdjacentHTML('afterend', '<div id="response-message">' + data.message + '</div>');
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+});
+</script>
