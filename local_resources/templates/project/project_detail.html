@@ -59,11 +59,20 @@ Project Detail
 
     {% for attribute in attributes %}
       {% if request.user.is_superuser %}
-          <p class="card-text text-justify"><strong>{{attribute}}: </strong>{{attribute.value}}  
+          <p class="card-text text-justify">
+            {% if attribute.proj_attr_type.is_private %}
+              <i class="fas fa-lock" aria-hidden="true"></i>
+            {% endif %}
+            <strong>{{attribute}}: </strong>{{attribute.value}}  
             {% if attribute.is_changeable %}
             <a href="{% url 'project-attribute-update' project.pk attribute.pk %}">
               <i class="far fa-edit" aria-hidden="true"></i><span class="sr-only">Edit</span>
             </a>
+            {% endif %}
+            {% if attribute.proj_attr_type.name == 'Group'%}
+            <button id="show-group-btn" type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#group-modal">
+              <i class="fas fa-users" aria-hidden="true"></i> View Group Members
+            </button>
             {% endif %}
           </p>
       {% else %}
@@ -550,6 +559,27 @@ Project Detail
     {% endif %}
   </div>
 </div>
+<div id="group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="group-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="group-modal-label">Group Members</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body
+">
+        <div id="group-members-content">
+          <!-- Group members will be loaded here via AJAX -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- End Admin Messages -->
 
 
@@ -625,7 +655,39 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       });
+
+      const group_button = document.getElementById('show-group-btn');
+      group_button.addEventListener('click', function(event) {
+
+          // Extract the CSRF token from the form
+          const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+          // Send the AJAX POST request
+          fetch("{% url 'get-group-members' project.id %}", {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            }
+          })
+          .then(response => response.json())
+          .then(data => {
+              // Handle success response from Django view
+              const groupMembersContent = document.getElementById('group-members-content');
+              groupMembersContent.innerHTML = '<ul>';
+              data.members.forEach(member => {
+                  groupMembersContent.innerHTML += '<li>' + member.username + ' (' + member.first_name + ' ' + member.last_name + ')</li>';
+              });
+              groupMembersContent.innerHTML += '</ul>'; 
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      });
   });
+
+
+
 </script>
 {% endif %}
 
