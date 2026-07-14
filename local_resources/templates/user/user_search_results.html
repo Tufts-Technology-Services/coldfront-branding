@@ -16,9 +16,12 @@
           <th scope="col">Last Name</th>
           <th scope="col">Email</th>
           <th scope="col">Source</th>
+          <th scope="col"></th>
         </tr>
       </thead>
       <tbody>
+        
+        {% url 'add-user-to-coldfront' as add_user_to_coldfront_url %}
         {% for user in matches %}
           <tr>
             <td>{{ forloop.counter }}</td>
@@ -31,7 +34,25 @@
             <td>{{ user.first_name }}</td>
             <td>{{ user.last_name }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.source }}</td>
+            {% if user.source == "local" %}
+              <td><span class="badge badge-primary">In Coldfront</span></td>
+              <td>
+                  <form id="user-impersonate-form-{{ forloop.counter }}" class="form-inline" method="post" action="{{ login_as_user }}">
+                    {% csrf_token %}
+                  <input type="hidden" id="impersonate-field-{{ forloop.counter }}" name="impersonate" value="{{ user.username }}">
+                  <button type="submit" class="btn btn-primary">Login As</button>
+                </form>
+              
+              </td>
+            {% else %}
+              <td>
+                <form id="user-create-form-{{ forloop.counter }}" class="form-inline" method="post" action="{{ add_user_to_coldfront_url }}">
+                    {% csrf_token %}
+                  <input type="hidden" id="username-field-{{ forloop.counter }}" name="username" value="{{ user.username }}">
+                  <button type="submit" class="btn btn-primary">Add to Coldfront</button>
+                </form>
+                </td>
+            {% endif %}
           </tr>
         {% endfor %}
       </tbody>
