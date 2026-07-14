@@ -35,7 +35,7 @@
             <td>{{ user.last_name }}</td>
             <td>{{ user.email }}</td>
             {% if user.source == "local" %}
-              <td><span class="badge badge-primary">In Coldfront</span></td>
+              <td><span class="badge badge-secondary">In Coldfront</span></td>
               <td>
                   {% url 'local-login-as-user' user.username as local_login_as_user_url %}
                   {% if local_login_as_user_url %}
