@@ -568,9 +568,8 @@ Project Detail
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body
-">
-        <div id="group-members-content">
+      <div class="modal-body">
+        <div class="container"id="group-members-content">
           <!-- Group members will be loaded here via AJAX -->
         </div>
       </div>
@@ -674,11 +673,30 @@ document.addEventListener('DOMContentLoaded', function() {
           .then(data => {
               // Handle success response from Django view
               const groupMembersContent = document.getElementById('group-members-content');
-              groupMembersContent.innerHTML = '<ul>';
+              
               data.members.forEach(member => {
-                  groupMembersContent.innerHTML += '<li>' + member + '</li>';
+                const status_badge = member.source_match ? '<span class="badge badge-success">verified</span>' : '<span class="badge badge-danger">missing</span>';
+                const content = `
+                  <div class="col-md-10 mb-3">${member.user.first_name} ${member.user.last_name} (${member.user.username}) ${status_badge}
+                  </div>
+                `;
+                const content_row = '<div class="row">' + content + '</div>';
+                  groupMembersContent.innerHTML += content_row;
               });
-              groupMembersContent.innerHTML += '</ul>'; 
+              if (data.missing_members.length > 0) {
+                const missingMembersContent = document.createElement('div');
+                missingMembersContent.innerHTML = '<h5>Missing Members</h5>';
+                data.missing_members.forEach(username => {
+                  const content = `
+                    <div class="col-md-10 mb-3">${username} <span class="badge badge-danger">missing</span>
+                    </div>
+                  `;
+                  const content_row = '<div class="row">' + content + '</div>';
+                  missingMembersContent.innerHTML += content_row;
+                });
+                groupMembersContent.appendChild(missingMembersContent);
+              }
+              
           })
           .catch(error => {
               console.error('Error:', error);
