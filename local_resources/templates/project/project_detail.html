@@ -673,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function() {
           .then(data => {
               // Handle success response from Django view
               const groupMembersContent = document.getElementById('group-members-content');
-              
+              groupMembersContent.innerHTML = ''; // Clear previous content
               data.members.forEach(member => {
                 const status_badge = member.source_match ? '<span class="badge badge-success">verified</span>' : '<span class="badge badge-danger">missing</span>';
                 const content = `
