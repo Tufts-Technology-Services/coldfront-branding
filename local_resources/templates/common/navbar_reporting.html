@@ -6,7 +6,11 @@
               {% if request.user.is_superuser %}
                 {% url 'billing-code-report' as billing_code_report_url %}
                 {% if billing_code_report_url %}
-                  <a id="navbar-billing-code-report" class="dropdown-item" href="{{ billing_code_report_url }}">Billing Code/Cost Report</a>
+                  <a id="navbar-billing-code-report" class="dropdown-item" href="{{ billing_code_report_url }}">Billing Code Report</a>
+                {% endif %}
+                {% url 'cost-preview-report' as cost_preview_report_url %}
+                {% if cost_preview_report_url %}
+                  <a id="navbar-cost-preview-report" class="dropdown-item" href="{{ cost_preview_report_url }}">Cost Preview Report</a>
                 {% endif %}
                 {% url 'no-cost-quotas-report' as no_cost_quotas_report_url %}
                 {% if no_cost_quotas_report_url %}
