@@ -136,7 +136,7 @@ Manage No-Cost Quotas
                 <td>{{ quota.user.username }}</td>
                 <td>{{ quota.quota_type }}</td>
                 <td>{{ quota.description|default:'-'}}</td>
-                <td>{{ quota.amount|floatformat:-2 }} {{ quota.units }}</td>
+                <td>{{ quota.amount_tb|floatformat:-2 }} {{ quota.units }}</td>
                 <td>
                     {{ quota.remaining|floatformat:-2 }} {{ quota.units }}
                     {% if quota.has_inactive %}

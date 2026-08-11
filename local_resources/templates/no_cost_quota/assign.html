@@ -140,7 +140,7 @@ Assign No-Cost Quota
                         data-allocation-display="Allocation {{ allocation.id }} - {{ allocation.project.title }}"
                         data-existing-amount="{{ row.existing_amount }}"
                         data-max-amount="{{ row.max_possible|floatformat:-2 }}"
-                        data-increment="{{ row.minimum_increment|floatformat:-2 }}"
+                        data-increment="{{ row.increment_tb|floatformat:-2 }}"
                         data-allotment-id="{{ row.allotment_id }}"
                         data-inactive="{{ row.inactive }}"
                         title="Assign quota">
@@ -194,8 +194,8 @@ Assign No-Cost Quota
                     <div class="form-group">
                         <label for="assignQuotaAmount">Quota amount ({{ quota.units }})</label>
                         <input type="number" class="form-control" id="assignQuotaAmount"
-                               name="amount" step="{{ quota.minimum_increment }}" min="0"
-                               placeholder="Multiple of {{ quota.minimum_increment|floatformat:-2 }} {{ quota.units }}"
+                               name="amount_tb" step="{{ quota.increment_tb }}" min="0"
+                               placeholder="Multiple of {{ quota.increment_tb|floatformat:-2 }} {{ quota.units }}"
                                required>
                     </div>
                 </div>
@@ -231,9 +231,9 @@ Assign No-Cost Quota
                   data-units="{{ quota.units }}">
                 {% csrf_token %}
                 <input type="hidden" name="quota_id" value="{{ quota.pk }}">
-                {% for a in assignements %}
+                {% for a in assignments %}
                 <input type="hidden" name="allocation_id" value="{{ a.allocation_id }}">
-                <input type="hidden" name="amount" value="{{ a.amount }}">
+                <input type="hidden" name="amount_tb" value="{{ a.amount_tb }}">
                 {% endfor %}
                 <div class="modal-header">
                     <h5 class="modal-title" id="autoAssignQuotaModalLabel">Auto-assign preview</h5>
