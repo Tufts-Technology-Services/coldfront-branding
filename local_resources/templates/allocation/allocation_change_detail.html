@@ -246,7 +246,7 @@ Allocation Change Detail
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       $('#chartModal').on('show.bs.modal', function() {
-          coldfront.initStorageHistoryChart("historyChart", "/plugins/storage-allocation-history/{{ allocation_id }}");
+          coldfront.initStorageHistoryChart("historyChart", "/plugins/storage-allocation-history/{{ allocation_change.allocation.id }}");
       });
   });
 </script>
