@@ -244,11 +244,11 @@ Allocation Change Detail
 {{ block.super }}
 
 <script>
-    jQuery(document).ready(function() {
-      jQuery('#chartModal').on('show.bs.modal', function() {
+  document.addEventListener('DOMContentLoaded', function() {
+      $('#chartModal').on('show.bs.modal', function() {
           coldfront.initStorageHistoryChart("historyChart", "/plugins/storage-allocation-history/{{ allocation_id }}");
       });
-    });
+  });
 </script>
 
 {% endblock %}
