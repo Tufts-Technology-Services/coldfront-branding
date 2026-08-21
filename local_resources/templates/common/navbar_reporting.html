@@ -3,22 +3,32 @@
           <div class="dropdown-menu">
             <a id="navbar-storage-report" class="dropdown-item" 
                href="https://tableau.uit.tufts.edu/#/site/IT/views/StorageAnalyticsbyOwnerPI/StoragePI" target="_blank">Research Storage Dashboard <i class="fas fa-arrow-up-right-from-square"></i></a>
-              {% if request.user.is_superuser %}
-                {% url 'billing-code-report' as billing_code_report_url %}
-                {% if billing_code_report_url %}
-                  <a id="navbar-billing-code-report" class="dropdown-item" href="{{ billing_code_report_url }}">Billing Code Report</a>
-                {% endif %}
+              {% if request.user.userprofile.is_pi or request.user.is_superuser %}  
                 {% url 'cost-preview-report' as cost_preview_report_url %}
                 {% if cost_preview_report_url %}
                   <a id="navbar-cost-preview-report" class="dropdown-item" href="{{ cost_preview_report_url }}">Cost Preview Report</a>
                 {% endif %}
-                {% url 'no-cost-quotas-report' as no_cost_quotas_report_url %}
+              {% endif %}
+              {% if request.user.is_superuser %}
+              {% url 'no-cost-quotas-report' as no_cost_quotas_report_url %}
                 {% if no_cost_quotas_report_url %}
                   <a id="navbar-no-cost-quotas-report" class="dropdown-item" href="{{ no_cost_quotas_report_url }}">No Cost Quotas Report</a>
+                {% endif %}
+                {% url 'billing-code-report' as billing_code_report_url %}
+                {% if billing_code_report_url %}
+                  <a id="navbar-billing-code-report" class="dropdown-item" href="{{ billing_code_report_url }}">Billing Code Report</a>
                 {% endif %}
                 {% url 'sf-report' as sf_report_url %}
                 {% if sf_report_url %}
                   <a id="navbar-sf-report" class="dropdown-item" href="{{ sf_report_url }}">Starfish Report</a>
+                {% endif %}
+                {% url 'not-updated-report' as not_updated_report %}
+                {% if not_updated_report %}
+                  <a id="navbar-not-updated-report" class="dropdown-item" href="{{ not_updated_report }}">Storage Not Updated Report</a>
+                {% endif %}
+                {% url 'expired-allocations-report' as expired_allocations_report %}
+                {% if expired_allocations_report %}
+                  <a id="navbar-expired-allocations-report" class="dropdown-item" href="{{ expired_allocations_report }}">Expired Allocations w NCQ Report</a>
                 {% endif %}
               {% endif %}
           </div>
