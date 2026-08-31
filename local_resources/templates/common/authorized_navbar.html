@@ -28,8 +28,8 @@
             {% endif %}
             {% url 'billing_index' as billing_installed %}
             {% if billing_installed and has_billing_role %}
-               <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
                <a id="navbar-manage-no-cost-quotas" class="dropdown-item" href="{% url 'manage_no_cost_quota' %}">No-Cost Quotas</a>
+               <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
             {% endif %}
             {% url 'account-status' as account_status_installed %}
             {% if account_status_installed %}
