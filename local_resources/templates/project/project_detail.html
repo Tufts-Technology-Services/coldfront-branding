@@ -121,13 +121,13 @@ Project Detail
             <th scope="col" class="text-nowrap">Email</th>
             <th scope="col" class="text-nowrap">Status</th>
             <th scope="col" class="nosort"><input type="checkbox" class="check" id="selectAll" style="margin-right: 5px;">Notify 
-              <a href="#" data-toggle="popover" data-trigger="hover" data-content="Receive email notifications for this project">
-                <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Receive email notifications for this project</span>
+              <a href="#" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Receive email notifications for this project">
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
               </a>
             </th>
             <th scope="col" class="text-nowrap">Role 
-              <a href="#" data-toggle="popover" data-trigger="hover" data-content="Approver role grants user access to add/remove users and allocations to the project.">
-                <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Approver role grants user access to add/remove users and allocations to the project.</span>
+              <a href="#" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Approver role grants user access to add/remove users and allocations to the project.">
+                <i class="fas fa-info-circle" aria-hidden="true"></i>
               </a>
             </th>
 
@@ -553,8 +553,6 @@ Project Detail
 {{ block.super }}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    $('[data-toggle="popover"]').popover();
-
     $("#selectAll").click(function () {
       $("input[id^='email_notifications_for_user_id_']").not(":disabled").prop('checked', $(this).prop('checked')).change();
      });

@@ -20,7 +20,7 @@ Resource Allocations
   <div class="mb-3" id="accordion">
     <div class="card">
       <div class="card-header">
-        <a id="expand_button" role="button" class="card-link " data-toggle="collapse" href="#collapseOne">
+        <a id="expand_button" role="button" class="card-link " data-bs-toggle="collapse" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           <div>
           <i class="fas fa-filter" aria-hidden="true"></i> Filter
           <i id="plus_minus" class="fas {{expand_accordion|get_icon}} float-right"></i>
@@ -75,13 +75,13 @@ Resource Allocations
           <tr>
            <!-- <td><a href="/allocation/{{allocation.id}}/">{{ allocation.id }}</a></td>-->
             <td class="text-nowrap"><a
-                href="/project/{{allocation.project.id}}/" data-toggle="popover" data-trigger="hover" data-content="View project details.">
+                href="/project/{{allocation.project.id}}/" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="View project details.">
                 {{ allocation.project.title|truncatechars:50 }}
               </a>
             </td>
 
             <td class="text-nowrap">
-              <a href="/allocation/{{allocation.id}}/" data-toggle="popover" data-trigger="hover" data-content="View allocation details.">{{ allocation.get_parent_resource }}</a>
+              <a href="/allocation/{{allocation.id}}/" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="View allocation details.">{{ allocation.get_parent_resource }}</a>
             </td>
 
             <td class="text-nowrap">{{allocation.get_information|default_if_none:allocation.description|default_if_none:""}}</td>
@@ -123,10 +123,4 @@ Resource Allocations
 
 {% block javascript %}
 {{ block.super }}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    $('[data-toggle="popover"]').popover();
-});
-</script>
-
 {% endblock %}

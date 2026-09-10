@@ -19,7 +19,8 @@ Project List
   <div class="mb-3" id="accordion">
     <div class="card">
       <div class="card-header">
-        <a id="expand_button" role="button" class="card-link " data-toggle="collapse" href="#collapseOne">
+        <a id="expand_button" role="button" class="card-link " data-bs-toggle="collapse" 
+            aria-expanded="false" aria-controls="collapseOne" href="#collapseOne">
           <div>
           <i class="fas fa-filter" aria-hidden="true"></i> Filter
           <i id="plus_minus" class="fas {{expand_accordion|get_icon}} float-right"></i>
@@ -67,7 +68,10 @@ Project List
           <tr>
 
             <td style="text-align: justify; text-justify: inter-word;">
-              <a href="/project/{{project.id}}/" data-toggle="popover" data-trigger="hover" data-content="View project details.">{{ project.title }}</a>
+              <a href="/project/{{project.id}}/" 
+                  data-bs-toggle="popover" 
+                  data-bs-trigger="hover focus" 
+                  data-bs-content="View project details.">{{ project.title }}</a>
             </td>
           
             <td>{{ project.description }}</td>
@@ -123,10 +127,5 @@ Project List
 
 {% block javascript %}
 {{ block.super }}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    $('[data-toggle="popover"]').popover();
-});
-</script> 
 
 {% endblock %}
