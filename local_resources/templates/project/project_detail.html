@@ -571,10 +571,10 @@ document.addEventListener('DOMContentLoaded', function() {
           checked: checked
         },
         success: function (data) {
-          $("#alert_div").html('<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-dismiss="alert">&times;</button><strong>Success!</strong> Email notification updated.</div>')
+          $("#alert_div").html('<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button><strong>Success!</strong> Email notification updated.</div>')
         },
         error: function (xhr, status, error) {
-          $("#alert_div").html('<div class="alert alert-danger alert-dismissible"><button type="button" class="btn-close" data-dismiss="alert">&times;</button><strong>Error!</strong> Failed updating email notification.</div>')
+          $("#alert_div").html('<div class="alert alert-danger alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button><strong>Error!</strong> Failed updating email notification.</div>')
         }
       });
     });
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function() {
             role: value
           },
           success: function (data) {
-            $("#alert_div").html('<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-dismiss="alert">&times;</button><strong>Success!</strong> User role updated.</div>')
+            $("#alert_div").html('<div class="alert alert-success alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button><strong>Success!</strong> User role updated.</div>')
             // update notification status if needed. Managers cannot update notification status, so disable checkbox if role is changed to manager
             if (value == "Manager") {
               $("#email_notifications_for_user_id_" + user_project_id).prop('checked', true).prop('disabled', true);
@@ -610,7 +610,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           },
           error: function (xhr, status, error) {
-            $("#alert_div").html('<div class="alert alert-danger alert-dismissible"><button type="button" class="btn-close" data-dismiss="alert">&times;</button><strong>Error!</strong> Failed updating user role.</div>')
+            $("#alert_div").html('<div class="alert alert-danger alert-dismissible"><button type="button" class="btn-close" data-bs-dismiss="alert">&times;</button><strong>Error!</strong> Failed updating user role.</div>')
           }
         });
       });

@@ -42,7 +42,7 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
                 {% elif not user == viewed_user %}
                   <span class="badge bg-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="visually-hidden-focusable">No</span></span>
                 {% else %}
-                  <form class="form-inline" method="post" action="{% url 'user-upgrade' %}">
+                  <form class="d-sm-flex align-items-center" method="post" action="{% url 'user-upgrade' %}">
                     <div class="mb-2"><!-- form group -->
                       <span class="badge bg-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="visually-hidden-focusable">No</span></span>
                     </div>

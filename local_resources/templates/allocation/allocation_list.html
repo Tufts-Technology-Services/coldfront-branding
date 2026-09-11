@@ -27,7 +27,7 @@ Resource Allocations
           </div>
         </a>
       </div>
-      <div id="collapseOne" class="collapse {{expand_accordion}}" data-parent="#accordion">
+      <div id="collapseOne" class="collapse {{expand_accordion}}" data-bs-parent="#accordion">
         <div class="card-body">
           <form id="filter_form" method="GET" action="{% url 'allocation-list' %}" autocomplete="off">
             {{ allocation_search_form.project |as_crispy_field }}
