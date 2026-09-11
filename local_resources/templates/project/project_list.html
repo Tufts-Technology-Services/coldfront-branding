@@ -23,7 +23,7 @@ Project List
             aria-expanded="false" aria-controls="collapseOne" href="#collapseOne">
           <div>
           <i class="fas fa-filter" aria-hidden="true"></i> Filter
-          <i id="plus_minus" class="fas {{expand_accordion|get_icon}} float-right"></i>
+          <i id="plus_minus" class="fas {{expand_accordion|get_icon}} float-end"></i>
           </div>
         </a>
       </div>
@@ -87,7 +87,7 @@ Project List
       </tbody>
     </table>
     {% if is_paginated %} Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-      <ul class="pagination float-right mr-3">
+      <ul class="pagination float-end me-3">
         {% if page_obj.has_previous %}
           <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{filter_parameters_with_order_by}}">Previous</a></li>
         {% else %}
@@ -117,7 +117,7 @@ Project List
     {% if user.is_superuser %}
     <a class="btn btn-primary" href="{% url 'project-create' %}" role="button"><i class="fas fa-plus" aria-hidden="true"></i> Request a new project</a> 
     {% endif %}
-    <div class="float-right">
+    <div class="float-end">
       <a class="btn btn-primary" href="{% url 'project-archived-list' %}?{{filter_parameters}}" role="button"><i class="fas fa-archive" aria-hidden="true"></i> View archived projects</a>
     </div>
   </div>

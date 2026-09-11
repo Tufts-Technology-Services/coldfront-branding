@@ -25,7 +25,7 @@
               <i class="fa fa-folder fa-lg" aria-hidden="true"></i>{{project.title}}  (owner: {{project.pi.first_name}} {{project.pi.last_name}})
             </a>
             {% if project.needs_review %}
-              <a href="{% url 'project-review' project.pk %}"><span class="badge badge-warning">Needs Review</span></a>
+              <a href="{% url 'project-review' project.pk %}"><span class="badge bg-warning">Needs Review</span></a>
             {% endif %}
           </li>
         {% endfor %}
@@ -44,7 +44,9 @@
         You are not currently associated with any projects. You must be in a project to have resource allocations.
       </div>
       {% if user.userprofile.is_pi or user.is_superuser %}
-        <a class="btn btn-primary btn-block" href="{% url 'project-create' %}" role="button">Request a new project</a>
+          <div class="d-grid gap-2">
+            <a class="btn btn-primary" href="{% url 'project-create' %}" role="button">Create a new project</a>
+          </div>
         <hr>
       {% endif %}
     {% endif %}

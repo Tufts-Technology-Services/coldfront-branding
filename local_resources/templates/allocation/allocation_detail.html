@@ -57,8 +57,8 @@ Allocation Detail
 <div class="card mb-3" id="notifications">
   <div class="card-header">
     <h3 class="d-inline"><i class="fas fa-users" aria-hidden="true"></i> Notifications</h3>
-    <span class="badge badge-secondary">{{notes.count}}</span>
-    <div class="float-right">
+    <span class="badge bg-secondary">{{notes.count}}</span>
+    <div class="float-end">
       {% if request.user.is_superuser %}
         <a class="btn btn-success" href="{% url 'allocation-note-add' allocation.pk %}" role="button">
           <i class="fas fa-plus" aria-hidden="true"></i> Add Notification
