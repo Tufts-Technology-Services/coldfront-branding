@@ -116,9 +116,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  $('#modal_link').on("click", function () {
-    $('#Modal').modal('show');
-  });
+  // Bootstrap 5's data API opens the modal (its jQuery .modal() isn't available)
+  $('#modal_link').attr({'data-bs-toggle': 'modal', 'data-bs-target': '#Modal'});
   $(function () {
     $('#myFormSubmit').click(function (e) {
       e.preventDefault();
@@ -137,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
           success: function (json) {
             console.log(json);
             $('#allocation_account_form')[0].reset();
-            $('#Modal').modal('toggle');
+            document.querySelector('#Modal [data-bs-dismiss="modal"]').click();
             $('#error_div').html('<div></div>');
           },
           error: function (xhr, errmsg, err) {
