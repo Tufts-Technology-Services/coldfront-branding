@@ -682,10 +682,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const content_row = '<div class="row">' + content + '</div>';
                   groupMembersContent.innerHTML += content_row;
               });
-              if (data.missing_members.length > 0) {
+              // The user-management plugin returns the list as missing_users
+              const missingMembers = data.missing_users || data.missing_members || [];
+              if (missingMembers.length > 0) {
                 const missingMembersContent = document.createElement('div');
                 missingMembersContent.innerHTML = '<h5>Missing Members</h5>';
-                data.missing_members.forEach(username => {
+                missingMembers.forEach(username => {
                   const content = `
                     <div class="col-md-10 mb-3">${username} <span class="badge bg-danger">missing</span>
                     </div>
