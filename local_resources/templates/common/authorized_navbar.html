@@ -18,7 +18,7 @@
           <a class="nav-link" href="{% url 'center-summary' %}">Center Summary</a>
         </li>-->
         <li id="navbar-project-menu" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-trigger="hover focus">Project</a>
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-trigger="hover focus">Manage</a>
           <div class="dropdown-menu">
             <a id="navbar-project" class="dropdown-item" href="{% url 'project-list' %}">Projects</a>
             <a id="navbar-allocation" class="dropdown-item" href="{% url 'allocation-list' %}">Allocations</a>
@@ -26,8 +26,24 @@
             {% if settings.ALLOCATION_ACCOUNT_ENABLED  %}
               <a class="dropdown-item" href="{% url 'allocation-account-list' %}">Allocation Accounts</a>
             {% endif %}
+            {% url 'billing_index' as billing_installed %}
+            {% if billing_installed and has_billing_role %}
+               <a id="navbar-manage-no-cost-quotas" class="dropdown-item" href="{% url 'manage_no_cost_quota' %}">No-Cost Quotas</a>
+               <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
+            {% endif %}
+            {% url 'account-status' as account_status_installed %}
+            {% if account_status_installed %}
+               <a id="navbar-account-status" class="dropdown-item" href="{% url 'account-status' %}">HPC Account Status</a>
+            {% endif %}
+            <a id="navbar-new-project" class="dropdown-item" target="_blank" href="https://tufts.qualtrics.com/jfe/form/SV_5bUmpFT0IXeyEfj">Request a New Project <i class="fas fa-arrow-up-right-from-square"></i></a>
+
           </div>
         </li>
+        
+        {% include 'common/navbar_reporting.html' %}
+        {% if settings.CENTER_HELP_URL %}
+          {% include 'common/navbar_help.html' %}
+        {% endif %}
         {% if request.user.is_superuser %}
           {% include 'common/navbar_admin.html' %}
         {% elif request.user.is_staff %}
@@ -35,10 +51,7 @@
         {% elif perms.project.can_review_pending_project_reviews or perms.grant.can_view_all_grants %}
           {% include 'common/navbar_director.html' %}
         {% endif %}
-        {% include 'common/navbar_reporting.html' %}
-        {% if settings.CENTER_HELP_URL %}
-          {% include 'common/navbar_help.html' %}
-        {% endif %}
+
       </ul>
       <ul class="navbar-nav ms-auto">
         {% include 'common/navbar_login.html' %}

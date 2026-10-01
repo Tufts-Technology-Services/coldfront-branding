@@ -208,6 +208,10 @@ body > main > div > div.card.border-primary > div.card-body > form > div.alert.a
   
 }
 
+.table-sm td, .table-sm th {
+    padding: 0.6rem;
+}
+
 /*
  * These were copied from django-hijack https://github.com/arteria/django-hijack
  *

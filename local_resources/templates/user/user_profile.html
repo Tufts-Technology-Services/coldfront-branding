@@ -13,7 +13,7 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
   <div class="card-header">
     <i class="fas fa-user" aria-hidden="true"></i>
     {{ viewed_user.username }}
-    {% if request.user.is_superuser %}            
+    {% if viewed_user.is_superuser %}            
         <span class="badge bg-info"><i class="fas fa-star" aria-hidden="true"></i> superuser</span>
     {% endif %}
     {% if request.user.is_superuser %}
@@ -43,11 +43,11 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
                   <span class="badge bg-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="visually-hidden-focusable">No</span></span>
                 {% else %}
                   <form class="d-sm-flex align-items-center" method="post" action="{% url 'user-upgrade' %}">
-                    <div class="mb-2"><!-- form group -->
+                    <div class=" mb-2">
                       <span class="badge bg-danger"><i class="fas fa-times" aria-hidden="true"></i><span class="visually-hidden-focusable">No</span></span>
                     </div>
                     {% if not request.user.is_superuser %}
-                    <div class="mx-sm-3 mb-2"><!-- form group -->
+                    <div class=" mx-sm-3 mb-2">
                       {% csrf_token %}
                       <button class="btn btn-secondary" type="submit"><i class="fas fa-chevron-circle-up" aria-hidden="true"></i> Upgrade Account</button>
                     </div>
