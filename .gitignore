@@ -1,0 +1,32 @@
+# OS files
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Python (in case of local tooling or test runs)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Node (in case of frontend tooling)
+node_modules/
+
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+
+# Claude Code
+CLAUDE.md
+CLAUDE.local.md
+.claude/*

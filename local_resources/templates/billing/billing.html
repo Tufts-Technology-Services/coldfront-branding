@@ -10,7 +10,7 @@ Billing Assignment
 {% block content %}
 <h2>Billing Assignment</h2>
 <div class="py-3">
-<p class="lead info-text">Assign DeptIDs and Grant Numbers or Project Numbers to projects for billing.</p>
+<p class="lead info-text">Assign DeptIds (departments and, optionally, grants) to projects for billing.</p>
 </div>
 <hr>
 {% if expand_accordion == "show" or project_list %}
@@ -19,11 +19,9 @@ Billing Assignment
         <div class="card-header">
             <a id="expand_button" role="button" class="card-link"
                data-bs-toggle="collapse" href="#collapseOne">
-               <div>
                 <i class="fas fa-filter" aria-hidden="true"></i> Filter
                 <i id="plus_minus"
                    class="fas {{expand_accordion|get_icon}} float-end"></i>
-               </div>
             </a>
         </div>
         <div id="collapseOne" class="collapse {{expand_accordion}}"
@@ -47,56 +45,15 @@ Billing Assignment
     <table class="table table-sm">
         <thead>
         <tr>
-            {% include "common/table_sort.html" with col_name="title" col_label="Project" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
-            {% include "common/table_sort.html" with col_name="pi__username" col_label="Owner" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
-            {% include "common/table_sort.html" with col_name="status__name" col_label="Status" filter_parameters=filter_parameters filter_parameters_with_order_by=filter_parameters %}
-      <!--      <th scope="col" class="text-nowrap">
-                
-                <a href="?order_by=id&direction=asc&{{filter_parameters}}"><i
-                        class="fas fa-sort-up" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort ID asc</span></a>
-                <a href="?order_by=id&direction=des&{{filter_parameters}}"><i
-                        class="fas fa-sort-down" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort ID desc</span></a>
-            </th>
-        -->
-        <!--    <th scope="col" class="text-nowrap">
-                PI
-                <a href="?order_by=pi&direction=asc&{{filter_parameters}}"><i
-                        class="fas fa-sort-up" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort PI asc</span></a>
-                <a href="?order_by=pi&direction=des&{{filter_parameters}}"><i
-                        class="fas fa-sort-down" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort PI desc</span></a>
-            </th>
-        -->
-            <!--
-            <th scope="col" class="text-nowrap">
-                Title
-                <a href="?order_by=title&direction=asc&{{filter_parameters}}"><i
-                        class="fas fa-sort-up" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort Title asc</span></a>
-                <a href="?order_by=title&direction=des&{{filter_parameters}}"><i
-                        class="fas fa-sort-down" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort Title desc</span></a>
-            </th>
-        -->
-            <!--
-            <th scope="col" class="text-nowrap">
-                Status
-                <a href="?order_by=status&direction=asc&{{filter_parameters}}"><i
-                        class="fas fa-sort-up" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort Status asc</span></a>
-                <a href="?order_by=status&direction=des&{{filter_parameters}}"><i
-                        class="fas fa-sort-down" aria-hidden="true"></i><span
-                        class="visually-hidden-focusable">Sort Status desc</span></a>
-            </th>
-        -->
+            {% include "billing/sort_header.html" with col_name="title" col_label="Project" %}
+            {% include "billing/sort_header.html" with col_name="pi" col_label="Owner" %}
+            {% include "billing/sort_header.html" with col_name="status" col_label="Status" %}
             <th scope="col" class="text-nowrap">Monthly cost</th>
             <th scope="col" class="text-nowrap text-start">Cost centers
-                <a href="#" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="DeptIDs and Grant Numbers or Project Numbers assigned to the project.">
-                <i class="fas fa-info-circle" aria-hidden="true"></i><span class="visually-hidden-focusable">DeptIDs and Grant Numbers or Project Numbers assigned to the project.</span>
-              </a>
+                <span tabindex="0" data-bs-toggle="popover" data-bs-trigger="hover focus"
+                      data-bs-content="Departments and grants assigned to the project.">
+                    <i class="fas fa-info-circle" aria-hidden="true"></i><span class="visually-hidden">Departments and grants assigned to the project.</span>
+                </span>
             </th>
             <th scope="col" class="text-nowrap"></th>
         </tr>
@@ -104,9 +61,7 @@ Billing Assignment
         <tbody>
         {% for project in project_list %}
         <tr>
-
             <td style="text-align: justify; text-justify: inter-word;"><a href="/project/{{project.id}}/">{{ project.title }}</a></td>
-
             <td>{{ project.pi.username }}</td>
             <td>{{ project.status.name }}</td>
             <td>{{ project.cost }}</td>
@@ -114,13 +69,14 @@ Billing Assignment
                 <div class="d-flex justify-content-between align-items-center flex-nowrap w-100">
                     <span class="text-body text-start text-truncate pe-2 flex-grow-1"
                           style="font-size: 0.9rem; cursor: pointer; min-width: 0;"
+                          tabindex="0"
                           data-bs-toggle="popover"
                           data-bs-trigger="hover focus"
                           data-bs-placement="top"
                           data-bs-container="body"
                           data-bs-html="true"
                           data-bs-title="Cost centers"
-                          data-bs-content="{{ project.all_cost_centers|linebreaksbr }}">
+                          data-bs-content="{{ project.all_cost_centers|force_escape }}">
                         {{ project.cost_centers }}
                     </span>
                     <span class="d-inline-flex flex-shrink-0"
@@ -169,8 +125,8 @@ Billing Assignment
 <div class="modal fade" id="costCentersModal" tabindex="-1" role="dialog"
      aria-labelledby="costCentersModalLabel" aria-hidden="true"
      data-update-url="{% url 'update_cost_center_assignment' %}"
-     data-delete-url="{% url 'delete_cost_center_assignment' %}"
-     data-autocomplete-url="{% url 'autocomplete_cost_center' %}">
+     data-autocomplete-url="{% url 'autocomplete_cost_center' %}"
+     data-delete-url="{% url 'delete_cost_center_assignment' %}">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
 
@@ -179,12 +135,9 @@ Billing Assignment
             <input type="hidden" id="id_total_project_cost">
 
             <div class="modal-header">
-                <h5 class="modal-title" id="costCentersModalLabel">Assign Cost
-                    Centers</h5>
+                <h5 class="modal-title" id="costCentersModalLabel">Assign DeptIds</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                        aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
@@ -209,7 +162,7 @@ Billing Assignment
 
                 <button type="button" class="btn btn-sm btn-primary"
                         id="add-row-btn">
-                    <i class="fas fa-plus"></i> Add cost assignmnent
+                    <i class="fas fa-plus"></i> Add cost assignment
                 </button>
 
                 <!-- Total Calculations -->
@@ -240,7 +193,7 @@ Billing Assignment
                 <tr id="sample-row">
                     <td>
                         <div class="autocomplete-wrapper position-relative text-start">
-                            <label class="visually-hidden-focusable">Department</label>
+                            <label class="visually-hidden">Department</label>
                             <input type="text"
                                    class="form-control form-control-sm dept-autocomplete-input"
                                    name="department"
@@ -253,7 +206,7 @@ Billing Assignment
                     </td>
                     <td>
                         <div class="autocomplete-wrapper position-relative text-start">
-                            <label class="visually-hidden-focusable">Grant</label>
+                            <label class="visually-hidden">Grant</label>
                             <input type="text"
                                    class="form-control form-control-sm grant-autocomplete-input"
                                    name="grant"
@@ -277,10 +230,9 @@ Billing Assignment
                         {# Clean Red Minus Icon #}
                         <button type="button"
                                 class="btn btn-link text-danger p-0 remove-row-btn"
-                                data-bs-toggle="popover"
-                                data-bs-trigger="hover focus"
-                                data-bs-placement="top"
-                                data-bs-content="Remove cost assignment">
+                                {# rows are copied from here after page load, so a popover would never be set up #}
+                                title="Remove cost assignment"
+                                aria-label="Remove cost assignment">
                             <i class="fas fa-minus-circle"
                                style="font-size: 1.2rem;"></i>
                         </button>
@@ -294,12 +246,4 @@ Billing Assignment
 <script src="{% static 'billing/js/cost_center_autocomplete.js' %}"></script>
 <script>window.COLDFRONT_MAX_COST_CENTER_ASSIGNMENTS = {{ max_cost_center_assignments }};</script>
 <script src="{% static 'billing/js/billing.js' %}"></script>
-{% endblock %}
-
-{% block javascript %}
-{{ block.super }}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-});
-</script>
 {% endblock %}
