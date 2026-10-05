@@ -74,7 +74,7 @@ Allocation Change Detail
                 <td>
                   {{ allocation_change.allocation.end_date }}
                   {% if allocation_change.allocation.is_locked and allocation_change.allocation.status.name == 'Approved' and allocation_change.allocation.expires_in <= 60 and allocation_change.allocation.expires_in >= 0 %}
-                  <span class="badge badge-warning"><i class="far fa-clock" aria-hidden="true"></i>
+                  <span class="badge bg-warning"><i class="far fa-clock" aria-hidden="true"></i>
                     Expires in {{allocation_change.allocation.expires_in}} day{{allocation_change.allocation.expires_in|pluralize}} - Not renewable
                   </span>
                   {% endif %}
@@ -128,8 +128,12 @@ Allocation Change Detail
                 <th scope="col">Attribute</th>
                 {% if allocation_change.status.name == 'Pending' %}
                   <th scope="col">Current Value</th>
+                  <th scope="col">Requested New Value</th>
+                {% elif allocation_change.status.name == 'Approved' %}
+                  <th scope="col">Previous Value</th>
+                  <th scope="col">Approved Value</th>
                 {% endif %}
-                <th scope="col">Requested New Value</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -141,13 +145,16 @@ Allocation Change Detail
                     {% if request.user.is_superuser %}
                       <td>
                         {{form.new_value}}
-                        <a href="{% url 'allocation-attribute-change-delete' form.change_pk.value %}" class="float-right confirm-delete">
+                        <a href="{% url 'allocation-attribute-change-delete' form.change_pk.value %}" class="float-end confirm-delete">
                           <i class="far fa-trash-alt fa-lg"></i>
                         </a>
                       </td>
                     {% else %}
                       <td>{{form.new_value.value}}</td>
                     {% endif %}
+                  {% elif allocation_change.status.name == 'Approved' %}
+                    <td><button id="chartBtn" type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#chartModal">View Chart</button></td>
+                    <td>{{form.new_value.value}}</td>
                   {% else %}
                     {% if form.new_value.value == '' %}
                       <td>None</td>
@@ -186,10 +193,10 @@ Allocation Change Detail
             {{note_form.notes | as_crispy_field}}
             <div style="float: right;">
               {% if allocation_change.status.name == 'Pending' %}
-                <button type="submit" name="action" value="approve" class="btn btn-success mr-1">Approve</button>
-                <button type="submit" name="action" value="deny" class="btn btn-danger mr-1">Deny</button>
+                <button type="submit" name="action" value="approve" class="btn btn-success me-1">Approve</button>
+                <button type="submit" name="action" value="deny" class="btn btn-danger me-1">Deny</button>
               {% endif %}
-                <button type="submit" name="action" value="update" class="btn btn-primary float-right">
+                <button type="submit" name="action" value="update" class="btn btn-primary float-end">
                 <i class="fas fa-sync" aria-hidden="true"></i> Update
               </button>
             </div>
@@ -198,7 +205,6 @@ Allocation Change Detail
     </div>
   {% endif %}
 </form>
-
 
   <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation_change.allocation.pk %}" role="button">
     View Allocation
@@ -209,11 +215,43 @@ Allocation Change Detail
     </a>
   {% endif %}
   <br>
-
+<div class="modal" id="chartModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Storage Allocation History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <canvas id="historyChart" width="400" height="400"></canvas>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
-  $(document).on('click', '.confirm-delete', function(){
-      return confirm('Are you sure you want to delete this requested allocation attribute change?');
-  })
+  // Runs after the module bundle has defined $
+  document.addEventListener('DOMContentLoaded', function() {
+    $(document).on('click', '.confirm-delete', function(){
+        return confirm('Are you sure you want to delete this requested allocation attribute change?');
+    });
+  });
 </script>
 {% endblock %}
 
+{% block javascript %}
+{{ block.super }}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      $('#chartModal').on('show.bs.modal', function() {
+          coldfront.initStorageHistoryChart("historyChart", "/plugins/storage-allocation-history/{{ allocation_change.allocation.id }}");
+      });
+  });
+</script>
+
+{% endblock %}

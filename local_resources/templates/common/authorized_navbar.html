@@ -5,7 +5,7 @@
   <div class="container">
     <a class="navbar-brand d-block d-sm-none text-primary" href="#"></a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-main">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-main">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -18,7 +18,7 @@
           <a class="nav-link" href="{% url 'center-summary' %}">Center Summary</a>
         </li>-->
         <li id="navbar-project-menu" class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Project</a>
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-trigger="hover focus">Manage</a>
           <div class="dropdown-menu">
             <a id="navbar-project" class="dropdown-item" href="{% url 'project-list' %}">Projects</a>
             <a id="navbar-allocation" class="dropdown-item" href="{% url 'allocation-list' %}">Allocations</a>
@@ -26,8 +26,24 @@
             {% if settings.ALLOCATION_ACCOUNT_ENABLED  %}
               <a class="dropdown-item" href="{% url 'allocation-account-list' %}">Allocation Accounts</a>
             {% endif %}
+            {% url 'billing_index' as billing_installed %}
+            {% if billing_installed and has_billing_role %}
+               <a id="navbar-manage-no-cost-quotas" class="dropdown-item" href="{% url 'manage_no_cost_quota' %}">No-Cost Quotas</a>
+               <a id="navbar-billing" class="dropdown-item" href="{% url 'billing_index' %}">Billing</a>
+            {% endif %}
+            {% url 'account-status' as account_status_installed %}
+            {% if account_status_installed %}
+               <a id="navbar-account-status" class="dropdown-item" href="{% url 'account-status' %}">HPC Account Status</a>
+            {% endif %}
+            <a id="navbar-new-project" class="dropdown-item" target="_blank" href="https://tufts.qualtrics.com/jfe/form/SV_5bUmpFT0IXeyEfj">Request a New Project <i class="fas fa-arrow-up-right-from-square"></i></a>
+
           </div>
         </li>
+        
+        {% include 'common/navbar_reporting.html' %}
+        {% if settings.CENTER_HELP_URL %}
+          {% include 'common/navbar_help.html' %}
+        {% endif %}
         {% if request.user.is_superuser %}
           {% include 'common/navbar_admin.html' %}
         {% elif request.user.is_staff %}
@@ -35,12 +51,35 @@
         {% elif perms.project.can_review_pending_project_reviews or perms.grant.can_view_all_grants %}
           {% include 'common/navbar_director.html' %}
         {% endif %}
-        {% include 'common/navbar_reporting.html' %}
-        {% if settings.CENTER_HELP_URL %}
-          {% include 'common/navbar_help.html' %}
-        {% endif %}
+
       </ul>
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ms-auto">
+        {% comment %}
+        Background-task status, filled and refreshed by htmx from the tufts_local plugin.
+        Reversing the URL first is the plugin's presence check, the same way the reporting
+        menu guards its links: with the plugin absent this is the empty string and the
+        navbar renders without it.
+
+        Staff-gated to match the endpoint, which is for superusers and staff alike. An
+        ordinary user's poll would follow @login_required's redirect and swap a login page
+        into the navbar. The two conditions are nested rather than joined into one
+        expression because Django binds `and` tighter than `or`, so "url and staff or
+        superuser" would show this to a superuser on a deployment without the plugin.
+
+        navbar-text, because a bare li would inherit dark body text and vanish against
+        bg-primary; the fragment's own text-reset then picks up the right colour. The poll
+        pauses on a hidden tab -- this sits on every page, so it is every staff member's
+        every background tab otherwise.
+        {% endcomment %}
+        {% url 'task-summary-indicator' as task_indicator_url %}
+        {% if task_indicator_url %}
+          {% if request.user.is_staff or request.user.is_superuser %}
+        <li id="navbar-task-indicator" class="navbar-text d-flex align-items-center me-3"
+            hx-get="{{ task_indicator_url }}"
+            hx-trigger="load, every 30s [!document.hidden]"
+            hx-swap="innerHTML"></li>
+          {% endif %}
+        {% endif %}
         {% include 'common/navbar_login.html' %}
       </ul>
     </div>
