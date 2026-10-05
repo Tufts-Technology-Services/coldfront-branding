@@ -1,275 +1,189 @@
-@media (min-width: 1400px) {
-    .container, .container-lg, .container-md, .container-sm, .container-xl {
-        max-width: 1320px;
-    }
+/*
+ * Tufts overrides for ColdFront's Bootstrap 5.3 theme.
+ *
+ * This file replaces core's (empty) common/css/common.css and loads after
+ * coldfront.css, the bundle with Bootstrap and core's own portal styles
+ * (footer, #brand, banner, hijack warning, readonly inputs, ...), so only what
+ * differs from those is here.
+ *
+ * Bootstrap 5.3 styles links, buttons, breadcrumbs and list groups through
+ * CSS variables (--bs-*); setting the variables, rather than the properties
+ * themselves, also covers their hover, focus, active and disabled states.
+ */
+
+:root {
+  --tufts-blue: #3172AE;
+  --tufts-blue-rgb: 49, 114, 174;
+  --tufts-blue-hover: #1473cb;
+  --tufts-blue-dark: #204b72;   /* darken(#3172AE, 15%), Bootstrap 4's link hover */
+  --tufts-blue-dark-rgb: 32, 75, 114;
+
+  --bs-link-color: var(--tufts-blue);
+  --bs-link-color-rgb: var(--tufts-blue-rgb);
+  --bs-link-hover-color: var(--tufts-blue-dark);
+  --bs-link-hover-color-rgb: var(--tufts-blue-dark-rgb);
 }
 
-
-.fakeimg {
-  height: 77px;
-  background: #E2E2E2;
+/* Bootstrap 5 underlines links; Bootstrap 4 only did on hover */
+a {
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 150px;
-}
+/* ------------------------------------------------------------------ layout */
 
 main {
-    padding-top: 20px;
-    padding-bottom: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .list-group-item i {
-    padding-right: 0.5em;
-}
-
-.justify-content-right {
-    justify-content: right;
-}
-
-.header-logo svg {
-    stroke: #ffffff;
-    fill: #ffffff;
-    width: 100%;
-}
-
-footer .primary-logo {
-    padding: 1em 0;
-}
-
-footer .primary-logo img {
-    height: 5em;
-}
-
-footer .secondary-logo {
-    padding: 3em 0 0 0;
-}
-
-footer .secondary-logo img {
-    height: 3em;
-}
-
-.bg-primary {
-    background-color: #3172AE !important;
-}
-
-.text-primary {
-  color: #1f1d1d !important;
-
-}
-
-.border-primary {
-  border-color: #1f1d1d !important;
-}
-
-a {
-  color: #3172AE;
-}
-
-.breadcrumb {
-    background-color: #00000008;
-    border: 1px solid rgba(0,0,0,.125);
-}
-
-ol.breadcrumb {
-    border-right: none;
-    border-radius: .25rem 0 0 .25rem;
-}
-
-div.breadcrumb {
-    border-left: none;
-    border-radius: 0 .25rem .25rem 0;
-}
-
-.btn-outline-primary {
-    color: #3172AE;
-    border-color: #3172AE;
-}
-
-.btn-outline-primary:hover {
-    background-color: #3172AE;
-}
-
-.btn-primary {
-    background-color: #3172AE;
-    border-color: #3172AE;
-}
-
-.btn-primary:hover {
-    background-color: #1473cb;
-    border-color: #1473cb;
-}
-
-span.header-text {
-    color: black;
-}
-
-.welcome-text {
-    font-size: 1.75em;
+  padding-right: 0.5em;
 }
 
 .home-block {
   min-height: 18rem;
 }
 
-.info-block table th {
-    border-top: none;
-}
-
-.project-list > .list-group-item {
-    border-color: white;
-}
-
-.btn-outline-primary.register-btn {
-    border-color: black;
-    color: black;
-    border-radius: 0;
-    padding: 0.75em 1.5em;
-}
-
-.btn-outline-primary.register-btn:hover {
-    background-color: white;
-    color: #3172AE;
-}
-
-.access-box {
-    background-color: #e0e0e0;
-    color: black;
-    margin-left: -4rem;
-    margin-right: -4rem;
-}
-
-.access-text {
-    font-weight: 500;
+.welcome-text {
+  font-size: 1.75em;
 }
 
 .see-all {
-    font-size: 0.75em;
-    font-weight: normal;
-}
-
-a.see-more {
-}
-
-#brand .container {
-  margin-bottom: 1px;
-}
-#brand h1 {
-  font-size: 1.75rem;
-  color: white;
-  padding-top: 20px;
+  font-size: 0.75em;
   font-weight: normal;
-  letter-spacing: 1px;
-}
-#brand h1 small {
-  color: white;
-  font-weight: lighter;
-  letter-spacing: 2px;
 }
 
-#footer {
-  position: absolute;
-  bottom: 0;
+.access-box {
+  background-color: #e0e0e0;
+  color: black;
+  margin-left: -4rem;
+  margin-right: -4rem;
+}
+
+.access-text {
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ header and footer */
+
+.header-logo svg {
+  stroke: #ffffff;
+  fill: #ffffff;
   width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 150px;
-  background-color: #4582EC;
-  color: #ffffff;
-  padding-top: 15px;
 }
 
-#footer a {
-  color: #ffffff;
-}
-
+/* core's portal styles pad the name down; the branding's header centres it */
 .banner-name {
-    color: #ffffff;
+  padding-top: 0;
 }
 
-.banner-logo {
-    margin-top: 5px;
-    max-height: 75px !important;
-    margin-bottom: 5px;
+footer .primary-logo {
+  padding: 1em 0;
 }
 
-body > main > form > div.alert.alert-block.alert-danger > ul > li {
-  list-style: none;
-  margin-top: 14px;
+footer .primary-logo img {
+  height: 5em;
 }
 
-body > main > div > div.card.border-primary > div.card-body > form > div.alert.alert-block.alert-danger > ul > li {
-  list-style: none;
-  margin-top: 14px;
-  
+footer .secondary-logo {
+  padding: 3em 0 0 0;
 }
 
-.table-sm td, .table-sm th {
-    padding: 0.6rem;
+footer .secondary-logo img {
+  height: 3em;
 }
+
+/* ------------------------------------------------------------------ colour utilities */
+
+/* .text-primary and .border-primary (#1f1d1d) already come from core */
+.bg-primary {
+  background-color: var(--tufts-blue) !important;
+}
+
+/* ------------------------------------------------------------------ buttons */
+
+.btn-primary {
+  --bs-btn-bg: var(--tufts-blue);
+  --bs-btn-border-color: var(--tufts-blue);
+  --bs-btn-hover-bg: var(--tufts-blue-hover);
+  --bs-btn-hover-border-color: var(--tufts-blue-hover);
+  --bs-btn-active-bg: var(--tufts-blue-hover);
+  --bs-btn-active-border-color: var(--tufts-blue-hover);
+  --bs-btn-disabled-bg: var(--tufts-blue);
+  --bs-btn-disabled-border-color: var(--tufts-blue);
+  --bs-btn-focus-shadow-rgb: var(--tufts-blue-rgb);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--tufts-blue);
+  --bs-btn-border-color: var(--tufts-blue);
+  --bs-btn-hover-bg: var(--tufts-blue);
+  --bs-btn-hover-border-color: var(--tufts-blue);
+  --bs-btn-active-bg: var(--tufts-blue);
+  --bs-btn-active-border-color: var(--tufts-blue);
+  --bs-btn-disabled-color: var(--tufts-blue);
+  --bs-btn-disabled-border-color: var(--tufts-blue);
+  --bs-btn-focus-shadow-rgb: var(--tufts-blue-rgb);
+}
+
+/* account signup's "Register for an HPC Account" */
+.btn-outline-primary.register-btn {
+  --bs-btn-color: black;
+  --bs-btn-border-color: black;
+  --bs-btn-border-radius: 0;
+  --bs-btn-padding-y: 0.75em;
+  --bs-btn-padding-x: 1.5em;
+  --bs-btn-hover-color: var(--tufts-blue);
+  --bs-btn-hover-bg: white;
+  --bs-btn-hover-border-color: black;
+  --bs-btn-active-color: var(--tufts-blue);
+  --bs-btn-active-bg: white;
+  --bs-btn-active-border-color: black;
+}
+
+/* ------------------------------------------------------------------ breadcrumbs */
 
 /*
- * These were copied from django-hijack https://github.com/arteria/django-hijack
- *
+ * Styled like a card header, to match the cards around them. Bootstrap 5
+ * dropped the breadcrumb's padding and background, so both are set here.
+ * The project and allocation pages put an ol.breadcrumb and a div.breadcrumb
+ * (notifications) side by side, joined into one bar.
  */
-.hijacked-warning {
-  background-size: 50px 50px;
-  background-color: #ffe761;
-  color: #000;
-  background-image: -webkit-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
-  background-image: -moz-linear-gradient(-45deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
-  background-image: linear-gradient(135deg, rgba(0, 0, 0, .04) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, .04) 50%, rgba(0, 0, 0, .04) 75%, transparent 75%, transparent);
-  margin-bottom:0;
+.breadcrumb {
+  --bs-breadcrumb-padding-x: 1rem;
+  --bs-breadcrumb-padding-y: 0.75rem;
+  --bs-breadcrumb-bg: rgba(var(--bs-body-color-rgb), 0.03);
+  --bs-breadcrumb-border-radius: var(--bs-border-radius);
+  border: var(--bs-border-width) solid var(--bs-border-color-translucent);
 }
 
-.hijacked-warning-controls,
-.hijacked-warning-controls form {
-	display: inline;
+ol.breadcrumb {
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.django-hijack-button-default {
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
-	background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-	background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-	background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-	background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-	background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
-	background-color:#ffffff;
-	-moz-border-radius:6px;
-	-webkit-border-radius:6px;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
-	display:inline-block;
-	cursor:pointer;
-	color:#666666;
-	font-family:Arial;
-	font-size:11px;
-	font-weight:bold;
-	padding:3px 12px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #ffffff;
-}
-.django-hijack-button-default:hover {
-	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
-	background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-	background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-	background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-	background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-	background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
-	background-color:#f6f6f6;
-}
-.django-hijack-button-default:active {
-	position:relative;
-	top:1px;
+div.breadcrumb {
+  border-left: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
-.form-control[readonly]{background-color:#ffffff;opacity:1}
+/* ------------------------------------------------------------------ lists and tables */
+
+.list-group.project-list {
+  --bs-list-group-border-color: white;
+}
+
+/* Bootstrap 5's own selector, so this replaces its 0.25rem padding */
+.table-sm > :not(caption) > * > * {
+  padding: 0.6rem;
+}
+
+/* sortable column headings (common/table_sort.html) */
+span.header-text {
+  color: black;
+}
