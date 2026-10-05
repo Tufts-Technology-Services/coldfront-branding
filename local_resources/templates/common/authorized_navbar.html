@@ -54,6 +54,32 @@
 
       </ul>
       <ul class="navbar-nav ms-auto">
+        {% comment %}
+        Background-task status, filled and refreshed by htmx from the tufts_local plugin.
+        Reversing the URL first is the plugin's presence check, the same way the reporting
+        menu guards its links: with the plugin absent this is the empty string and the
+        navbar renders without it.
+
+        Staff-gated to match the endpoint, which is for superusers and staff alike. An
+        ordinary user's poll would follow @login_required's redirect and swap a login page
+        into the navbar. The two conditions are nested rather than joined into one
+        expression because Django binds `and` tighter than `or`, so "url and staff or
+        superuser" would show this to a superuser on a deployment without the plugin.
+
+        navbar-text, because a bare li would inherit dark body text and vanish against
+        bg-primary; the fragment's own text-reset then picks up the right colour. The poll
+        pauses on a hidden tab -- this sits on every page, so it is every staff member's
+        every background tab otherwise.
+        {% endcomment %}
+        {% url 'task-summary-indicator' as task_indicator_url %}
+        {% if task_indicator_url %}
+          {% if request.user.is_staff or request.user.is_superuser %}
+        <li id="navbar-task-indicator" class="navbar-text d-flex align-items-center me-3"
+            hx-get="{{ task_indicator_url }}"
+            hx-trigger="load, every 30s [!document.hidden]"
+            hx-swap="innerHTML"></li>
+          {% endif %}
+        {% endif %}
         {% include 'common/navbar_login.html' %}
       </ul>
     </div>
