@@ -80,6 +80,8 @@
             hx-swap="innerHTML"></li>
           {% endif %}
         {% endif %}
+        {# ServiceNow ticketing switch. ticketing_toggle is set only for ticketing admins on sites with the plugin. #}
+        {% if ticketing_toggle %}{% include 'ticketing/navbar_toggle.html' %}{% endif %}
         {% include 'common/navbar_login.html' %}
       </ul>
     </div>

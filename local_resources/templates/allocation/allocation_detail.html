@@ -53,6 +53,9 @@ Allocation Detail
   {% include "allocation/detail/allocation_users.html" %}
 {% endif %}
 
+{# ServiceNow tickets (ticketing plugin). ticketing_toggle is set only for ticketing admins on sites with the plugin. #}
+{% if ticketing_toggle %}{% include 'ticketing/filed_tickets.html' with subject=allocation %}{% endif %}
+
 <!-- Start Admin Messages -->
 <div class="card mb-3" id="notifications">
   <div class="card-header">

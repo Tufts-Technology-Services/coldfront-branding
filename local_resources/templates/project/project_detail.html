@@ -518,6 +518,9 @@ Project Detail
 <!-- End Project ResearchOutputs -->
 {% endif %}
 
+{# ServiceNow tickets (ticketing plugin). ticketing_toggle is set only for ticketing admins on sites with the plugin. #}
+{% if ticketing_toggle %}{% include 'ticketing/filed_tickets.html' with subject=project %}{% endif %}
+
 <!-- Start Admin Messages -->
 <div id="notifications" class="card mb-3">
   <div class="card-header">
