@@ -156,7 +156,7 @@ Allocation Change Detail
                   {% elif allocation_change.status.name == 'Approved' %}
                     <td>
                       {% if storage_history_url %}
-                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#chartModal">View Chart</button>
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#storageHistoryModal">View Chart</button>
                       {% endif %}
                     </td>
                     <td>{{form.new_value.value}}</td>
@@ -220,25 +220,9 @@ Allocation Change Detail
     </a>
   {% endif %}
   <br>
-{# the history chart's endpoint, from tufts_local: empty where it isn't installed, which hides the buttons #}
-<div class="modal" id="chartModal" tabindex="-1" data-history-url="{{ storage_history_url }}">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Storage Allocation History</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <canvas id="historyChart" width="400" height="400"></canvas>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
+{% if storage_history_url %}
+  {% include "allocation/storage_history_modal.html" with history_url=storage_history_url %}
+{% endif %}
 <script>
   // Runs after the module bundle has defined $
   document.addEventListener('DOMContentLoaded', function() {
@@ -251,13 +235,5 @@ Allocation Change Detail
 
 {% block javascript %}
 {{ block.super }}
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      $('#chartModal').on('show.bs.modal', function() {
-          coldfront.initStorageHistoryChart("historyChart", this.dataset.historyUrl);
-      });
-  });
-</script>
 
 {% endblock %}
