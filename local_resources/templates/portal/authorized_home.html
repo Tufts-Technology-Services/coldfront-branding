@@ -11,8 +11,8 @@
 
   <div class="col-lg-6 mt-2 mb-3 project-block home-block">
     <h2>Projects 
-        <a href="#" data-toggle="popover" title="Projects" data-trigger="hover" data-content="Projects organize your allocations and manage group membership.">
-        <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Projects organize your allocations and manage group membership.</span></a> 
+        <a href="#" data-bs-toggle="popover" data-bs-title="Projects" data-bs-trigger="hover focus" data-bs-content="Projects organize your allocations and manage group membership.">
+        <i class="fas fa-info-circle" aria-hidden="true"></i><span class="visually-hidden-focusable">Projects organize your allocations and manage group membership.</span></a> 
     </h2>
     <hr>
     {% if project_list %}
@@ -23,7 +23,7 @@
               <i class="fa fa-folder fa-lg" aria-hidden="true"></i>{{project.title}}  (owner: {{project.pi.first_name}} {{project.pi.last_name}})
             </a>
             {% if project.needs_review %}
-              <a href="{% url 'project-review' project.pk %}"><span class="badge badge-warning">Needs Review</span></a>
+              <a href="{% url 'project-review' project.pk %}"><span class="badge bg-warning">Needs Review</span></a>
             {% endif %}
           </li>
         {% endfor %}
@@ -42,7 +42,7 @@
         You are not currently associated with any projects. You must be in a project to have resource allocations.
       </div>
       {% if user.userprofile.is_pi or user.is_superuser %}
-        <a class="btn btn-primary btn-block" href="{% url 'project-create' %}" role="button">Request a new project</a>
+        <a class="btn btn-primary w-100" href="{% url 'project-create' %}" role="button">Request a new project</a>
         <hr>
       {% endif %}
     {% endif %}
@@ -50,8 +50,8 @@
 
   <div class="col-lg-6 mt-2 mb-3 info-block home-block">
     <h2>Resource Allocations 
-      <a href="#" data-toggle="popover" title="Resource Allocations" data-trigger="hover" data-content="Research computing resources, such as storage, that are currently allocated to you.">
-        <i class="fas fa-info-circle" aria-hidden="true"></i><span class="sr-only">Research computing resources, such as storage, that are currently allocated to you.</span></a> 
+      <a href="#" data-bs-toggle="popover" data-bs-title="Resource Allocations" data-bs-trigger="hover focus" data-bs-content="Research computing resources, such as storage, that are currently allocated to you.">
+        <i class="fas fa-info-circle" aria-hidden="true"></i><span class="visually-hidden-focusable">Research computing resources, such as storage, that are currently allocated to you.</span></a> 
     </h2>
     <hr>
 
@@ -126,7 +126,18 @@
   document.addEventListener('DOMContentLoaded', function() {
     $("#navbar-main > ul > li.active").removeClass("active");
     $("#navbar-home").addClass("active");
-    $('[data-toggle="popover"]').popover();
+    {% url 'account-status' as account_status_url %}
+    {% if account_status_url %}
+
+    fetch('{{ account_status_url }}', {'headers': {'Accept': 'application/json'}}).then(
+        x => x.json()
+      ).then(
+        data => {
+          if (!data.access && !data.signup_exists) {
+            $('#cluster_registration_card').show();
+          }
+        });
+    {% endif %}
   });
 </script>
 {% endblock %}

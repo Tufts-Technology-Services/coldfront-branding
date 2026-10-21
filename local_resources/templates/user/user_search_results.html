@@ -1,0 +1,102 @@
+
+{% if matches %}
+  {% if number_of_usernames_found %}
+    <strong>Found {{number_of_usernames_found}} of {{number_of_usernames_searched}} usernames searched.</strong> 
+  {% endif %}
+  {% if usernames_not_found %}
+    The missing username{{usernames_not_found|length|pluralize}} {{usernames_not_found|length|pluralize:"is, are"}}: {{ usernames_not_found|join:", " }}.
+  {% endif %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Username</th>
+          <th scope="col">First Name</th>
+          <th scope="col">Last Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Source</th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% url 'add-user-to-coldfront' as add_user_to_coldfront_url %}
+        {% for user in matches %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            {% url 'user-profile' user.username as user_profile_url %}
+            {% if user_profile_url %}
+            <td><a href="{{ user_profile_url }}">{{ user.username }}</a></td>
+            {% else %}
+            <td>{{ user.username }}</td>
+            {% endif %}
+            <td>{{ user.first_name }}</td>
+            <td>{{ user.last_name }}</td>
+            <td>{{ user.email }}</td>
+            {% if user.source == "local" %}
+              <td><span class="badge bg-secondary">In Coldfront</span></td>
+              <td>
+                  {% url 'local-login-as-user' user.username as local_login_as_user_url %}
+                  {% if local_login_as_user_url %}
+                    <form id="user-impersonate-form-{{ forloop.counter }}" class="d-sm-flex align-items-center" method="post" action="{{ local_login_as_user_url }}">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-primary">Login As</button>
+                    </form>
+                  {% endif %}
+              </td>
+            {% else %}
+              <td>
+                <form id="user-create-form-{{ forloop.counter }}" class="d-sm-flex align-items-center" method="post" data-url="{{ add_user_to_coldfront_url }}">
+                    {% csrf_token %}
+                  <input type="hidden" id="username-field-{{ forloop.counter }}" name="username" value="{{ user.username }}">
+                  <button type="submit" class="btn btn-primary">Add to Coldfront</button>
+                </form>
+                </td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="alert alert-info text-center">
+    No results!
+  </div>
+{% endif %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('form[id^="user-create-form-"]').forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+          // Prevent the browser from reloading the page
+          event.preventDefault(); 
+
+          // Extract the CSRF token from the form
+          const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+          // Gather your input data
+          const usernameData = form.querySelector('[name="username"]').value;
+          const url = form.dataset.url;
+          // Send the AJAX POST request
+          fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                username: usernameData
+            })
+          })
+          .then(response => response.json())
+          .then(data => {
+              // Handle success response from Django view
+              form.insertAdjacentHTML('afterend', '<div id="response-message">' + data.message + '</div>');
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+        });
+    });
+  });
+</script>
