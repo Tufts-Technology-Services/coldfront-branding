@@ -120,6 +120,7 @@ Allocation Change Detail
       <h3 class="d-inline"><i class="fas fa-info-circle" aria-hidden="true"></i> Allocation Attributes</h3>
     </div>
     <div class="card-body">
+      {% url 'storage-allocation-history' allocation_change.allocation.id as storage_history_url %}
       {% if attribute_changes %}
         <div class="table-responsive">
           <table class="table table-bordered table-sm">
@@ -153,7 +154,11 @@ Allocation Change Detail
                       <td>{{form.new_value.value}}</td>
                     {% endif %}
                   {% elif allocation_change.status.name == 'Approved' %}
-                    <td><button id="chartBtn" type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#chartModal">View Chart</button></td>
+                    <td>
+                      {% if storage_history_url %}
+                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#chartModal">View Chart</button>
+                      {% endif %}
+                    </td>
                     <td>{{form.new_value.value}}</td>
                   {% else %}
                     {% if form.new_value.value == '' %}
@@ -215,7 +220,8 @@ Allocation Change Detail
     </a>
   {% endif %}
   <br>
-<div class="modal" id="chartModal" tabindex="-1">
+{# the history chart's endpoint, from tufts_local: empty where it isn't installed, which hides the buttons #}
+<div class="modal" id="chartModal" tabindex="-1" data-history-url="{{ storage_history_url }}">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -249,7 +255,7 @@ Allocation Change Detail
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       $('#chartModal').on('show.bs.modal', function() {
-          coldfront.initStorageHistoryChart("historyChart", "/plugins/storage-allocation-history/{{ allocation_change.allocation.id }}");
+          coldfront.initStorageHistoryChart("historyChart", this.dataset.historyUrl);
       });
   });
 </script>
