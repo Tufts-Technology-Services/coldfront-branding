@@ -1,0 +1,33 @@
+{% comment %}
+The storage history chart, in a modal: an allocation's Storage Quota (TB) and its usage over time,
+from tufts_local's storage-allocation-history endpoint.
+
+Include it once per page, with history_url from
+{% url 'storage-allocation-history' <allocation id> as history_url %}. That's empty where tufts_local
+isn't installed, so include this, and show the buttons that open it, only when it isn't. A button opens
+it with data-bs-toggle="modal" data-bs-target="#storageHistoryModal".
+{% endcomment %}
+<div class="modal" id="storageHistoryModal" tabindex="-1" data-history-url="{{ history_url }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Storage Allocation History</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <canvas id="storageHistoryChart" width="400" height="400"></canvas>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Runs after the module bundle has defined $ and coldfront
+  document.addEventListener('DOMContentLoaded', function() {
+    $('#storageHistoryModal').on('show.bs.modal', function() {
+      coldfront.initStorageHistoryChart('storageHistoryChart', this.dataset.historyUrl);
+    });
+  });
+</script>
