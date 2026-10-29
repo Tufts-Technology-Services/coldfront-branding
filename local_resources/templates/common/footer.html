@@ -1,14 +1,14 @@
-{% load portal_tags %}
+{% load portal_tags static %}
 
 <footer id="footer" class="footer bg-primary customize_footer">
   <div class="container">
     <div class="row">
         <div class="col-3 primary-logo">
-           <a href="https://it.tufts.edu"><img src="/static/common/images/tts_horiz_white.png"></a>
+           <a href="https://it.tufts.edu"><img src="{% static 'common/images/tts_horiz_white.png' %}"></a>
         </div>
         <div class="col-7"></div>
         <div class="col-2 secondary-logo">
-           <a href='https://coldfront.dev/'><img title="Powered by ColdFront" src="/static/common/images/coldfront_logo.png">
+           <a href='https://coldfront.dev/'><img title="Powered by ColdFront" src="{% static 'common/images/coldfront_logo.png' %}"></a>
         </div>
     </div>
   </div>
