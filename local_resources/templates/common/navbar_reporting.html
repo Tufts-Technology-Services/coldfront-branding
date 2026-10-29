@@ -31,6 +31,10 @@
                 {% if expired_allocations_report %}
                   <a id="navbar-expired-allocations-report" class="dropdown-item" href="{{ expired_allocations_report }}">Expired Allocations w NCQ Report</a>
                 {% endif %}
+                {% url 'project-history-search' as project_history_url %}
+                {% if project_history_url %}
+                  <a id="navbar-project-history" class="dropdown-item" href="{{ project_history_url }}">Project History</a>
+                {% endif %}
               {% endif %}
           </div>
         </li>
