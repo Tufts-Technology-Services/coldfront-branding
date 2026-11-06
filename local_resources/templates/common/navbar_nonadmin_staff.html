@@ -1,7 +1,8 @@
 {% load common_tags %}
 {% comment %}
   Copied from coldfront core (coldfront/templates/common/navbar_nonadmin_staff.html), with the
-  tufts_local background task link added at the end.
+  allocation_blueprint page's link added after All Resources, and the tufts_local background task
+  link at the end.
 
   intentionally keeping "navbar-admin" (rather than renaming to navbar-staff),
   since existing templates use javascript to target it by ID
@@ -18,6 +19,7 @@
       <a class="dropdown-item" href="{% url 'allocation-list' %}?show_all_allocations=on">All Allocations</a>
     {% endif %}
     <a class="dropdown-item" href="{% url 'resource-list' %}">All Resources</a>
+    {% include 'common/navbar_blueprint_links.html' %}
     {% if perms.project.can_review_pending_project_reviews %}
       <a id="navbar-project-reviews" class="dropdown-item" href="{% url 'project-review-list' %}">Project Reviews</a>
     {% endif %}
