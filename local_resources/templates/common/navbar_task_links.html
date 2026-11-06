@@ -1,0 +1,9 @@
+{% comment %}
+The tufts_local plugin's background task pages, for the Admin and Staff menus. Reversing the URL
+first is the plugin's presence check: without the plugin it is the empty string and nothing shows.
+The menus are only shown to superusers and staff, who are exactly the pages' audience.
+{% endcomment %}
+{% url 'task-report' as task_report_url %}
+{% if task_report_url %}
+  <a id="navbar-task-report" class="dropdown-item" href="{{ task_report_url }}">Background Tasks</a>
+{% endif %}

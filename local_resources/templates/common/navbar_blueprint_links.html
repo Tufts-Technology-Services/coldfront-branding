@@ -1,0 +1,10 @@
+{% comment %}
+The allocation_blueprint plugin's page, for the Admin and Staff menus: which attributes each
+resource's new allocations get. Reversing the URL first is the plugin's presence check: without the
+plugin, or with its URLs not mounted, it is the empty string and nothing shows. The page is for
+superusers and staff, the only people these menus are shown to.
+{% endcomment %}
+{% url 'blueprint_list' as blueprint_list_url %}
+{% if blueprint_list_url %}
+  <a id="navbar-allocation-blueprints" class="dropdown-item" href="{{ blueprint_list_url }}">Allocation Blueprints</a>
+{% endif %}
