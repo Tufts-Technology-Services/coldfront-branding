@@ -27,5 +27,10 @@
 <a id="navbar-manage-reports" class="dropdown-item" href="{{ manage_reports_url }}">Manage Billing</a>
 {% endif %}
     {% include 'common/navbar_task_links.html' %}
+    {# tufts_local's page of who is signed in, for superusers; left out where the plugin isn't installed #}
+    {% url 'signed-in-users' as signed_in_users_url %}
+    {% if signed_in_users_url %}
+      <a id="navbar-signed-in-users" class="dropdown-item" href="{{ signed_in_users_url }}">Signed-in Users</a>
+    {% endif %}
   </div>
 </li>
