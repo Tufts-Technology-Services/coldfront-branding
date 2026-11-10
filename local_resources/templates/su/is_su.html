@@ -8,20 +8,35 @@ coldfront's wording. With it installed, what the administrator changes is record
 name, with a note that they were signed in as the user: the banner says so, so nobody expects it to
 look like the user did it.
 
+A session started from the tufts_local plugin's "View as" control is read-only: its session has
+su_read_only, the plugin's middleware refuses anything that changes data, and the banner says so.
+Releasing it goes through the plugin's view-as-exit, which comes back to the page being looked at,
+where django-su's own logout lands on a fixed page. Reversing that URL first is the plugin's
+presence check: where it is missing, the stock release link is used.
+
 The classes are django-hijack's, styled in common.css, as coldfront's template has them.
 {% endcomment %}
 {% if IS_SU %}
+{% url 'view-as-exit' as view_as_exit_url %}
 <div id="hijacked-warning" class="alert hijacked-warning hijacked-warning-bootstrap" role="alert">
     {% if request.signed_in_by %}
     You are <strong>{{ request.signed_in_by.get_full_name|default:request.signed_in_by.username }}
     ({{ request.signed_in_by.username }})</strong>, signed in as
     <strong>{{ request.user.get_full_name|default:request.user.username }} ({{ request.user.username }})</strong>.
+    {% if request.session.su_read_only %}
+    This is read-only: you can look at pages as they would, but nothing can be changed until you release them.
+    {% else %}
     What you change is recorded under your name, with a note that you were signed in as them.
+    {% endif %}
     {% else %}
     You are currently working on behalf of {{ request.user }}.
     {% endif %}
     <div class="hijacked-warning-controls">
+        {% if request.session.su_read_only and view_as_exit_url %}
+        <a id="su-release" class="btn btn-default btn-sm django-hijack-button-default" href="{{ view_as_exit_url }}?next={{ request.get_full_path|urlencode }}">release {{ request.user }}</a>
+        {% else %}
         <a id="su-release" class="btn btn-default btn-sm django-hijack-button-default" href="{% url 'su_logout' %}">release {{ request.user }}</a>
+        {% endif %}
     </div>
 </div>
 {% endif %}
