@@ -2,7 +2,7 @@
 {% comment %}
   Copied from coldfront core (coldfront/templates/common/navbar_nonadmin_staff.html), with the
   allocation_blueprint page's link added after All Resources, and the tufts_local background task
-  link at the end.
+  and Software Versions links at the end.
 
   intentionally keeping "navbar-admin" (rather than renaming to navbar-staff),
   since existing templates use javascript to target it by ID
@@ -31,5 +31,6 @@
       <a id="navbar-grant-report" class="dropdown-item" href="{% url 'grant-report' %}">Grant Report</a>
     {% endif %}
     {% include 'common/navbar_task_links.html' %}
+    {% include 'common/navbar_software_versions_link.html' %}
   </div>
 </li>
