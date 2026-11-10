@@ -1,0 +1,27 @@
+{% comment %}
+The warning shown while an administrator is signed in as another user with django-su. Replaces
+coldfront's su/is_su.html, which only names the user signed in as.
+
+request.signed_in_by is the administrator, set by coldfront_utils.task_context's
+ActingUserMiddleware. Where that isn't installed or is older, it's missing, and this falls back to
+coldfront's wording. With it installed, what the administrator changes is recorded under their own
+name, with a note that they were signed in as the user: the banner says so, so nobody expects it to
+look like the user did it.
+
+The classes are django-hijack's, styled in common.css, as coldfront's template has them.
+{% endcomment %}
+{% if IS_SU %}
+<div id="hijacked-warning" class="alert hijacked-warning hijacked-warning-bootstrap" role="alert">
+    {% if request.signed_in_by %}
+    You are <strong>{{ request.signed_in_by.get_full_name|default:request.signed_in_by.username }}
+    ({{ request.signed_in_by.username }})</strong>, signed in as
+    <strong>{{ request.user.get_full_name|default:request.user.username }} ({{ request.user.username }})</strong>.
+    What you change is recorded under your name, with a note that you were signed in as them.
+    {% else %}
+    You are currently working on behalf of {{ request.user }}.
+    {% endif %}
+    <div class="hijacked-warning-controls">
+        <a id="su-release" class="btn btn-default btn-sm django-hijack-button-default" href="{% url 'su_logout' %}">release {{ request.user }}</a>
+    </div>
+</div>
+{% endif %}
