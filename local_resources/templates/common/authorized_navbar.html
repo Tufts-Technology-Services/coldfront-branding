@@ -81,8 +81,8 @@
             hx-swap="innerHTML"></li>
           {% endif %}
         {% endif %}
-        {# ServiceNow ticketing switch. ticketing_toggle is set only for ticketing admins on sites with the plugin. #}
-        {% if ticketing_toggle %}{% include 'ticketing/navbar_toggle.html' %}{% endif %}
+        {# Shows only while ticketing is off; the ServiceNow ticketing switch itself is in the user menu (navbar_login.html). #}
+        {% if ticketing_toggle %}{% include 'ticketing/navbar_off_indicator.html' %}{% endif %}
         {% include 'common/navbar_login.html' %}
       </ul>
     </div>
