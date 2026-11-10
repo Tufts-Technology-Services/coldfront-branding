@@ -32,5 +32,6 @@
     {% if signed_in_users_url %}
       <a id="navbar-signed-in-users" class="dropdown-item" href="{{ signed_in_users_url }}">Signed-in Users</a>
     {% endif %}
+    {% include 'common/navbar_software_versions_link.html' %}
   </div>
 </li>
