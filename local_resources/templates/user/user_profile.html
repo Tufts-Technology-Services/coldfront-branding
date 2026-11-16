@@ -68,6 +68,8 @@ User Profile{% if not user == viewed_user %}: {{ viewed_user.username }}{% endif
               <th scope="row">Last Login:</th>
               <td>{{viewed_user.last_login}}</td>
             </tr>
+            {# Your API token, on your own profile only (coldfront-rest-api-plugin) #}
+            {% include "rest_api/profile_token_row.html" %}
           {% endblock %}
         </tbody>
       </table>
