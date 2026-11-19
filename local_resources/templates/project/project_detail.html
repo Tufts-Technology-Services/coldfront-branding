@@ -135,7 +135,7 @@ Project Detail
             <th scope="col" class="text-nowrap">First Name</th>
             <th scope="col" class="text-nowrap">Last Name</th>
             <th scope="col" class="text-nowrap">Email</th>
-            <th scope="col" class="text-nowrap">Status</th>
+            <!--<th scope="col" class="text-nowrap">Status</th>-->
             <th scope="col" class="nosort"><input type="checkbox" class="check" id="selectAll" style="margin-right: 5px;">Notify 
               <a href="#" data-bs-toggle="popover" data-bs-trigger="hover focus" data-bs-content="Receive email notifications for this project">
                 <i class="fas fa-info-circle" aria-hidden="true"></i><span class="visually-hidden-focusable">Receive email notifications for this project</span>
@@ -158,12 +158,12 @@ Project Detail
               <td>{{ user.user.last_name }}</td>
               <td>{{ user.user.email }}</td>
 
-              {% if user.status.name == 'Active' %}
+              <!--{% if user.status.name == 'Active' %}
                 <td class="text-success">{{ user.status.name }}</td>
               {% else %}
                 <td class="text-info">{{ user.status.name }}
                 </td>
-              {% endif %}
+              {% endif %}-->
 
               <td>
                 <input type="checkbox" id="email_notifications_for_user_id_{{user.id}}"
