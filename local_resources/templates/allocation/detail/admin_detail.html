@@ -126,6 +126,15 @@
               {% endif %}
           <button type="submit" name="action" value="deny" class="btn btn-danger me-1 confirm-deny">Deny</button>
         {% endif %}
+        {% comment %}
+          Deletion is for allocations made by mistake. The admin's confirmation page lists what goes with it.
+          tufts_local refuses to delete an Active allocation: revoke it first.
+        {% endcomment %}
+        {% if allocation.status.name != 'Active' %}
+          <a class="btn btn-outline-danger me-1" href="{% url 'admin:allocation_allocation_delete' allocation.pk %}" role="button">
+            <i class="fas fa-trash" aria-hidden="true"></i> Delete
+          </a>
+        {% endif %}
         <button type="submit" name="action" value="update" class="btn btn-primary"><i class="fas fa-sync" aria-hidden="true"></i> Update</button>
     </div>
     </form>
