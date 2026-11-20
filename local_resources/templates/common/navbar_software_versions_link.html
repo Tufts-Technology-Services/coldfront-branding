@@ -1,0 +1,10 @@
+{% comment %}
+The tufts_local plugin's Software Versions page (the ColdFront version and the installed packages), for the
+Admin and Staff menus. Reversing the URL first is the plugin's presence check: without the plugin it
+is the empty string and nothing shows. The page is for superusers and staff, the only people these
+menus are shown to.
+{% endcomment %}
+{% url 'software-versions' as software_versions_url %}
+{% if software_versions_url %}
+  <a id="navbar-software-versions" class="dropdown-item" href="{{ software_versions_url }}">Software Versions</a>
+{% endif %}

@@ -1,25 +1,27 @@
 {% load common_tags %}
 
 {%  if allocation.status.name == "Expired" and allocation.expires_in < 0 %}
-<span class="badge badge-pill badge-danger">Expired</span>
+<span class="badge rounded-pill bg-danger">Expired</span>
 {%  elif allocation.status.name == "Renewal Requested" %}
-<span class="badge badge-pill badge-danger">Renewal Requested</span>
+<span class="badge rounded-pill bg-danger">Renewal Requested</span>
 {%  elif allocation.expires_in >= 0 and allocation.expires_in <= 30 %}
-<span class="badge badge-pill badge-danger">Expires in <span
-        class="badge badge-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}</span>
+<span class="badge rounded-pill bg-danger">Expires in <span
+        class="badge bg-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}</span>
 {% elif allocation.expires_in > 30 and allocation.expires_in <= 90 %}
-<span class="badge badge-pill badge-warning">Expires in <span
-        class="badge badge-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}</span>
+<span class="badge rounded-pill bg-warning">Expires in <span
+        class="badge bg-light">{{allocation.expires_in}}</span> day{{allocation.expires_in|pluralize }}</span>
 {% elif allocation.status.name == "Pending" %}
-<span class="badge badge-pill badge-info">{{allocation.status}}</span>
+<span class="badge rounded-pill bg-info">{{allocation.status}}</span>
 {% elif allocation.status.name == "Active" %}
     {% if user_status|get_value_by_index:forloop.counter0 == 'PendingEULA' %}
-    <a href="{% url 'allocation-review-eula' allocation.pk %}" class="btn btn-info btn-block">Review and Accept EULA</a>
+    <div class="d-grid gap-2">
+        <a href="{% url 'allocation-review-eula' allocation.pk %}" class="btn btn-info">Review and Accept EULA</a>
+    </div>
     {% else %}
-    <span class="badge badge-pill badge-success">{{allocation.status}}</span>
+    <span class="badge rounded-pill bg-success">{{allocation.status}}</span>
     {% endif %}
 {% elif allocation.status.name == "New" %}
-<span class="badge badge-pill badge-warning">Requested</span>
+<span class="badge rounded-pill bg-warning">Requested</span>
 {% else %}
-<span class="badge badge-pill badge-info">{{allocation.status}}</span>
+<span class="badge rounded-pill bg-info">{{allocation.status}}</span>
 {% endif %}

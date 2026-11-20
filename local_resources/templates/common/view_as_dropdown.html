@@ -1,0 +1,39 @@
+{% comment %}
+The tufts_local plugin's "View as" control, for a superuser on a project or allocation detail page.
+It sits in the breadcrumb row's right-hand block, before Notifications, and adds nothing to the row
+itself: included from project/detail/breadcrumbs.html and allocation/detail/breadcrumbs.html.
+That block is a .breadcrumb, which wraps, and is only col-3 wide, so the control is narrow: an eye
+icon, with the words only at xl widths, and the full wording as a tooltip and for screen readers.
+
+view_as comes from the plugin's context processor and is missing where the plugin isn't installed, so
+nothing shows there. It has people only on those two pages, only for superusers, and only while not
+already viewing as someone. They are at most three, one of each kind that can see a page
+differently: the project's PI, a manager who isn't the PI, and a user. Starting is a POST: it signs
+the superuser in as them, read-only, through django-su, for every page until they release them from
+the banner (su/is_su.html), which brings them back to the page they are on.
+
+The plugin gives each person's kind in coldfront's words: "pi", "manager" or "user". The words shown
+are this site's, the same ones project_detail.html uses: Owner for the PI, Approver for a manager.
+To show coldfront's own PI and Manager instead, change the two words in the button below; nothing
+else depends on them.
+{% endcomment %}
+{% if view_as.people %}
+<div id="view-as" class="dropdown me-2">
+  <a class="dropdown-toggle text-decoration-none text-nowrap" href="#" data-bs-toggle="dropdown" aria-expanded="false"
+     title="View pages as&hellip; (read-only)" aria-label="View pages as&hellip; (read-only)"><i class="fas fa-eye" aria-hidden="true"></i><span class="d-none d-xl-inline"> View as</span></a>
+  <div class="dropdown-menu dropdown-menu-end">
+    <h6 class="dropdown-header">View pages as&hellip; (read-only)</h6>
+    {% for person in view_as.people %}
+    <form method="post" action="{{ view_as.start_url }}">
+      {% csrf_token %}
+      <input type="hidden" name="user" value="{{ person.user.pk }}">
+      <input type="hidden" name="next" value="{{ view_as.next }}">
+      <button type="submit" class="dropdown-item">
+        <strong>{% if person.kind == "pi" %}Owner{% elif person.kind == "manager" %}Approver{% else %}User{% endif %}</strong>
+        <span class="text-muted">{{ person.user.get_full_name|default:person.user.username }} ({{ person.user.username }})</span>
+      </button>
+    </form>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

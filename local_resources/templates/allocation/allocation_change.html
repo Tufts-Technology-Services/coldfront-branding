@@ -39,7 +39,7 @@ Request Allocation Change
             <table class="table table-bordered table-sm">
               <thead>
                 <tr>
-                  <th scope="col"><span class="sr-only">Attribute</span></th>
+                  <th scope="col"><span class="visually-hidden-focusable">Attribute</span></th>
                   <th scope="col">Current Value</th>
                   <th scope="col">Requested Value</th>
                 </tr>
@@ -72,12 +72,12 @@ Request Allocation Change
         height: 5em;
     }
     </style>
-      <div class="form-group">
+      <div class="mb-3"><!-- form group -->
             <label for="{{ form.justification.id_for_label }}">
                 Reason for Change:
             </label>
             {{ form.justification }}
-            <small class="form-text text-muted">please include some information about the reason for this request. e.g. new lab member, new data set</small>
+            <small class="form-text text-muted">Please include the reason for this request. e.g. new lab member, new data set</small>
         </div>
       <input class="btn btn-success" type="submit" value="Submit" />
       <a class="btn btn-secondary" href="{% url 'allocation-detail' allocation.pk %}" role="button">Back to

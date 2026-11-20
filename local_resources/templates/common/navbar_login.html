@@ -1,0 +1,20 @@
+{% comment %}
+Copied from coldfront core (coldfront/templates/common/navbar_login.html), with the ticketing plugin's
+switch added to the user menu. The switch is rarely used, so it lives here rather than in the menu
+bar; the menu bar shows only that ticketing is off (ticketing/navbar_off_indicator.html, included in
+authorized_navbar.html). ticketing_toggle is set only for ticketing admins on sites with the plugin.
+{% endcomment %}
+<li id="navbar-user" class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+    <i class="fas fa-user" aria-hidden="true"></i> {{user.username}}
+  </a>
+  <div class="dropdown-menu">
+    <a id="navbar-user-user-profile" class="dropdown-item" href="{% url 'user-profile' %}"><i class="fas fa-user-circle" aria-hidden="true"></i> User Profile</a>
+    {% if ticketing_toggle %}
+    <div class="dropdown-divider"></div>
+    {% include 'ticketing/user_menu_toggle.html' %}
+    <div class="dropdown-divider"></div>
+    {% endif %}
+    <button class="dropdown-item" hx-post="{% url 'logout' %}" hx-swap="none"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Log Out</button>
+  </div>
+</li>
